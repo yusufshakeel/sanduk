@@ -1,0 +1,23 @@
+{
+  "name": "sanduk",
+  "version": "0.0.1",
+  "description": "Helper app for development.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusufshakeel/sanduk.git"
+  },
+  "keywords": [
+    "sandbox",
+    "code",
+    "app",
+    "electron"
+  ],
+  "author": "Yusuf Shakeel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yusufshakeel/sanduk/issues"
+  },
+  "homepage": "https://github.com/yusufshakeel/sanduk#readme"
+}
