@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Helper app for development.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "electron ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yusufshakeel/sanduk.git"
@@ -19,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/yusufshakeel/sanduk/issues"
   },
-  "homepage": "https://github.com/yusufshakeel/sanduk#readme"
+  "homepage": "https://github.com/yusufshakeel/sanduk#readme",
+  "devDependencies": {
+    "electron": "^13.1.4"
+  }
 }
