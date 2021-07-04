@@ -5,7 +5,19 @@ const macOSSpecificMenu = () => {
   if (process.platform === 'darwin') {
     return [
       {
-        role: 'appMenu'
+        label: 'Sanduk',
+        role: 'appMenu',
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideothers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
       }
     ];
   } else {
@@ -21,7 +33,8 @@ function applicationMenu() {
       submenu: [
         {
           label: 'UUID'
-        }
+        },
+        { type: 'separator' }
       ]
     },
     { role: 'editMenu' },
