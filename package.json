@@ -2,9 +2,13 @@
   "name": "sanduk",
   "version": "0.0.1",
   "description": "Helper app for development.",
-  "main": "index.js",
+  "main": "src/main-process/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "watch": "nodemon --exec electron .",
+    "pre-build": "rm -rf dist",
+    "build:all-platform": "npm run pre-build && npx electron-builder -mwl",
+    "build:for-mac": "npm run pre-build && npx electron-builder -m"
   },
   "repository": {
     "type": "git",
@@ -22,7 +26,16 @@
     "url": "https://github.com/yusufshakeel/sanduk/issues"
   },
   "homepage": "https://github.com/yusufshakeel/sanduk#readme",
+  "build": {
+    "appId": "com.yusufshakeel.sanduk",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "resources/app-icons/stable/sanduk.icns"
+    }
+  },
   "devDependencies": {
-    "electron": "^13.1.4"
+    "electron": "^13.1.4",
+    "electron-builder": "^22.11.7",
+    "nodemon": "^2.0.9"
   }
 }
