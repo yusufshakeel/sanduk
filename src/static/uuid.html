@@ -3,8 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Sanduk - UUID</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <style>
+      body {
+          -webkit-user-select: none;
+      }
+      .sanduk-tool-btn:hover {
+          cursor: default;
+      }
+      #uuid-v4-output {
+          -webkit-user-select: text;
+          border: 1px solid #333;
+          display: block;
+          width: 100%;
+          padding: 5px;
+          font-size: 1.5em;
+          text-align: center;
+      }
+  </style>
 </head>
 <body>
-<h1>UUID</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-12 py-2">
+      <h4>UUID v4</h4>
+      <span id="uuid-v4-output" class="my-2"> </span>
+      <button id="generate-uuid-v4-btn" class="btn btn-primary sanduk-tool-btn">Generate</button>
+      <button id="copy-uuid-v4-btn" class="btn btn-secondary sanduk-tool-btn">Copy</button>
+    </div>
+  </div>
+</div>
+<script src="../renderer-process/uuid.js"></script>
 </body>
 </html>
