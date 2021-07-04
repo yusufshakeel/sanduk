@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Sanduk</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .sanduk-tool-btn {
+            width: 100%
+        }
+        .sanduk-tool-btn:hover {
+            cursor: default;
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to Sanduk</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 py-2">
+            <button id="tool-uuid" type="button" class="btn btn-outline-primary sanduk-tool-btn">UUID</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 py-2">
+            <button id="tool-base64-encode" type="button" class="btn btn-outline-primary sanduk-tool-btn">Base64 Encode</button>
+        </div>
+        <div class="col-6 py-2">
+            <button id="tool-base64-decode" type="button" class="btn btn-outline-primary sanduk-tool-btn">Base64 Decode</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 py-2">
+            <button id="tool-jwt" type="button" class="btn btn-outline-primary sanduk-tool-btn">JSON Web Token</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 py-2">
+            <button id="tool-json-formatter" type="button" class="btn btn-outline-primary sanduk-tool-btn">JSON Formatter</button>
+        </div>
+    </div>
+</div>
+<script src="../renderer-process/app.js"></script>
 </body>
 </html>

@@ -3,22 +3,7 @@ const { Menu, shell } = require('electron');
 
 const macOSSpecificMenu = () => {
   if (process.platform === 'darwin') {
-    return [
-      {
-        role: 'appMenu',
-        submenu: [
-          { role: 'about' },
-          { type: 'separator' },
-          { role: 'services' },
-          { type: 'separator' },
-          { role: 'hide' },
-          { role: 'hideothers' },
-          { role: 'unhide' },
-          { type: 'separator' },
-          { role: 'quit' }
-        ]
-      }
-    ];
+    return [{ role: 'appMenu' }];
   } else {
     return {};
   }
@@ -28,21 +13,12 @@ function applicationMenu() {
   const template = [
     ...macOSSpecificMenu(),
     {
-      label: 'Tools',
-      submenu: [
-        {
-          label: 'UUID'
-        },
-        { type: 'separator' }
-      ]
-    },
-    {
       role: 'help',
       submenu: [
         {
           label: 'Project Code',
-          click: () => {
-            shell.openExternal(require('../../package.json').homepage);
+          click: async () => {
+            await shell.openExternal(require('../../package.json').homepage);
           }
         }
       ]
