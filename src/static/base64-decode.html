@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanduk - Base64 Decode</title>
+  <link rel="stylesheet" href="css/halfmoon.min.css">
+  <style>
+      body {
+          -webkit-user-select: none;
+      }
+
+      .sanduk-tool-btn:hover {
+          cursor: default;
+      }
+
+      textarea.sanduk-jwt-container {
+          resize: none;
+      }
+  </style>
+</head>
+<body class="dark-mode">
+<div class="container p-20">
+  <div class="row">
+    <div class="col-12">
+      <h4>Base64 Decode</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="base64-encoded">Base64 Encoded</label>
+        <textarea class="form-control sanduk-jwt-container" id="base64-encoded"></textarea>
+      </div>
+      <div id="base64-encode-message"></div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="form-group">
+      <label for="plain-text">Plain Text</label>
+      <textarea class="form-control sanduk-jwt-container" id="plain-text"></textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button id="decode-btn" class="btn btn-default sanduk-tool-btn">Decode</button>
+      <button id="copy-btn" class="btn btn-default sanduk-tool-btn">Copy</button>
+      <button id="clear-btn" class="btn btn-default sanduk-tool-btn float-right">Clear</button>
+    </div>
+  </div>
+</div>
+<script src="../renderer-process/base64-decode.js"></script>
+</body>
+</html>

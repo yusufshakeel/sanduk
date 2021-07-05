@@ -17,17 +17,24 @@ function showError(message) {
 }
 
 decodeJWTBtn.addEventListener('click', () => {
-  hideError();
-
-  const input = jwtInput.value.trim();
-  if (!input.length) {
-    return;
-  }
   try {
+    hideError();
+    const input = jwtInput.value.trim();
+    if (!input.length) {
+      return;
+    }
     const decodedHeader = jwtDecode(input, { header: true });
     const decodedJWT = jwtDecode(input);
     jwtDecodedHeader.innerText = JSON.stringify(decodedHeader, null, 2);
     jwtDecodedPayload.innerText = JSON.stringify(decodedJWT, null, 2);
+    const heightOfJwtDecodedHeader = jwtDecodedHeader.offsetHeight;
+    const heightOfjwtDecodedPayload = jwtDecodedPayload.offsetHeight;
+    const maxHeight =
+      heightOfJwtDecodedHeader > heightOfjwtDecodedPayload
+        ? heightOfJwtDecodedHeader
+        : heightOfjwtDecodedPayload;
+    jwtDecodedHeader.style.height = `${maxHeight}px`;
+    jwtDecodedPayload.style.height = `${maxHeight}px`;
   } catch (e) {
     showError(e.message);
   }
@@ -35,7 +42,6 @@ decodeJWTBtn.addEventListener('click', () => {
 
 clearJWTBtn.addEventListener('click', () => {
   hideError();
-
   jwtInput.value = '';
   jwtDecodedHeader.innerText = '';
   jwtDecodedPayload.innerText = '';
