@@ -1,46 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sanduk</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <style>
-        .sanduk-tool-btn {
-            width: 100%
-        }
-        .sanduk-tool-btn:hover {
-            cursor: default;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Sanduk</title>
+  <link rel="stylesheet" href="css/halfmoon.min.css">
+  <style>
+      .sanduk-tool-btn {
+          width: 100%
+      }
+
+      .sanduk-tool-btn:hover {
+          cursor: default;
+      }
+  </style>
 </head>
-<body>
-<div class="container">
-    <div class="row">
-        <div class="col-6 py-2">
-            <button id="tool-uuid-v4" type="button" class="btn btn-outline-primary sanduk-tool-btn">UUID V4</button>
-        </div>
-        <div class="col-6 py-2">
-            <button id="tool-uuid-v5" type="button" class="btn btn-outline-primary sanduk-tool-btn">UUID V5</button>
-        </div>
+<body class="dark-mode">
+<div class="container p-20">
+  <div class="row">
+    <div class="col-6 p-5">
+      <button class="btn btn-lg sanduk-tool-btn" id="open-uuid-v4-browser-window-btn" type="button">UUID v4</button>
     </div>
-    <div class="row">
-        <div class="col-6 py-2">
-            <button id="tool-base64-encode" type="button" class="btn btn-outline-primary sanduk-tool-btn">Base64 Encode</button>
-        </div>
-        <div class="col-6 py-2">
-            <button id="tool-base64-decode" type="button" class="btn btn-outline-primary sanduk-tool-btn">Base64 Decode</button>
-        </div>
+    <div class="col-6 p-5">
+      <button class="btn btn-lg sanduk-tool-btn" id="open-uuid-v5-browser-window-btn" type="button">UUID v5</button>
     </div>
-    <div class="row">
-        <div class="col-12 py-2">
-            <button id="tool-jwt" type="button" class="btn btn-outline-primary sanduk-tool-btn">JSON Web Token</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 py-2">
-            <button id="tool-json-formatter" type="button" class="btn btn-outline-primary sanduk-tool-btn">JSON Formatter</button>
-        </div>
-    </div>
+  </div>
 </div>
 <script src="../renderer-process/app.js"></script>
 </body>

@@ -1,10 +1,21 @@
 'use strict';
-const {ipcRenderer} = require('electron');
+const { ipcRenderer } = require('electron');
+const {
+  CHANNEL_LAUNCH_UUID_V4_BROWSER_WINDOW,
+  CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW
+} = require('../constants/channel-constants');
 
-const btnToolUUIDV4 = document.getElementById('tool-uuid-v4');
+const openUUIDV4BrowserWindowBtnElement = document.getElementById(
+  'open-uuid-v4-browser-window-btn'
+);
+const openUUIDV5BrowserWindowBtnElement = document.getElementById(
+  'open-uuid-v5-browser-window-btn'
+);
 
-btnToolUUIDV4.addEventListener('click', e => {
-  console.log('i was clicked', e);
-  ipcRenderer.send('launch-uuid-browser-window');
-  e.preventDefault();
+openUUIDV4BrowserWindowBtnElement.addEventListener('click', () => {
+  ipcRenderer.send(CHANNEL_LAUNCH_UUID_V4_BROWSER_WINDOW);
+});
+
+openUUIDV5BrowserWindowBtnElement.addEventListener('click', () => {
+  ipcRenderer.send(CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW);
 });
