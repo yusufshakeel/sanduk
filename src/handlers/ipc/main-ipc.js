@@ -2,7 +2,8 @@
 const { ipcMain } = require('electron');
 const {
   CHANNEL_LAUNCH_UUID_V4_BROWSER_WINDOW,
-  CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW
+  CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW,
+  CHANNEL_LAUNCH_JWT_DECODER_BROWSER_WINDOW
 } = require('../../constants/channel-constants');
 
 function mainIpc({ appBrowserWindows }) {
@@ -19,6 +20,14 @@ function mainIpc({ appBrowserWindows }) {
       appBrowserWindows.uuidV5BrowserWindow.createWindow();
     } else {
       appBrowserWindows.uuidV5BrowserWindow.getBrowserWindowInstance().focus();
+    }
+  });
+
+  ipcMain.on(CHANNEL_LAUNCH_JWT_DECODER_BROWSER_WINDOW, () => {
+    if (!appBrowserWindows.jwtDecoderBrowserWindow.getBrowserWindowInstance()) {
+      appBrowserWindows.jwtDecoderBrowserWindow.createWindow();
+    } else {
+      appBrowserWindows.jwtDecoderBrowserWindow.getBrowserWindowInstance().focus();
     }
   });
 }
