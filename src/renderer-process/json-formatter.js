@@ -11,12 +11,12 @@ window.onload = () => {
   inputEditor = window.ace.edit('json-input');
   inputEditor.setTheme('ace/theme/dracula');
   inputEditor.session.setMode('ace/mode/json');
-  inputEditor.session.setUseWrapMode(true);
+  // inputEditor.session.setUseWrapMode(true);
 
   outputEditor = window.ace.edit('json-output');
   outputEditor.setTheme('ace/theme/dracula');
   outputEditor.session.setMode('ace/mode/json');
-  outputEditor.session.setUseWrapMode(true);
+  // outputEditor.session.setUseWrapMode(true);
 
   function hideError() {
     jsonInputMessage.innerHTML = '';
