@@ -14,10 +14,8 @@ function hideError() {
   uuidV5NamespaceMessage.innerHTML = '';
 }
 
-function showError() {
-  uuidV5NamespaceMessage.innerHTML = `<div class="alert alert-danger" role="alert">
-  Namespace should be a valid UUID.
-</div>`;
+function showError(message) {
+  uuidV5NamespaceMessage.innerHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
   setTimeout(hideError, 5000);
 }
 
@@ -25,6 +23,7 @@ btnGenerateUUIDV5.addEventListener('click', () => {
   try {
     hideError();
     if (!uuidV5Namespace.value.trim().length) {
+      showError('Namespace required.');
       return;
     }
     uuidV5Output.innerText = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
