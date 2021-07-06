@@ -4,17 +4,9 @@
   <meta charset="UTF-8">
   <title>Sanduk - JSON Formatter</title>
   <link rel="stylesheet" href="css/halfmoon.min.css">
-  <link rel="stylesheet" href="plugin/codemirror/lib/codemirror.css">
-  <link rel="stylesheet" href="plugin/codemirror/addon/fold/foldgutter.css" />
-  <link rel="stylesheet" href="plugin/codemirror/theme/dracula.css" />
   <style>
       body {
           -webkit-user-select: none;
-      }
-
-      .CodeMirror {
-          font-size: 1.2em;
-          height: 70vh;
       }
   </style>
 </head>
@@ -29,7 +21,7 @@
     <div class="col-6 p-5">
       <div class="form-group">
         <label for="json-input">JSON Input</label>
-        <textarea class="form-control" id="json-input"></textarea>
+        <pre class="form-control" id="json-input" style="height: 70vh; font-size: 1em"></pre>
       </div>
       <div id="json-input-message"></div>
       <button type="button" class="btn btn-default float-right" id="format-btn">Format</button>
@@ -37,21 +29,13 @@
     <div class="col-6 p-5">
       <div class="form-group">
         <label for="json-output">Formatted JSON</label>
-        <textarea class="form-control" id="json-output"></textarea>
+        <pre class="form-control" id="json-output" style="height: 70vh; font-size: 1em"></pre>
       </div>
+      <button type="button" class="btn btn-default float-right" id="foldAll-btn">Fold</button>
     </div>
   </div>
 </div>
-<script src="plugin/codemirror/lib/codemirror.js"></script>
-<script src="plugin/codemirror/addon/fold/foldcode.js"></script>
-<script src="plugin/codemirror/addon/fold/foldgutter.js"></script>
-<script src="plugin/codemirror/addon/fold/brace-fold.js"></script>
-<script src="plugin/codemirror/addon/fold/xml-fold.js"></script>
-<script src="plugin/codemirror/addon/fold/indent-fold.js"></script>
-<script src="plugin/codemirror/addon/fold/markdown-fold.js"></script>
-<script src="plugin/codemirror/addon/fold/comment-fold.js"></script>
-<script src="plugin/codemirror/mode/javascript/javascript.js"></script>
-<script src="plugin/codemirror/addon/wrap/hardwrap.js"></script>
+<script type="text/javascript" src="./plugin/ace/ace.js"></script>
 <script src="../renderer-process/json-formatter.js"></script>
 </body>
 </html>

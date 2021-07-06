@@ -1,85 +1,22 @@
 'use strict';
 
-const jsonInput = document.getElementById('json-input');
-const jsonOutput = document.getElementById('json-output');
 const jsonInputMessage = document.getElementById('json-input-message');
 const formatBtn = document.getElementById('format-btn');
+const foldAllBtn = document.getElementById('foldAll-btn');
 
 let inputEditor;
 let outputEditor;
 
 window.onload = () => {
-  inputEditor = window.CodeMirror.fromTextArea(jsonInput, {
-    mode: { name: 'javascript', json: true },
-    lineNumbers: true,
-    lineWrapping: true,
-    foldGutter: true,
-    theme: 'dracula',
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    foldOptions: {
-      widget: (from, to) => {
-        let count = undefined;
+  inputEditor = window.ace.edit('json-input');
+  inputEditor.setTheme('ace/theme/dracula');
+  inputEditor.session.setMode('ace/mode/json');
+  inputEditor.session.setUseWrapMode(true);
 
-        // Get open / close token
-        let startToken = '{',
-          endToken = '}';
-        let prevLine = inputEditor.getLine(from.line);
-        if (prevLine.lastIndexOf('[') > prevLine.lastIndexOf('{')) {
-          (startToken = '['), (endToken = ']');
-        }
-
-        // Get json content
-        let internal = inputEditor.getRange(from, to);
-        let toParse = startToken + internal + endToken;
-
-        // Get key count
-        try {
-          let parsed = JSON.parse(toParse);
-          count = Object.keys(parsed).length;
-        } catch (e) {
-          //
-        }
-
-        return count ? `\u21A4${count}\u21A6` : '\u2194';
-      }
-    }
-  });
-
-  outputEditor = window.CodeMirror.fromTextArea(jsonOutput, {
-    mode: { name: 'javascript', json: true },
-    lineNumbers: true,
-    lineWrapping: true,
-    foldGutter: true,
-    theme: 'dracula',
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    foldOptions: {
-      widget: (from, to) => {
-        let count = undefined;
-
-        // Get open / close token
-        let startToken = '{',
-          endToken = '}';
-        let prevLine = outputEditor.getLine(from.line);
-        if (prevLine.lastIndexOf('[') > prevLine.lastIndexOf('{')) {
-          (startToken = '['), (endToken = ']');
-        }
-
-        // Get json content
-        let internal = outputEditor.getRange(from, to);
-        let toParse = startToken + internal + endToken;
-
-        // Get key count
-        try {
-          let parsed = JSON.parse(toParse);
-          count = Object.keys(parsed).length;
-        } catch (e) {
-          //
-        }
-
-        return count ? `\u21A4${count}\u21A6` : '\u2194';
-      }
-    }
-  });
+  outputEditor = window.ace.edit('json-output');
+  outputEditor.setTheme('ace/theme/dracula');
+  outputEditor.session.setMode('ace/mode/json');
+  outputEditor.session.setUseWrapMode(true);
 
   function hideError() {
     jsonInputMessage.innerHTML = '';
@@ -99,5 +36,9 @@ window.onload = () => {
     } catch (e) {
       showError(e.message);
     }
+  });
+
+  foldAllBtn.addEventListener('click', () => {
+    outputEditor.getSession().foldAll(1);
   });
 };
