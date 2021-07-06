@@ -7,10 +7,10 @@ const formatBtn = document.getElementById('format-btn');
 
 let inputEditor;
 let outputEditor;
+
 window.onload = () => {
   inputEditor = window.CodeMirror.fromTextArea(jsonInput, {
     mode: { name: 'javascript', json: true },
-    styleActiveLine: true,
     lineNumbers: true,
     lineWrapping: true,
     foldGutter: true,
@@ -47,7 +47,6 @@ window.onload = () => {
 
   outputEditor = window.CodeMirror.fromTextArea(jsonOutput, {
     mode: { name: 'javascript', json: true },
-    styleActiveLine: true,
     lineNumbers: true,
     lineWrapping: true,
     foldGutter: true,

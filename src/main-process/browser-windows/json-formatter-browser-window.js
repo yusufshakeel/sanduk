@@ -12,7 +12,7 @@ function JSONFormatterBrowserWindow() {
     });
 
     // for dev work
-    browserWindowInstance.webContents.openDevTools();
+    // browserWindowInstance.webContents.openDevTools();
   };
 
   this.createWindow = async () => {
