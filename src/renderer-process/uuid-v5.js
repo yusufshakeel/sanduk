@@ -1,35 +1,36 @@
 'use strict';
 const { clipboard } = require('electron');
-const { v5: uuidV5, validate: uuidValidate } = require('uuid');
+const { v5: uuidV5 } = require('uuid');
 
 const uuidV5Name = document.getElementById('uuid-v5-name');
 const uuidV5Namespace = document.getElementById('uuid-v5-namespace');
 const uuidV5NamespaceMessage = document.getElementById('uuid-v5-namespace-message');
 const btnGenerateUUIDV5 = document.getElementById('generate-uuid-v5-btn');
 const btnCopyUUIDV5 = document.getElementById('copy-uuid-v5-btn');
+const btnClearUUIDV5 = document.getElementById('clear-uuid-v5-btn');
 const uuidV5Output = document.getElementById('uuid-v5-output');
 
-function hideInvalidUUIDError() {
+function hideError() {
   uuidV5NamespaceMessage.innerHTML = '';
 }
 
-function showInvalidUUIDError() {
+function showError() {
   uuidV5NamespaceMessage.innerHTML = `<div class="alert alert-danger" role="alert">
   Namespace should be a valid UUID.
 </div>`;
-
-  setTimeout(hideInvalidUUIDError, 5000);
+  setTimeout(hideError, 5000);
 }
 
 btnGenerateUUIDV5.addEventListener('click', () => {
-  hideInvalidUUIDError();
-
-  if (!uuidValidate(uuidV5Namespace.value)) {
-    showInvalidUUIDError('Invalid UUID');
-    return;
+  try {
+    hideError();
+    if (!uuidV5Namespace.value.trim().length) {
+      return;
+    }
+    uuidV5Output.innerText = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
+  } catch (e) {
+    showError(e.message);
   }
-
-  uuidV5Output.innerText = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
 });
 
 btnCopyUUIDV5.addEventListener('click', () => {
@@ -41,4 +42,11 @@ btnCopyUUIDV5.addEventListener('click', () => {
   setTimeout(() => {
     btnCopyUUIDV5.innerText = 'Copy';
   }, 200);
+});
+
+btnClearUUIDV5.addEventListener('click', () => {
+  hideError();
+  uuidV5Output.innerText = ' ';
+  uuidV5Name.value = '';
+  uuidV5Namespace.value = '';
 });

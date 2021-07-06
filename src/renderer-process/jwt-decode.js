@@ -14,6 +14,7 @@ function hideError() {
 
 function showError(message) {
   jwtInputMessage.innerHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
+  setTimeout(hideError, 5000);
 }
 
 decodeJWTBtn.addEventListener('click', () => {

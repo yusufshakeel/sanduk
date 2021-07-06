@@ -4,6 +4,7 @@ const {
   CHANNEL_LAUNCH_UUID_V4_BROWSER_WINDOW,
   CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW,
   CHANNEL_LAUNCH_JWT_DECODER_BROWSER_WINDOW,
+  CHANNEL_LAUNCH_BASE64_ENCODER_DECODER_DECODER_BROWSER_WINDOW,
   CHANNEL_LAUNCH_BASE64_ENCODE_BROWSER_WINDOW,
   CHANNEL_LAUNCH_BASE64_DECODE_BROWSER_WINDOW
 } = require('../constants/channel-constants');
@@ -13,6 +14,9 @@ const openUUIDV4BrowserWindowBtnElement = document.getElementById(
 );
 const openUUIDV5BrowserWindowBtnElement = document.getElementById(
   'open-uuid-v5-browser-window-btn'
+);
+const openBase64EncoderDecoderBrowserWindowBtnElement = document.getElementById(
+  'open-base64-encoder-decoder-browser-window-btn'
 );
 const openJWTDecoderBrowserWindowBtnElement = document.getElementById(
   'open-jwt-decoder-browser-window-btn'
@@ -30,6 +34,10 @@ openUUIDV4BrowserWindowBtnElement.addEventListener('click', () => {
 
 openUUIDV5BrowserWindowBtnElement.addEventListener('click', () => {
   ipcRenderer.send(CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW);
+});
+
+openBase64EncoderDecoderBrowserWindowBtnElement.addEventListener('click', () => {
+  ipcRenderer.send(CHANNEL_LAUNCH_BASE64_ENCODER_DECODER_DECODER_BROWSER_WINDOW);
 });
 
 openJWTDecoderBrowserWindowBtnElement.addEventListener('click', () => {

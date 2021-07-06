@@ -18,9 +18,9 @@ function JWTDecoderBrowserWindow() {
   this.createWindow = async () => {
     browserWindowInstance = new BrowserWindow({
       width: 600,
-      height: 500,
+      height: 600,
       minWidth: 600,
-      minHeight: 500,
+      minHeight: 600,
       backgroundColor: '#25282c',
       webPreferences: {
         contextIsolation: false,
