@@ -4,31 +4,55 @@
   <meta charset="UTF-8">
   <title>Sanduk - JSON Formatter</title>
   <link rel="stylesheet" href="css/halfmoon.min.css">
+  <link rel="stylesheet" href="plugin/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="plugin/codemirror/addon/fold/foldgutter.css" />
+  <link rel="stylesheet" href="plugin/codemirror/theme/dracula.css" />
   <style>
       body {
           -webkit-user-select: none;
       }
 
-      .sanduk-tool-btn:hover {
-          cursor: default;
+      .CodeMirror {
+          font-size: 1.2em;
+          height: 70vh;
       }
   </style>
 </head>
 <body class="dark-mode">
 <div class="container p-10">
   <div class="row">
-    <div class="col-6"></div>
-    <div class="col-6"></div>
+    <div class="col-12 text-center">
+      <h4 class="">JSON Formatter</h4>
+    </div>
   </div>
   <div class="row">
-    <div class="col-12">
-      <h4>JSON Formatter</h4>
-      <pre class="my-5 border d-block text-center font-size-20" id="uuid-v4-output">&nbsp;</pre>
-      <button id="generate-uuid-v4-btn" class="btn btn-default sanduk-tool-btn">Generate</button>
-      <button id="copy-uuid-v4-btn" class="btn btn-light sanduk-tool-btn">Copy</button>
+    <div class="col-6 p-5">
+      <div class="form-group">
+        <label for="json-input">JSON Input</label>
+        <textarea class="form-control" id="json-input"></textarea>
+      </div>
+      <div id="json-input-message"></div>
+      <button type="button" class="btn btn-default float-right" id="format-btn">Format</button>
+    </div>
+    <div class="col-6 p-5">
+      <div class="form-group">
+        <label for="json-output">Formatted JSON</label>
+        <textarea class="form-control" id="json-output"></textarea>
+      </div>
     </div>
   </div>
 </div>
+<script src="plugin/codemirror/lib/codemirror.js"></script>
+<script src="plugin/codemirror/addon/selection/active-line.js"></script>
+<script src="plugin/codemirror/addon/fold/foldcode.js"></script>
+<script src="plugin/codemirror/addon/fold/foldgutter.js"></script>
+<script src="plugin/codemirror/addon/fold/brace-fold.js"></script>
+<script src="plugin/codemirror/addon/fold/xml-fold.js"></script>
+<script src="plugin/codemirror/addon/fold/indent-fold.js"></script>
+<script src="plugin/codemirror/addon/fold/markdown-fold.js"></script>
+<script src="plugin/codemirror/addon/fold/comment-fold.js"></script>
+<script src="plugin/codemirror/mode/javascript/javascript.js"></script>
+<script src="plugin/codemirror/addon/wrap/hardwrap.js"></script>
 <script src="../renderer-process/json-formatter.js"></script>
 </body>
 </html>

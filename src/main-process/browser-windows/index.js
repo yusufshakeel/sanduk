@@ -5,6 +5,7 @@ const UUIDV5BrowserWindow = require('./uuid-v5-browser-window');
 const JWTDecoderBrowserWindow = require('./jwt-decoder-browser-window');
 const Base64EncoderDecoderBrowserWindow = require('./base64-encoder-decoder-browser-window');
 const EpochBrowserWindow = require('./epoch-browser-window');
+const JSONFormatterBrowserWindow = require('./json-formatter-browser-window');
 
 function appBrowserWindows() {
   return {
@@ -13,7 +14,8 @@ function appBrowserWindows() {
     uuidV5BrowserWindow: new UUIDV5BrowserWindow(),
     jwtDecoderBrowserWindow: new JWTDecoderBrowserWindow(),
     base64EncoderDecoderBrowserWindow: new Base64EncoderDecoderBrowserWindow(),
-    epochBrowserWindow: new EpochBrowserWindow()
+    epochBrowserWindow: new EpochBrowserWindow(),
+    jsonFormatterBrowserWindow: new JSONFormatterBrowserWindow()
   };
 }
 
