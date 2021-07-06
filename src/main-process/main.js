@@ -1,14 +1,24 @@
 'use strict';
-const { app } = require('electron');
+const { app, globalShortcut, BrowserWindow } = require('electron');
 const applicationMenu = require('./application-menu');
 const appBrowserWindows = require('./browser-windows')();
 const ipcHandler = require('../handlers/ipc');
 
-app.whenReady().then(async () => {
-  await applicationMenu();
-  await appBrowserWindows.mainBrowserWindow.createWindow();
-  ipcHandler({ appBrowserWindows });
-});
+app
+  .whenReady()
+  .then(() => {
+    globalShortcut.register('Command+W', () => {
+      const focusedWindow = BrowserWindow.getFocusedWindow();
+      if (focusedWindow) {
+        focusedWindow.close();
+      }
+    });
+  })
+  .then(async () => {
+    await applicationMenu();
+    await appBrowserWindows.mainBrowserWindow.createWindow();
+    ipcHandler({ appBrowserWindows });
+  });
 
 // Quit the app when all windows are closed. Not for macOS.
 app.on('window-all-closed', () => {
