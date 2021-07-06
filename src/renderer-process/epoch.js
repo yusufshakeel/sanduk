@@ -12,7 +12,7 @@ const currentTimeEpoch = document.getElementById('current-time-epoch');
 
 function updateCurrentTimes() {
   const date = new Date();
-  currentTimeLocale.innerText = date.toLocaleString();
+  currentTimeLocale.innerText = date.toString().split('GMT')[0].trim();
   currentTimeUTC.innerText = date.toUTCString();
   currentTimeEpoch.innerText = parseInt(date.getTime() / 1000);
 }
