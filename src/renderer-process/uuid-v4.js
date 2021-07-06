@@ -6,9 +6,13 @@ const btnGenerateUUIDV4 = document.getElementById('generate-uuid-v4-btn');
 const btnCopyUUIDV4 = document.getElementById('copy-uuid-v4-btn');
 const uuidV4Output = document.getElementById('uuid-v4-output');
 
-btnGenerateUUIDV4.addEventListener('click', () => {
+function updateUUIDV4() {
   uuidV4Output.innerText = uuidV4();
-});
+}
+
+setTimeout(updateUUIDV4, 100);
+
+btnGenerateUUIDV4.addEventListener('click', updateUUIDV4);
 
 btnCopyUUIDV4.addEventListener('click', () => {
   if (!uuidV4Output.innerText.trim().length) {
