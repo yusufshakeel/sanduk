@@ -18,9 +18,9 @@ function JSONFormatterBrowserWindow() {
   this.createWindow = async () => {
     browserWindowInstance = new BrowserWindow({
       width: 1000,
-      height: 640,
+      height: 680,
       minWidth: 640,
-      minHeight: 640,
+      minHeight: 680,
       backgroundColor: '#25282c',
       webPreferences: {
         contextIsolation: false,
