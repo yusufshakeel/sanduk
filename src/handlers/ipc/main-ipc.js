@@ -4,7 +4,8 @@ const {
   CHANNEL_LAUNCH_UUID_V4_BROWSER_WINDOW,
   CHANNEL_LAUNCH_UUID_V5_BROWSER_WINDOW,
   CHANNEL_LAUNCH_JWT_DECODER_BROWSER_WINDOW,
-  CHANNEL_LAUNCH_BASE64_ENCODER_DECODER_DECODER_BROWSER_WINDOW
+  CHANNEL_LAUNCH_BASE64_ENCODER_DECODER_DECODER_BROWSER_WINDOW,
+  CHANNEL_LAUNCH_EPOCH_BROWSER_WINDOW
 } = require('../../constants/channel-constants');
 
 function mainIpc({ appBrowserWindows }) {
@@ -37,6 +38,14 @@ function mainIpc({ appBrowserWindows }) {
       appBrowserWindows.base64EncoderDecoderBrowserWindow.createWindow();
     } else {
       appBrowserWindows.base64EncoderDecoderBrowserWindow.getBrowserWindowInstance().focus();
+    }
+  });
+
+  ipcMain.on(CHANNEL_LAUNCH_EPOCH_BROWSER_WINDOW, () => {
+    if (!appBrowserWindows.epochBrowserWindow.getBrowserWindowInstance()) {
+      appBrowserWindows.epochBrowserWindow.createWindow();
+    } else {
+      appBrowserWindows.epochBrowserWindow.getBrowserWindowInstance().focus();
     }
   });
 }
