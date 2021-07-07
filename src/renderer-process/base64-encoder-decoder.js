@@ -49,7 +49,7 @@ copyEncodedBtn.addEventListener('click', () => {
   copyEncodedBtn.innerText = 'Copied!';
   clipboard.writeText(base64EncodedOutput.value);
   setTimeout(() => {
-    copyEncodedBtn.innerText = 'Copy Encoded';
+    copyEncodedBtn.innerText = 'Copy';
   }, 200);
 });
 
@@ -76,6 +76,6 @@ copyDecodedBtn.addEventListener('click', () => {
   copyDecodedBtn.innerText = 'Copied!';
   clipboard.writeText(plainTextOutput.value);
   setTimeout(() => {
-    copyDecodedBtn.innerText = 'Copy Decoded';
+    copyDecodedBtn.innerText = 'Copy';
   }, 200);
 });
