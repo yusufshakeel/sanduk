@@ -1,12 +1,19 @@
 'use strict';
 let xmlFormatter = require('xml-formatter');
 const { ALERT_TYPE_ERROR, ALERT_TYPE_PRIMARY } = require('../constants/alert-type-constants');
+const {
+  ACE_EDITOR_MAX_FONT_SIZE_IN_PIXELS,
+  ACE_EDITOR_MIN_FONT_SIZE_IN_PIXELS
+} = require('../constants/ui-constants');
 
 const formatInput1Btn = document.getElementById('format-input1-btn');
 const compactInput1Btn = document.getElementById('compact-input1-btn');
 const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
 const xmlInput1Message = document.getElementById('xml-input1-message');
 const input1Footer = document.getElementById('input1-footer');
+const xmlInput1 = document.getElementById('xml-input1');
+const increaseFontInput1Btn = document.getElementById('increase-font-input1-btn');
+const decreaseFontInput1Btn = document.getElementById('decrease-font-input1-btn');
 
 let input1Editor;
 
@@ -71,5 +78,19 @@ toggleWrapInput1Btn.addEventListener('click', () => {
     input1Editor.session.setUseWrapMode(true);
     toggleWrapInput1Btn.dataset.wrap = 'yes';
     toggleWrapInput1Btn.innerText = 'Unwrap';
+  }
+});
+
+increaseFontInput1Btn.addEventListener('click', () => {
+  const currentFontSize = parseInt(xmlInput1.style.fontSize.split('px')[0]);
+  if (currentFontSize < ACE_EDITOR_MAX_FONT_SIZE_IN_PIXELS) {
+    xmlInput1.style.fontSize = `${currentFontSize + 1}px`;
+  }
+});
+
+decreaseFontInput1Btn.addEventListener('click', () => {
+  const currentFontSize = parseInt(xmlInput1.style.fontSize.split('px')[0]);
+  if (currentFontSize > ACE_EDITOR_MIN_FONT_SIZE_IN_PIXELS) {
+    xmlInput1.style.fontSize = `${currentFontSize - 1}px`;
   }
 });

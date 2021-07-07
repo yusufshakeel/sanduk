@@ -5,6 +5,10 @@ const {
   ALERT_TYPE_ERROR,
   ALERT_TYPE_PRIMARY
 } = require('../constants/alert-type-constants');
+const {
+  ACE_EDITOR_MAX_FONT_SIZE_IN_PIXELS,
+  ACE_EDITOR_MIN_FONT_SIZE_IN_PIXELS
+} = require('../constants/ui-constants');
 
 const validateInput1Btn = document.getElementById('validate-input1-btn');
 const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
@@ -12,7 +16,10 @@ const formatInput1Btn = document.getElementById('format-input1-btn');
 const compactInput1Btn = document.getElementById('compact-input1-btn');
 const foldInput1Btn = document.getElementById('fold-input1-btn');
 const jsonInput1Message = document.getElementById('json-input1-message');
+const jsonInput1 = document.getElementById('json-input1');
 const input1Footer = document.getElementById('input1-footer');
+const increaseFontInput1Btn = document.getElementById('increase-font-input1-btn');
+const decreaseFontInput1Btn = document.getElementById('decrease-font-input1-btn');
 
 let input1Editor;
 
@@ -106,4 +113,18 @@ foldInput1Btn.addEventListener('click', () => {
     return;
   }
   input1Editor.getSession().foldAll(1);
+});
+
+increaseFontInput1Btn.addEventListener('click', () => {
+  const currentFontSize = parseInt(jsonInput1.style.fontSize.split('px')[0]);
+  if (currentFontSize < ACE_EDITOR_MAX_FONT_SIZE_IN_PIXELS) {
+    jsonInput1.style.fontSize = `${currentFontSize + 1}px`;
+  }
+});
+
+decreaseFontInput1Btn.addEventListener('click', () => {
+  const currentFontSize = parseInt(jsonInput1.style.fontSize.split('px')[0]);
+  if (currentFontSize > ACE_EDITOR_MIN_FONT_SIZE_IN_PIXELS) {
+    jsonInput1.style.fontSize = `${currentFontSize - 1}px`;
+  }
 });
