@@ -1,28 +1,20 @@
 'use strict';
-let jsonlint = require('jsonlint');
-const {
-  ALERT_TYPE_SUCCESS,
-  ALERT_TYPE_ERROR,
-  ALERT_TYPE_PRIMARY
-} = require('../constants/alert-type-constants');
+let xmlFormatter = require('xml-formatter');
+const { ALERT_TYPE_ERROR, ALERT_TYPE_PRIMARY } = require('../constants/alert-type-constants');
 
-const validateInput1Btn = document.getElementById('validate-input1-btn');
-const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
 const formatInput1Btn = document.getElementById('format-input1-btn');
 const compactInput1Btn = document.getElementById('compact-input1-btn');
-const foldInput1Btn = document.getElementById('fold-input1-btn');
-const jsonInput1Message = document.getElementById('json-input1-message');
+const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
+const xmlInput1Message = document.getElementById('xml-input1-message');
 const input1Footer = document.getElementById('input1-footer');
 
 let input1Editor;
 
 const theme = 'ace/theme/idle_fingers';
-// cobalt, idle_fingers, merbivore_soft
-// dracula*, gruvbox*, tomorrow_night_eighties*
-const mode = 'ace/mode/json';
+const mode = 'ace/mode/xml';
 
 window.onload = () => {
-  input1Editor = window.ace.edit('json-input1');
+  input1Editor = window.ace.edit('xml-input1');
   input1Editor.setTheme(theme);
   input1Editor.session.setMode(mode);
   input1Editor.selection.on('changeCursor', () => {
@@ -40,48 +32,29 @@ function showMessage(element, message, alertType = ALERT_TYPE_PRIMARY) {
   setTimeout(() => hideMessage(element), 5000);
 }
 
-function isValidJSON(json, element) {
-  try {
-    jsonlint.parse(json);
-    return true;
-  } catch (e) {
-    showMessage(element, e.message, ALERT_TYPE_ERROR);
-  }
-  return false;
-}
-
-validateInput1Btn.addEventListener('click', () => {
-  const input = input1Editor.getValue();
-  if (input.length && isValidJSON(input, jsonInput1Message)) {
-    showMessage(jsonInput1Message, 'Valid JSON', ALERT_TYPE_SUCCESS);
-  }
-});
-
 formatInput1Btn.addEventListener('click', () => {
   try {
-    hideMessage(jsonInput1Message);
+    hideMessage(xmlInput1Message);
     const input = input1Editor.getValue();
     if (!input.length) {
       return;
     }
-    const json = JSON.stringify(JSON.parse(input), null, 2);
-    input1Editor.setValue(json, -1);
+    input1Editor.setValue(xmlFormatter(input), -1);
   } catch (e) {
-    showMessage(jsonInput1Message, e.message, ALERT_TYPE_ERROR);
+    showMessage(xmlInput1Message, e.message, ALERT_TYPE_ERROR);
   }
 });
 
 compactInput1Btn.addEventListener('click', () => {
   try {
-    hideMessage(jsonInput1Message);
+    hideMessage(xmlInput1Message);
     const input = input1Editor.getValue();
     if (!input.length) {
       return;
     }
-    const json = JSON.stringify(JSON.parse(input));
-    input1Editor.setValue(json, -1);
+    input1Editor.setValue(xmlFormatter(input, { indentation: '', lineSeparator: '' }), -1);
   } catch (e) {
-    showMessage(jsonInput1Message, e.message, ALERT_TYPE_ERROR);
+    showMessage(xmlInput1Message, e.message, ALERT_TYPE_ERROR);
   }
 });
 
@@ -99,11 +72,4 @@ toggleWrapInput1Btn.addEventListener('click', () => {
     toggleWrapInput1Btn.dataset.wrap = 'yes';
     toggleWrapInput1Btn.innerText = 'Unwrap';
   }
-});
-
-foldInput1Btn.addEventListener('click', () => {
-  if (!input1Editor.getValue().length) {
-    return;
-  }
-  input1Editor.getSession().foldAll(1);
 });
