@@ -7,15 +7,20 @@ const foldAllBtn = document.getElementById('foldAll-btn');
 let inputEditor;
 let outputEditor;
 
+const theme = 'ace/theme/cobalt';
+// cobalt, idle_fingers, merbivore_soft
+// dracula*, gruvbox*, tomorrow_night_eighties*
+const mode = 'ace/mode/json';
+
 window.onload = () => {
   inputEditor = window.ace.edit('json-input');
-  inputEditor.setTheme('ace/theme/dracula');
-  inputEditor.session.setMode('ace/mode/json');
+  inputEditor.setTheme(theme);
+  inputEditor.session.setMode(mode);
   // inputEditor.session.setUseWrapMode(true);
 
   outputEditor = window.ace.edit('json-output');
-  outputEditor.setTheme('ace/theme/dracula');
-  outputEditor.session.setMode('ace/mode/json');
+  outputEditor.setTheme(theme);
+  outputEditor.session.setMode(mode);
   // outputEditor.session.setUseWrapMode(true);
 
   function hideError() {
