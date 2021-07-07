@@ -2,7 +2,7 @@
 
 const jsonInputMessage = document.getElementById('json-input-message');
 const formatBtn = document.getElementById('format-btn');
-const foldAllBtn = document.getElementById('foldAll-btn');
+const foldOutputBtn = document.getElementById('fold-output-btn');
 
 let inputEditor;
 let outputEditor;
@@ -36,6 +36,9 @@ window.onload = () => {
     try {
       hideError();
       const input = inputEditor.getValue();
+      if (!input.length) {
+        return;
+      }
       const json = JSON.stringify(JSON.parse(input), null, 2);
       outputEditor.setValue(json);
     } catch (e) {
@@ -43,7 +46,7 @@ window.onload = () => {
     }
   });
 
-  foldAllBtn.addEventListener('click', () => {
+  foldOutputBtn.addEventListener('click', () => {
     outputEditor.getSession().foldAll(1);
   });
 };
