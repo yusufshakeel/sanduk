@@ -48,6 +48,7 @@
   "dependencies": {
     "base-64": "^1.0.0",
     "electron-window-state": "^5.0.3",
+    "jsonlint": "^1.6.3",
     "jwt-decode": "^3.1.2",
     "utf8": "^3.0.0",
     "uuid": "^8.3.2"

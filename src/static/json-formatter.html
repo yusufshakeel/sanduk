@@ -19,50 +19,41 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-6 p-5">
+    <div class="col-12 p-5">
       <div class="form-group">
-        <label for="json-input" class="d-block mb-10">JSON Input</label>
-
         <!-- menu -->
-        <div class="btn-group" role="group">
-          <button class="btn btn-primary"
-                  type="button"
-                  id="format-btn">Format
-          </button>
-          <button class="btn btn-primary"
-                  type="button"
-                  id="validate-input-btn">Validate
-          </button>
-          <button class="btn btn-primary"
-                  type="button"
-                  id="compact-input-btn">Compact
-          </button>
+        <div class="text-center">
+          <div class="btn-group" role="group">
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="validate-input1-btn">Validate
+            </button>
+            <button class="btn btn-primary"
+                    type="button"
+                    id="format-input1-btn">Pretty
+            </button>
+            <button class="btn btn-primary"
+                    type="button"
+                    id="compact-input1-btn">Compact
+            </button>
+            <button class="btn btn-primary"
+                    type="button"
+                    id="fold-input1-btn">Fold
+            </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="toggle-wrap-input1-btn" data-wrap="no">Wrap
+            </button>
+          </div>
         </div>
 
         <!-- input editor -->
         <pre class="form-control"
-             id="json-input"
-             style="height: 65vh; font-size: 120%"></pre>
+             id="json-input1"
+             style="height: 65vh; font-size: 1em; margin-bottom: 0"></pre>
+        <div id="input1-footer" class="bg-dark p-5"></div>
       </div>
-      <div id="json-input-message"></div>
-    </div>
-    <div class="col-6 p-5">
-      <div class="form-group">
-        <label for="json-output" class="d-block mb-10">Formatted JSON</label>
-
-        <!-- menu -->
-        <div class="btn-group" role="group">
-          <button class="btn btn-primary"
-                  type="button"
-                  id="fold-output-btn">Fold
-          </button>
-        </div>
-
-        <!-- output editor -->
-        <pre class="form-control"
-             id="json-output"
-             style="height: 65vh; font-size: 120%"></pre>
-      </div>
+      <div id="json-input1-message"></div>
     </div>
   </div>
 </div>
