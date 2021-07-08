@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanduk - JSON Web Token Decoder</title>
+  <link rel="stylesheet" href="css/halfmoon.min.css">
+  <style>
+      body {
+          -webkit-user-select: none;
+      }
+
+      .sanduk-tool-btn:hover {
+          cursor: default;
+      }
+
+      textarea.sanduk-jwt-container {
+          resize: none;
+          font-size: 1.2em;
+      }
+
+      #jwt-decoded-header,
+      #jwt-decoded-payload {
+          overflow-y: scroll;
+          -webkit-user-select: text;
+          height: max-content;
+          min-height: 100px;
+          max-height: 400px;
+          padding: 5px 5px 10px 5px;
+          margin: 0;
+          font-size: 1.2em;
+      }
+  </style>
+</head>
+<body class="dark-mode">
+<div class="container-fluid p-10">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h4>JSON Web Token Decoder</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="jwt-input">JWT</label>
+        <textarea class="form-control sanduk-jwt-container" id="jwt-input"></textarea>
+      </div>
+      <div id="jwt-input-message"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group">
+        <label for="jwt-decoded-header">Header</label>
+        <pre class="form-control" id="jwt-decoded-header"></pre>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <label for="jwt-decoded-payload">Payload</label>
+        <pre class="form-control" id="jwt-decoded-payload"></pre>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button id="decode-jwt-btn" class="btn btn-rounded btn-primary sanduk-tool-btn">Decode</button>
+      <button id="clear-jwt-btn" class="btn btn-rounded btn-default sanduk-tool-btn">Clear</button>
+    </div>
+  </div>
+</div>
+<script src="../renderer-process/jwt-decode.js"></script>
+</body>
+</html>

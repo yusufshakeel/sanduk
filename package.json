@@ -1,9 +1,17 @@
 {
   "name": "sanduk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Helper app for development.",
-  "main": "index.js",
-  "scripts": {},
+  "main": "src/main-process/main.js",
+  "scripts": {
+    "start": "electron .",
+    "watch": "nodemon --exec electron .",
+    "pre-build": "rm -rf dist",
+    "build:all-platform": "npm run pre-build && npx electron-builder -mwl",
+    "build:for-mac": "npm run pre-build && npx electron-builder -m",
+    "lint": "npx eslint -c .eslintrc.json src",
+    "lint:fix": "npx eslint --fix -c .eslintrc.json src"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yusufshakeel/sanduk.git"
@@ -19,5 +27,36 @@
   "bugs": {
     "url": "https://github.com/yusufshakeel/sanduk/issues"
   },
-  "homepage": "https://github.com/yusufshakeel/sanduk#readme"
+  "homepage": "https://github.com/yusufshakeel/sanduk#readme",
+  "build": {
+    "appId": "com.yusufshakeel.sanduk",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "resources/app-icons/stable/sanduk.icns"
+    },
+    "dmg": {
+      "background": "resources/app-icons/stable/background.tiff",
+      "icon": "resources/app-icons/stable/sanduk.icns"
+    }
+  },
+  "devDependencies": {
+    "electron": "^13.1.5",
+    "electron-builder": "^22.11.7",
+    "eslint": "^7.30.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.9",
+    "prettier": "^2.3.2"
+  },
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "electron-window-state": "^5.0.3",
+    "jsonlint": "^1.6.3",
+    "jwt-decode": "^3.1.2",
+    "utf8": "^3.0.0",
+    "uuid": "^8.3.2",
+    "xml-formatter": "^2.4.0",
+    "xml2js": "^0.4.23"
+  }
 }

@@ -1,0 +1,5 @@
+'use strict';
+module.exports = {
+  ACE_EDITOR_MAX_FONT_SIZE_IN_PIXELS: 64,
+  ACE_EDITOR_MIN_FONT_SIZE_IN_PIXELS: 12
+};

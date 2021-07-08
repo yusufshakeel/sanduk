@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanduk - UUID v4</title>
+  <link rel="stylesheet" href="css/halfmoon.min.css">
+  <style>
+      body {
+          -webkit-user-select: none;
+      }
+
+      .sanduk-tool-btn:hover {
+          cursor: default;
+      }
+
+      #uuid-v4-output {
+          -webkit-user-select: text;
+      }
+  </style>
+</head>
+<body class="dark-mode">
+<div class="container-fluid p-10">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h4 class="">UUID v4</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <pre class="my-15 border d-block text-center font-size-20" id="uuid-v4-output">&nbsp;</pre>
+      <button id="generate-uuid-v4-btn" class="btn btn-rounded btn-primary sanduk-tool-btn">Generate</button>
+      <button id="copy-uuid-v4-btn" class="btn btn-rounded btn-secondary sanduk-tool-btn">Copy</button>
+    </div>
+  </div>
+</div>
+<script src="../renderer-process/uuid-v4.js"></script>
+</body>
+</html>
