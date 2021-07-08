@@ -33,6 +33,10 @@
     "mac": {
       "category": "public.app-category.developer-tools",
       "icon": "resources/app-icons/stable/sanduk.icns"
+    },
+    "dmg": {
+      "background": "resources/app-icons/stable/background.tiff",
+      "icon": "resources/app-icons/stable/sanduk.icns"
     }
   },
   "devDependencies": {
