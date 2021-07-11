@@ -30,13 +30,36 @@
   <div class="sidebar">
     <div class="sidebar-menu">
       <div class="sidebar-divider"></div>
-      <a href="#" class="sidebar-link">Base64 Encoder Decoder</a>
-      <a href="#" class="sidebar-link">Epoch</a>
-      <a href="#" class="sidebar-link">JSON Formatter</a>
-      <a href="#" class="sidebar-link">JWT Encoder Decoder</a>
-      <a href="#" class="sidebar-link">UUID v4</a>
-      <a href="#" class="sidebar-link">UUID v5</a>
-      <a href="#" class="sidebar-link">XML Formatter</a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="base64-encoder-decoder"
+         id="base64-encoder-decoder-sidebar-link">Base64 Encoder Decoder
+      </a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="epoch"
+         id="epoch-sidebar-link">Epoch
+      </a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="json-formatter"
+         id="json-formatter-sidebar-link">JSON Formatter
+      </a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="jwt-decoder"
+         id="jwt-decoder-sidebar-link">JWT Decoder
+      </a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="uuid"
+         id="uuid-sidebar-link">UUID
+      </a>
+      <a href="#" class="sidebar-link sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="xml-formatter"
+         id="xml-formatter-sidebar-link">XML Formatter
+      </a>
     </div>
   </div>
 
@@ -44,7 +67,38 @@
   <div class="content-wrapper">
     <div class="container-fluid p-10">
       <div class="row">
-        <div class="col-12" id="main-content"></div>
+        <div class="col-12" id="main-content">
+          <div id="base64-encoder-decoder-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="base64-encoder-decoder"
+               class="sandook-tool-content-wrapper d-none">base64
+          </div>
+          <div id="epoch-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="epoch"
+               class="sandook-tool-content-wrapper d-none">epoch
+          </div>
+          <div id="json-formatter-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="json-formatter"
+               class="sandook-tool-content-wrapper d-none">json formatter
+          </div>
+          <div id="jwt-decoder-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="jwt-decoder"
+               class="sandook-tool-content-wrapper d-none">jwt decoder
+          </div>
+          <div id="uuid-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="uuid"
+               class="sandook-tool-content-wrapper d-none">uuid
+          </div>
+          <div id="xml-formatter-content-wrapper"
+               data-sanduk-tool-isActive="false"
+               data-sanduk-tool-name="xml-formatter"
+               class="sandook-tool-content-wrapper d-none">xml formatter
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -52,5 +106,6 @@
 
 <!-- Requires halfmoon.js for the dropdowns -->
 <script src="js/halfmoon.min.js"></script>
+<script src="../renderer-process/app.js"></script>
 </body>
 </html>
