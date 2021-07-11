@@ -10,7 +10,8 @@
     "build:all-platform": "npm run pre-build && npx electron-builder -mwl",
     "build:for-mac": "npm run pre-build && npx electron-builder -m",
     "lint": "npx eslint -c .eslintrc.json src",
-    "lint:fix": "npx eslint --fix -c .eslintrc.json src"
+    "lint:fix": "npx eslint --fix -c .eslintrc.json src test/unit",
+    "test:unit": "jest -c jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.6",
     "nodemon": "^2.0.9",
     "prettier": "^2.3.2"
   },

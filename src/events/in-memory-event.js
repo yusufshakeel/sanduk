@@ -10,7 +10,7 @@ function InMemoryEventProducer({ client }) {
 function InMemoryEventConsumer({ client }) {
   this.listenTo = (topic, handler) => {
     client.on(topic, async message => {
-      return handler(message.eventType, message.eventData);
+      handler(message.eventType, message.eventData);
     });
   };
 }

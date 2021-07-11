@@ -1,11 +1,14 @@
 'use strict';
-const { inMemoryEventProducer, inMemoryEventConsumer } = require('../events');
+const { inMemoryEventProducer: Producer, inMemoryEventConsumer: Consumer } = require('../events');
 const {
   TOPIC: { CLICKED_TOOL }
 } = require('../constants/topic-subscriber-constants');
 const { EVENT_SHOW_CLICKED_TOOL } = require('../constants/event-constants');
 
-function ClickedToolHandler() {
+function ClickedToolHandler({
+  inMemoryEventProducer = Producer,
+  inMemoryEventConsumer = Consumer
+}) {
   const self = this;
 
   self.menuItems = null;

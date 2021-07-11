@@ -1,0 +1,26 @@
+{
+  "testEnvironment": "node",
+  "verbose": true,
+  "bail": true,
+  "testRegex": "(unit).test.js$",
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "**/*.{js,jsx}",
+    "!**/coverage/**",
+    "!**/dist/**",
+    "!**/node_modules/**",
+    "!**/resources/**",
+    "!**/src/clicked-tool-handler.js/**",
+    "!**/src/main-process/**",
+    "!**/src/renderer-process/**",
+    "!**/src/static/**",
+    "!**/test/**"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  }
+}
