@@ -1,7 +1,7 @@
-"use strict";
-const { app, BrowserWindow } = require("electron");
-const windowStateKeeper = require("electron-window-state");
-const applicationMenu = require("./application-menu");
+'use strict';
+const { app, BrowserWindow } = require('electron');
+const windowStateKeeper = require('electron-window-state');
+const applicationMenu = require('./application-menu');
 
 // global variable to prevent it from getting garbage collected.
 let mainWindow;
@@ -27,7 +27,7 @@ function createWindow() {
   });
 
   // for dev work
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
 
   windowState.manage(mainWindow);
 
@@ -38,22 +38,20 @@ function createWindow() {
   });
 }
 
-app
-  .whenReady()
-  .then(() => {
-    applicationMenu();
-    createWindow();
-  });
+app.whenReady().then(() => {
+  applicationMenu();
+  createWindow();
+});
 
 // Quit the app when all windows are closed. Not for macOS.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 // When app icon is clicked and app is running then recreate BrowserWindow (macOS)
-app.on("activate", async () => {
+app.on('activate', async () => {
   if (!mainWindow) {
     createWindow();
   }
