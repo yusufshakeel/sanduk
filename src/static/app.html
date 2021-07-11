@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sanduk</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/halfmoon.min.css">
+  <link rel="stylesheet" href="plugin/fontawesome/css/all.min.css">
+</head>
+<body class="dark-mode">
+<!-- Page wrapper with .with-navbar class -->
+<div class="page-wrapper with-navbar with-sidebar">
+  <!-- Navbar (immediate child of the page wrapper) -->
+  <nav class="navbar">
+    <!-- Navbar content (with toggle sidebar button) -->
+    <div class="navbar-content">
+      <button class="btn" type="button" onclick="halfmoon.toggleSidebar()">
+        <i class="fas fa-bars" aria-hidden="true"></i>
+        <span class="sr-only">Toggle sidebar</span> <!-- sr-only = show only on screen readers -->
+      </button>
+    </div>
+    <!-- Navbar brand -->
+    <div class="navbar-text ml-5">
+      <img src="../../resources/app-icons/stable/png/32.png" style="height: 20px; width: 20px;">
+      <span class="ml-5">sanduk</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar (immediate child of the page wrapper) -->
+  <div class="sidebar">
+    <div class="sidebar-menu">
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link">Base64 Encoder Decoder</a>
+      <a href="#" class="sidebar-link">Epoch</a>
+      <a href="#" class="sidebar-link">JSON Formatter</a>
+      <a href="#" class="sidebar-link">JWT Encoder Decoder</a>
+      <a href="#" class="sidebar-link">UUID v4</a>
+      <a href="#" class="sidebar-link">UUID v5</a>
+      <a href="#" class="sidebar-link">XML Formatter</a>
+    </div>
+  </div>
+
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <div class="container-fluid p-10">
+      <div class="row">
+        <div class="col-12" id="main-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Requires halfmoon.js for the dropdowns -->
+<script src="js/halfmoon.min.js"></script>
+</body>
+</html>
