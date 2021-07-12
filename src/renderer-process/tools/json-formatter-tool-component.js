@@ -71,7 +71,6 @@ module.exports = function JsonFormatterToolComponent() {
   };
 
   this.init = () => {
-    console.log('in...');
     const validateInput1Btn = document.getElementById('validate-input1-btn');
     const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
     const formatInput1Btn = document.getElementById('format-input1-btn');
