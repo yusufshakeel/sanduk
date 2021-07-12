@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1626069202961" clover="3.2.0">
-  <project timestamp="1626069202962" name="All files">
-    <metrics statements="71" coveredstatements="50" conditionals="20" coveredconditionals="8" methods="16" coveredmethods="14" elements="107" coveredelements="72" complexity="0" loc="71" ncloc="71" packages="3" files="5" classes="5"/>
+<coverage generated="1626071705398" clover="3.2.0">
+  <project timestamp="1626071705398" name="All files">
+    <metrics statements="71" coveredstatements="53" conditionals="20" coveredconditionals="10" methods="16" coveredmethods="14" elements="107" coveredelements="77" complexity="0" loc="71" ncloc="71" packages="3" files="5" classes="5"/>
     <package name="constants">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="event-constants.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/constants/event-constants.js">
@@ -21,7 +21,7 @@
         <line num="5" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
         <line num="11" count="3" type="stmt"/>
-        <line num="12" count="6" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
         <line num="13" count="7" type="stmt"/>
         <line num="18" count="3" type="stmt"/>
       </file>
@@ -34,25 +34,25 @@
       </file>
     </package>
     <package name="handlers">
-      <metrics statements="58" coveredstatements="37" conditionals="20" coveredconditionals="8" methods="11" coveredmethods="9"/>
+      <metrics statements="58" coveredstatements="40" conditionals="20" coveredconditionals="10" methods="11" coveredmethods="9"/>
       <file name="clicked-tool-handler.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/handlers/clicked-tool-handler.js">
-        <metrics statements="58" coveredstatements="37" conditionals="20" coveredconditionals="8" methods="11" coveredmethods="9"/>
+        <metrics statements="58" coveredstatements="40" conditionals="20" coveredconditionals="10" methods="11" coveredmethods="9"/>
         <line num="2" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
-        <line num="9" count="5" type="stmt"/>
-        <line num="11" count="5" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="14" count="5" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="11" count="8" type="stmt"/>
+        <line num="12" count="8" type="stmt"/>
+        <line num="14" count="8" type="stmt"/>
         <line num="15" count="6" type="cond" truecount="1" falsecount="1"/>
         <line num="16" count="6" type="stmt"/>
         <line num="17" count="6" type="stmt"/>
         <line num="18" count="5" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="5" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="25" count="5" type="stmt"/>
-        <line num="26" count="5" type="stmt"/>
-        <line num="28" count="5" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
+        <line num="26" count="8" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
@@ -63,7 +63,7 @@
         <line num="40" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="48" count="5" type="stmt"/>
+        <line num="48" count="8" type="stmt"/>
         <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
@@ -71,15 +71,15 @@
         <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="56" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="63" count="5" type="stmt"/>
-        <line num="64" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="65" count="5" type="stmt"/>
-        <line num="68" count="1" type="stmt"/>
-        <line num="69" count="1" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="78" count="5" type="stmt"/>
+        <line num="63" count="8" type="stmt"/>
+        <line num="64" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="65" count="6" type="stmt"/>
+        <line num="68" count="3" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="70" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="78" count="8" type="stmt"/>
         <line num="79" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="80" count="1" type="stmt"/>
         <line num="83" count="1" type="stmt"/>
@@ -88,11 +88,11 @@
         <line num="87" count="1" type="stmt"/>
         <line num="88" count="1" type="stmt"/>
         <line num="89" count="1" type="stmt"/>
-        <line num="94" count="5" type="stmt"/>
-        <line num="95" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="94" count="8" type="stmt"/>
+        <line num="95" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="96" count="1" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
-        <line num="101" count="5" type="stmt"/>
+        <line num="98" count="3" type="stmt"/>
+        <line num="101" count="8" type="stmt"/>
         <line num="102" count="2" type="stmt"/>
         <line num="109" count="1" type="stmt"/>
       </file>
