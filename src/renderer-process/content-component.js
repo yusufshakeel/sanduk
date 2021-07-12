@@ -3,11 +3,13 @@ const UUIDToolComponent = require('./tools/uuid-tool-component');
 const EpochToolComponent = require('./tools/epoch-tool-component');
 const Base64EncoderDecoderToolComponent = require('./tools/base64-encoder-decoder-tool-component');
 const JsonFormatterToolComponent = require('./tools/json-formatter-tool-component');
+const XmlFormatterToolComponent = require('./tools/xml-formatter-tool-component');
 
 const uuidToolComponent = new UUIDToolComponent();
 const epochToolComponent = new EpochToolComponent();
 const base64EncoderDecoderToolComponent = new Base64EncoderDecoderToolComponent();
 const jsonFormatterToolComponent = new JsonFormatterToolComponent();
+const xmlFormatterToolComponent = new XmlFormatterToolComponent();
 
 module.exports = async function contentComponent() {
   const html = `<div class="container-fluid p-10">
@@ -47,7 +49,8 @@ module.exports = async function contentComponent() {
         <div id="xml-formatter-content-wrapper"
              data-sanduk-tool-isActive="false"
              data-sanduk-tool-name="xml-formatter"
-             class="sandook-tool-content-wrapper d-none">xml formatter
+             class="sandook-tool-content-wrapper d-none">
+             ${xmlFormatterToolComponent.getHtml()}
         </div>
       </div>
     </div>
@@ -60,4 +63,5 @@ module.exports = async function contentComponent() {
   epochToolComponent.init();
   base64EncoderDecoderToolComponent.init();
   jsonFormatterToolComponent.init();
+  xmlFormatterToolComponent.init();
 };

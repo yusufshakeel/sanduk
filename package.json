@@ -11,6 +11,7 @@
     "build:for-mac": "npm run pre-build && npx electron-builder -m",
     "lint": "npx eslint -c .eslintrc.json src",
     "lint:fix": "npx eslint --fix -c .eslintrc.json src test/unit",
+    "test:all": "npm run test:unit",
     "test:unit": "jest -c jest.config.json"
   },
   "repository": {
