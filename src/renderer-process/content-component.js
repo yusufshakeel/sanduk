@@ -1,7 +1,9 @@
 'use strict';
 const UUIDToolComponent = require('./tools/uuid-tool-component');
+const EpochToolComponent = require('./tools/epoch-tool-component');
 
 const uuidToolComponent = new UUIDToolComponent();
+const epochToolComponent = new EpochToolComponent();
 
 module.exports = async function contentComponent() {
   const html = `<div class="container-fluid p-10">
@@ -15,7 +17,8 @@ module.exports = async function contentComponent() {
         <div id="epoch-content-wrapper"
              data-sanduk-tool-isActive="false"
              data-sanduk-tool-name="epoch"
-             class="sandook-tool-content-wrapper d-none">epoch
+             class="sandook-tool-content-wrapper d-none">
+             ${epochToolComponent.getEpochHtml()}
         </div>
         <div id="json-formatter-content-wrapper"
              data-sanduk-tool-isActive="false"
@@ -48,4 +51,5 @@ module.exports = async function contentComponent() {
 
   uuidToolComponent.initUUIDV4();
   uuidToolComponent.initUUIDV5();
+  epochToolComponent.initEpoch();
 };
