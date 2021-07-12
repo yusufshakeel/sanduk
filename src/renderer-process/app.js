@@ -1,8 +1,9 @@
 'use strict';
 const ClickedToolHandler = require('../handlers/clicked-tool-handler');
+const sidebarComponent = require('../renderer-process/sidebar');
 const clickedToolHandler = new ClickedToolHandler();
 
-function addClickEventListenerToTools() {
+async function addClickEventListenerToTools() {
   const menuItems = document.getElementsByClassName('sanduk-tool');
   const contentWrappers = document.getElementsByClassName('sandook-tool-content-wrapper');
   if (!menuItems || !contentWrappers) {
@@ -13,5 +14,5 @@ function addClickEventListenerToTools() {
 }
 
 window.onload = () => {
-  addClickEventListenerToTools();
+  sidebarComponent().then(addClickEventListenerToTools);
 };
