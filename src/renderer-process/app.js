@@ -1,6 +1,6 @@
 'use strict';
 const ClickedToolHandler = require('../handlers/clicked-tool-handler');
-const sidebarComponent = require('../renderer-process/sidebar');
+const sidebarComponent = require('../renderer-process/sidebar-component');
 const clickedToolHandler = new ClickedToolHandler();
 
 async function addClickEventListenerToTools() {
