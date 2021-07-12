@@ -3,5 +3,5 @@ body {
 }
 
 a.sidebar-link.sanduk-tool[data-sanduk-tool-isActive="true"] {
-    border-left: 2px solid dodgerblue;
+    border-left: 3px solid dodgerblue;
 }
