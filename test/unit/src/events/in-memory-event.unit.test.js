@@ -24,6 +24,19 @@ describe('Testing InMemoryEventProducer', () => {
       eventData: 'SOME_EVENT_DATA'
     });
   });
+
+  test('Should be able to remove all listeners', async () => {
+    const producer = new InMemoryEventProducer({ client: eventEmitter2 });
+    const consumer = new InMemoryEventConsumer({ client: eventEmitter2 });
+    const topicName = `someTopicName-${new Date().getTime()}`;
+    consumer.listenTo(topicName, (eventType, eventData) => {});
+    producer.emit(topicName, { eventType: 'SOME_EVENT_TYPE', eventData: 'SOME_EVENT_DATA' });
+    const listeners = eventEmitter2.listeners(topicName);
+    expect(listeners).toHaveLength(1);
+    producer.removeAllListeners(topicName);
+    const listenersAfterRemovingAll = eventEmitter2.listeners(topicName);
+    expect(listenersAfterRemovingAll).toHaveLength(0);
+  });
 });
 
 describe('Testing InMemoryEventConsumer', () => {
@@ -38,5 +51,6 @@ describe('Testing InMemoryEventConsumer', () => {
     });
     expect(consumer).toHaveProperty('listenTo');
     expect(handler).toHaveBeenCalledWith('SOME_EVENT_TYPE', 'SOME_EVENT_DATA');
+    producer.removeAllListeners('SOME_TOPIC');
   });
 });

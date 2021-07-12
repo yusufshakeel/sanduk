@@ -1,18 +1,24 @@
 'use strict';
-const { inMemoryEventProducer } = require('../../../../src/events');
+const {inMemoryEventProducer} = require('../../../../src/events');
 const ClickedToolHandler = require('../../../../src/handlers/clicked-tool-handler');
+const { TOPIC: { CLICKED_TOOL } } = require('../../../../src/constants/topic-subscriber-constants');
+
+beforeEach(() => {
+  inMemoryEventProducer.removeAllListeners(CLICKED_TOOL);
+});
 
 describe('Testing clicked', () => {
   test('Should emit event on click', () => {
-    const spy = jest.spyOn(inMemoryEventProducer, 'emit');
-    const clickedToolHandler = new ClickedToolHandler();
+    const fakeInMemoryEventProducer = {
+      emit: jest.fn()
+    };
+    const clickedToolHandler = new ClickedToolHandler(fakeInMemoryEventProducer);
     clickedToolHandler.clicked({ toolName: 'TOOL_NAME', toolMenuItemId: 'TOOL_MENU_ITEM_ID' });
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('CLICKED_TOOL', {
+    expect(fakeInMemoryEventProducer.emit).toHaveBeenCalledTimes(1);
+    expect(fakeInMemoryEventProducer.emit).toHaveBeenCalledWith('CLICKED_TOOL', {
       eventType: 'EVENT_SHOW_CLICKED_TOOL',
       eventData: { toolName: 'TOOL_NAME', toolMenuItemId: 'TOOL_MENU_ITEM_ID' }
     });
-    spy.mockRestore();
   });
 });
 
@@ -25,8 +31,11 @@ describe('Testing registerContentWrappers', () => {
 
   test('Should return content wrappers', () => {
     const clickedToolHandler = new ClickedToolHandler();
-    clickedToolHandler.registerContentWrappers([1, 2]);
-    expect(clickedToolHandler.getContentWrappers()).toStrictEqual([1, 2]);
+    const contentWrapperElement = {
+      getAttribute: jest.fn(() => 'SOME_NAME')
+    };
+    clickedToolHandler.registerContentWrappers([contentWrapperElement]);
+    expect(clickedToolHandler.getContentWrappers()).toStrictEqual([contentWrapperElement]);
   });
 });
 
@@ -78,5 +87,37 @@ describe('Testing getContentWrapperByName', () => {
     };
     clickedToolHandler.registerContentWrappers([contentWrapperElement]);
     expect(clickedToolHandler.getContentWrapperByName('SOME_OTHER_NAME')).toBeNull();
+  });
+});
+
+describe('Testing getMenuItemById', () => {
+  test('Should return null if no menu item exists', () => {
+    const clickedToolHandler = new ClickedToolHandler();
+    expect(clickedToolHandler.getMenuItemById('SOME_ID')).toBeNull();
+  });
+
+  test('Should return menu item by id', () => {
+    const clickedToolHandler = new ClickedToolHandler();
+    const menuItemElement = {
+      getAttribute: jest.fn(() => 'SOME_ID'),
+      addEventListener: jest.fn()
+    };
+    clickedToolHandler.registerMenuItems([menuItemElement]);
+    expect(clickedToolHandler.getMenuItemById('SOME_ID')).toStrictEqual(menuItemElement);
+  });
+
+  test('Should return null if menu item is not found', () => {
+    const fakeInMemoryEventProducer = {
+      emit: jest.fn()
+    };
+    const clickedToolHandler = new ClickedToolHandler();
+    const menuItemElement = {
+      getAttribute: jest.fn(attribute => {
+        return { id: 'SOME_ID', 'data-sanduk-tool-name': 'SOME_TOOL_NAME' }[attribute];
+      }),
+      addEventListener: jest.fn((event, callback) => callback())
+    };
+    clickedToolHandler.registerMenuItems([menuItemElement]);
+    expect(clickedToolHandler.getMenuItemById('SOME_OTHER_ID')).toBeNull();
   });
 });

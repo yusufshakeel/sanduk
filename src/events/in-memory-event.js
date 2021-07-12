@@ -5,6 +5,10 @@ function InMemoryEventProducer({ client }) {
     const { eventType, eventData } = message;
     return client.emitAsync(topic, { eventType, eventData });
   };
+
+  this.removeAllListeners = topic => {
+    client.removeAllListeners(topic);
+  };
 }
 
 function InMemoryEventConsumer({ client }) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1626071705398" clover="3.2.0">
-  <project timestamp="1626071705398" name="All files">
-    <metrics statements="71" coveredstatements="53" conditionals="20" coveredconditionals="10" methods="16" coveredmethods="14" elements="107" coveredelements="77" complexity="0" loc="71" ncloc="71" packages="3" files="5" classes="5"/>
+<coverage generated="1626087439646" clover="3.2.0">
+  <project timestamp="1626087439646" name="All files">
+    <metrics statements="73" coveredstatements="62" conditionals="22" coveredconditionals="16" methods="17" coveredmethods="16" elements="112" coveredelements="94" complexity="0" loc="73" ncloc="73" packages="3" files="5" classes="5"/>
     <package name="constants">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="event-constants.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/constants/event-constants.js">
@@ -14,16 +14,18 @@
       </file>
     </package>
     <package name="events">
-      <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
       <file name="in-memory-event.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/events/in-memory-event.js">
-        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="5" count="4" type="stmt"/>
-        <line num="6" count="4" type="stmt"/>
-        <line num="11" count="3" type="stmt"/>
-        <line num="12" count="9" type="stmt"/>
-        <line num="13" count="7" type="stmt"/>
-        <line num="18" count="3" type="stmt"/>
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="13" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="13" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
       </file>
       <file name="index.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/events/index.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -34,67 +36,67 @@
       </file>
     </package>
     <package name="handlers">
-      <metrics statements="58" coveredstatements="40" conditionals="20" coveredconditionals="10" methods="11" coveredmethods="9"/>
+      <metrics statements="58" coveredstatements="47" conditionals="22" coveredconditionals="16" methods="11" coveredmethods="10"/>
       <file name="clicked-tool-handler.js" path="/Users/yusufshakeel/Documents/GitHub/sanduk/src/handlers/clicked-tool-handler.js">
-        <metrics statements="58" coveredstatements="40" conditionals="20" coveredconditionals="10" methods="11" coveredmethods="9"/>
+        <metrics statements="58" coveredstatements="47" conditionals="22" coveredconditionals="16" methods="11" coveredmethods="10"/>
         <line num="2" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="8" type="stmt"/>
-        <line num="14" count="8" type="stmt"/>
-        <line num="15" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="16" count="6" type="stmt"/>
-        <line num="17" count="6" type="stmt"/>
-        <line num="18" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="19" count="5" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="26" count="8" type="stmt"/>
-        <line num="28" count="8" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="31" count="11" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="48" count="8" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="63" count="8" type="stmt"/>
-        <line num="64" count="9" type="cond" truecount="2" falsecount="0"/>
-        <line num="65" count="6" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="11" type="stmt"/>
+        <line num="52" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="66" count="11" type="stmt"/>
+        <line num="67" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="68" count="3" type="stmt"/>
-        <line num="69" count="3" type="stmt"/>
-        <line num="70" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="71" count="1" type="stmt"/>
-        <line num="75" count="1" type="stmt"/>
-        <line num="78" count="8" type="stmt"/>
-        <line num="79" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="80" count="1" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
+        <line num="73" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="81" count="11" type="stmt"/>
+        <line num="82" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="83" count="1" type="stmt"/>
-        <line num="85" count="1" type="stmt"/>
-        <line num="86" count="1" type="stmt"/>
-        <line num="87" count="1" type="stmt"/>
-        <line num="88" count="1" type="stmt"/>
-        <line num="89" count="1" type="stmt"/>
-        <line num="94" count="8" type="stmt"/>
-        <line num="95" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="96" count="1" type="stmt"/>
-        <line num="98" count="3" type="stmt"/>
-        <line num="101" count="8" type="stmt"/>
-        <line num="102" count="2" type="stmt"/>
-        <line num="109" count="1" type="stmt"/>
+        <line num="86" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="89" count="3" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="97" count="11" type="stmt"/>
+        <line num="98" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="101" count="3" type="stmt"/>
+        <line num="104" count="11" type="stmt"/>
+        <line num="105" count="3" type="stmt"/>
+        <line num="112" count="1" type="stmt"/>
       </file>
     </package>
   </project>
