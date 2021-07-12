@@ -1,9 +1,11 @@
 'use strict';
 const UUIDToolComponent = require('./tools/uuid-tool-component');
 const EpochToolComponent = require('./tools/epoch-tool-component');
+const Base64EncoderDecoderToolComponent = require('./tools/base64-encoder-decoder-tool-component');
 
 const uuidToolComponent = new UUIDToolComponent();
 const epochToolComponent = new EpochToolComponent();
+const base64EncoderDecoderToolComponent = new Base64EncoderDecoderToolComponent();
 
 module.exports = async function contentComponent() {
   const html = `<div class="container-fluid p-10">
@@ -12,13 +14,14 @@ module.exports = async function contentComponent() {
         <div id="base64-encoder-decoder-content-wrapper"
              data-sanduk-tool-isActive="false"
              data-sanduk-tool-name="base64-encoder-decoder"
-             class="sandook-tool-content-wrapper d-none">Base64 Encoder Decoder
+             class="sandook-tool-content-wrapper d-none">
+             ${base64EncoderDecoderToolComponent.getHtml()}
         </div>
         <div id="epoch-content-wrapper"
              data-sanduk-tool-isActive="false"
              data-sanduk-tool-name="epoch"
              class="sandook-tool-content-wrapper d-none">
-             ${epochToolComponent.getEpochHtml()}
+             ${epochToolComponent.getHtml()}
         </div>
         <div id="json-formatter-content-wrapper"
              data-sanduk-tool-isActive="false"
@@ -51,5 +54,6 @@ module.exports = async function contentComponent() {
 
   uuidToolComponent.initUUIDV4();
   uuidToolComponent.initUUIDV5();
-  epochToolComponent.initEpoch();
+  epochToolComponent.init();
+  base64EncoderDecoderToolComponent.init();
 };

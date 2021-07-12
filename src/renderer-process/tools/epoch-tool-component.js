@@ -2,7 +2,7 @@
 const { clipboard } = require('electron');
 
 module.exports = function EpochToolComponent() {
-  this.getEpochHtml = () => {
+  this.getHtml = () => {
     return `<!-- epoch -->
   <div class="row">
     <div class="col-12 text-center">
@@ -55,7 +55,7 @@ module.exports = function EpochToolComponent() {
   </div>`;
   };
 
-  this.initEpoch = () => {
+  this.init = () => {
     const epochInput = document.getElementById('epoch-input');
     const epochMessage = document.getElementById('epoch-message');
     const timeInLocale = document.getElementById('time-in-locale');
