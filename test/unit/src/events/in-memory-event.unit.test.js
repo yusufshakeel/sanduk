@@ -29,7 +29,7 @@ describe('Testing InMemoryEventProducer', () => {
     const producer = new InMemoryEventProducer({ client: eventEmitter2 });
     const consumer = new InMemoryEventConsumer({ client: eventEmitter2 });
     const topicName = `someTopicName-${new Date().getTime()}`;
-    consumer.listenTo(topicName, (eventType, eventData) => {});
+    consumer.listenTo(topicName, () => {});
     producer.emit(topicName, { eventType: 'SOME_EVENT_TYPE', eventData: 'SOME_EVENT_DATA' });
     const listeners = eventEmitter2.listeners(topicName);
     expect(listeners).toHaveLength(1);

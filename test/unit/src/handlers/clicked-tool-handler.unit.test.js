@@ -1,7 +1,9 @@
 'use strict';
-const {inMemoryEventProducer} = require('../../../../src/events');
+const { inMemoryEventProducer } = require('../../../../src/events');
 const ClickedToolHandler = require('../../../../src/handlers/clicked-tool-handler');
-const { TOPIC: { CLICKED_TOOL } } = require('../../../../src/constants/topic-subscriber-constants');
+const {
+  TOPIC: { CLICKED_TOOL }
+} = require('../../../../src/constants/topic-subscriber-constants');
 
 beforeEach(() => {
   inMemoryEventProducer.removeAllListeners(CLICKED_TOOL);
@@ -107,9 +109,6 @@ describe('Testing getMenuItemById', () => {
   });
 
   test('Should return null if menu item is not found', () => {
-    const fakeInMemoryEventProducer = {
-      emit: jest.fn()
-    };
     const clickedToolHandler = new ClickedToolHandler();
     const menuItemElement = {
       getAttribute: jest.fn(attribute => {
@@ -119,5 +118,126 @@ describe('Testing getMenuItemById', () => {
     };
     clickedToolHandler.registerMenuItems([menuItemElement]);
     expect(clickedToolHandler.getMenuItemById('SOME_OTHER_ID')).toBeNull();
+  });
+});
+
+describe('Testing showContentWrapper', () => {
+  test('Should be able to show content wrapper', () => {
+    const clickedToolHandler = new ClickedToolHandler();
+    const menuItemElements = [
+      {
+        getAttribute: jest.fn(attribute => {
+          return {
+            'data-sanduk-tool-isActive': 'false',
+            'data-sanduk-tool-name': 'TOOL_1',
+            id: 'MENU_ITEM_1'
+          }[attribute];
+        }),
+        addEventListener: jest.fn((event, callback) => callback()),
+        setAttribute: jest.fn()
+      },
+      {
+        getAttribute: jest.fn(attribute => {
+          return {
+            'data-sanduk-tool-isActive': 'false',
+            'data-sanduk-tool-name': 'TOOL_2',
+            id: 'MENU_ITEM_2'
+          }[attribute];
+        }),
+        addEventListener: jest.fn((event, callback) => callback()),
+        setAttribute: jest.fn()
+      }
+    ];
+    const contentWrapperElements = [
+      {
+        getAttribute: jest.fn(attribute => {
+          return {
+            'data-sanduk-tool-isActive': 'false',
+            'data-sanduk-tool-name': 'TOOL_1',
+            id: 'CONTENT_WRAPPER_1'
+          }[attribute];
+        }),
+        setAttribute: jest.fn(),
+        classList: {
+          add: jest.fn(),
+          remove: jest.fn()
+        }
+      },
+      {
+        getAttribute: jest.fn(attribute => {
+          return {
+            'data-sanduk-tool-isActive': 'false',
+            'data-sanduk-tool-name': 'TOOL_2',
+            id: 'CONTENT_WRAPPER_2'
+          }[attribute];
+        }),
+        setAttribute: jest.fn(),
+        classList: {
+          add: jest.fn(),
+          remove: jest.fn()
+        }
+      }
+    ];
+    clickedToolHandler.registerMenuItems(menuItemElements);
+    clickedToolHandler.registerContentWrappers(contentWrapperElements);
+    clickedToolHandler.showContentWrapper(contentWrapperElements[0], 'MENU_ITEM_1');
+
+    expect(menuItemElements[0].setAttribute).toHaveBeenCalledWith(
+      'data-sanduk-tool-isActive',
+      'true'
+    );
+    expect(menuItemElements[1].setAttribute).toHaveBeenCalledWith(
+      'data-sanduk-tool-isActive',
+      'false'
+    );
+
+    expect(contentWrapperElements[0].setAttribute).toHaveBeenCalledWith(
+      'data-sanduk-tool-isActive',
+      'true'
+    );
+    expect(contentWrapperElements[1].setAttribute).toHaveBeenCalledWith(
+      'data-sanduk-tool-isActive',
+      'false'
+    );
+
+    expect(contentWrapperElements[0].classList.remove).toHaveBeenCalledWith('d-none');
+    expect(contentWrapperElements[1].classList.add).toHaveBeenCalledWith('d-none');
+  });
+});
+
+describe('Testing handleShowClickedToolEvent', () => {
+  test('Should do nothing if eventType is not EVENT_SHOW_CLICKED_TOOL', () => {
+    const clickedToolHandler = new ClickedToolHandler();
+    const spy = jest.spyOn(clickedToolHandler, 'handleShowClickedToolEvent');
+    inMemoryEventProducer.emit(CLICKED_TOOL, {
+      eventType: 'SOME_EVENT_TYPE',
+      eventData: { toolName: 'SOME_NAME', toolMenuItemId: 'SOME_ID' }
+    });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('SOME_EVENT_TYPE', {
+      toolName: 'SOME_NAME',
+      toolMenuItemId: 'SOME_ID'
+    });
+    spy.mockRestore();
+  });
+
+  test.skip('Should do nothing if contentWrapperToShow is not found', () => {
+    const clickedToolHandler = new ClickedToolHandler();
+    const spy = jest.spyOn(clickedToolHandler, 'handleShowClickedToolEvent');
+    inMemoryEventProducer.emit(CLICKED_TOOL, {
+      eventType: 'EVENT_SHOW_CLICKED_TOOL',
+      eventData: { toolName: 'SOME_NAME', toolMenuItemId: 'SOME_ID' }
+    });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('EVENT_SHOW_CLICKED_TOOL', {
+      toolName: 'SOME_NAME',
+      toolMenuItemId: 'SOME_ID'
+    });
+
+    expect(clickedToolHandler.getContentWrapperByName).toHaveBeenCalledTimes(1);
+    expect(clickedToolHandler.getContentWrapperByName).toHaveBeenCalledWith('SOME_NAME');
+
+    expect(clickedToolHandler.showContentWrapper).toHaveBeenCalledTimes(0);
+    spy.mockRestore();
   });
 });
