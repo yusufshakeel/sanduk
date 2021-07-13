@@ -28,7 +28,7 @@ module.exports = function JwtDecoderToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <div class="form-group">
         <label for="jwt-decoder-input">JWT</label>
         <textarea class="form-control" id="jwt-decoder-input"></textarea>
@@ -37,13 +37,13 @@ module.exports = function JwtDecoderToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-6">
+    <div class="col-6 p-5">
       <div class="form-group">
         <label for="jwt-decoder-decoded-header">Header</label>
         <pre class="form-control" id="jwt-decoder-decoded-header"></pre>
       </div>
     </div>
-    <div class="col-6">
+    <div class="col-6 p-5">
       <div class="form-group">
         <label for="jwt-decoder-decoded-payload">Payload</label>
         <pre class="form-control" id="jwt-decoder-decoded-payload"></pre>
@@ -51,7 +51,7 @@ module.exports = function JwtDecoderToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <button id="jwt-decoder-decode-btn" class="btn btn-rounded btn-primary sanduk-tool-btn">Decode</button>
       <button id="jwt-deocder-clear-btn" class="btn btn-rounded btn-default sanduk-tool-btn">Clear</button>
     </div>

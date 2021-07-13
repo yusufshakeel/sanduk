@@ -5,6 +5,7 @@ const Base64EncoderDecoderToolComponent = require('./tools/base64-encoder-decode
 const JsonFormatterToolComponent = require('./tools/json-formatter-tool-component');
 const XmlFormatterToolComponent = require('./tools/xml-formatter-tool-component');
 const JwtDecoderToolComponent = require('./tools/jwt-decoder-tool-component');
+const XmlToJsonToolComponent = require('./tools/xml-to-json-tool-component');
 
 const uuidToolComponent = new UUIDToolComponent();
 const epochToolComponent = new EpochToolComponent();
@@ -12,6 +13,7 @@ const base64EncoderDecoderToolComponent = new Base64EncoderDecoderToolComponent(
 const jsonFormatterToolComponent = new JsonFormatterToolComponent();
 const xmlFormatterToolComponent = new XmlFormatterToolComponent();
 const jwtDecoderToolComponent = new JwtDecoderToolComponent();
+const xmlToJsonToolComponent = new XmlToJsonToolComponent();
 
 module.exports = async function contentComponent() {
   const html = `<div class="container-fluid p-10">
@@ -55,6 +57,12 @@ module.exports = async function contentComponent() {
              class="sandook-tool-content-wrapper d-none">
              ${xmlFormatterToolComponent.getHtml()}
         </div>
+        <div id="xml-to-json-content-wrapper"
+             data-sanduk-tool-isActive="false"
+             data-sanduk-tool-name="xml-to-json"
+             class="sandook-tool-content-wrapper d-none">
+             ${xmlToJsonToolComponent.getHTML()}
+        </div>
       </div>
     </div>
   </div>`;
@@ -68,4 +76,5 @@ module.exports = async function contentComponent() {
   jsonFormatterToolComponent.init();
   xmlFormatterToolComponent.init();
   jwtDecoderToolComponent.init();
+  xmlToJsonToolComponent.init();
 };

@@ -1,5 +1,9 @@
 'use strict';
-let xmlFormatter = require('xml-formatter');
+const xmlFormatter = require('xml-formatter');
+
+const xmlFormatterOption = {
+  indentation: '  '
+};
 
 const { ALERT_TYPE_ERROR, ALERT_TYPE_PRIMARY } = require('../constants/alert-type-constants');
 
@@ -52,7 +56,7 @@ module.exports = function XmlFormatterToolComponent() {
         <pre class="form-control"
              id="xml-formatter-input1"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
-        <div id="xml-formatter-input1-footer" class="bg-dark p-5"></div>
+        <div id="xml-formatter-input1-footer" class="bg-dark p-5">Ln: 1 Col: 1</div>
       </div>
       <div id="xml-formatter-xml-input1-message"></div>
     </div>
@@ -78,7 +82,7 @@ module.exports = function XmlFormatterToolComponent() {
     input1Editor.setTheme(theme);
     input1Editor.session.setMode(mode);
     input1Editor.selection.on('changeCursor', () => {
-      const { row, column } = input1Editor.getCursorPosition();
+      const { row = 0, column = 0 } = input1Editor.getCursorPosition();
       input1Footer.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
     });
 
@@ -98,7 +102,7 @@ module.exports = function XmlFormatterToolComponent() {
         if (!input.length) {
           return;
         }
-        input1Editor.setValue(xmlFormatter(input), -1);
+        input1Editor.setValue(xmlFormatter(input, xmlFormatterOption), -1);
       } catch (e) {
         showMessage(xmlInput1Message, e.message, ALERT_TYPE_ERROR);
       }

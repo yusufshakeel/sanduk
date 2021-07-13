@@ -11,7 +11,7 @@ module.exports = function UUIDToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <div class="form-group">
         <input class="form-control text-center text-monospace font-size-18" id="uuid-v4-output" readonly>
       </div>
@@ -30,7 +30,7 @@ module.exports = function UUIDToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <div class="form-group">
         <label for="uuid-v5-name">String</label>
         <input class="form-control" id="uuid-v5-name">
