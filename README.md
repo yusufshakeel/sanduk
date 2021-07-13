@@ -1,29 +1,41 @@
 # sanduk
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yusufshakeel/sanduk)
-[![npm version](https://img.shields.io/badge/npm-0.1.3-blue.svg)](https://www.npmjs.com/package/sanduk)
+[![npm version](https://img.shields.io/badge/npm-0.2.0-blue.svg)](https://www.npmjs.com/package/sanduk)
 
 Helper app for development.
 
 Sanduk (Sandooq) in English means "Box".
 
-## Getting started:
+## In 3 steps
 
-* Download or clone this project.
-* Open terminal and get into the project directory and run the following command.
+1. Clone the project
+
+```
+git clone https://github.com/yusufshakeel/sanduk.git
+```
+
+2. Install modules
+
 ```
 npm install
 ```
 
-## To build dmg for macOS
-
-Run the following command.
+3. Build dmg for macOS
 
 ```
 npm run build:for-mac
 ```
 
 A `dist` directory will be created which will have the dmg file.
+
+## Tests
+
+```
+npm run test:all
+```
+
+Test code is inside `test` directory.
 
 ## License
 
