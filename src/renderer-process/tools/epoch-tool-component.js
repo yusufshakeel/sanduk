@@ -10,7 +10,7 @@ module.exports = function EpochToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <div class="form-group">
         <label for="epoch-input">Enter epoch time</label>
         <input class="form-control" id="epoch-input">
@@ -29,7 +29,7 @@ module.exports = function EpochToolComponent() {
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 p-5">
       <div id="time-table">
         <table class="table">
           <tbody>

@@ -12,6 +12,10 @@ const macOSSpecificMenu = () => {
 function applicationMenu() {
   const template = [
     ...macOSSpecificMenu(),
+    {
+      label: 'File',
+      submenu: [{ role: 'close' }]
+    },
     { role: 'editMenu' },
     {
       role: 'help',

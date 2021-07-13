@@ -9,7 +9,7 @@ module.exports = async function navbarComponent() {
     </div>
     <div class="navbar-text ml-5">
       <img src="../../resources/app-icons/stable/png/32.png" style="height: 20px; width: 20px;" alt="sanduk logo">
-      <span class="ml-5">sanduk</span>
+      <span class="ml-5 font-weight-semi-bold">sanduk</span>
     </div>`;
 
   document.getElementById('navbar').innerHTML = html;

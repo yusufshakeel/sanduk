@@ -27,60 +27,64 @@ module.exports = function JsonFormatterToolComponent() {
           <div class="btn-group" role="group">
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="validate-input1-btn">Validate
-            </button>
-            <button class="btn btn-primary"
-                    type="button"
-                    id="format-input1-btn">Pretty
-            </button>
-            <button class="btn btn-primary"
-                    type="button"
-                    id="compact-input1-btn">Compact
-            </button>
-            <button class="btn btn-primary"
-                    type="button"
-                    id="fold-input1-btn">Fold
+                    id="validate-input1-json-formatter-btn">Validate
             </button>
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="toggle-wrap-input1-btn" data-wrap="no">Wrap
+                    id="format-input1-json-formatter-btn">Pretty
+            </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="compact-input1-json-formatter-btn">Compact
+            </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="fold-input1-json-formatter-btn">Fold
+            </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="toggle-wrap-input1-json-formatter-btn" data-wrap="no">Wrap
             </button>
           </div>
 
           <div class="btn-group" role="group">
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="increase-font-input1-btn">A<sup>+</sup>
+                    id="increase-font-input1-json-formatter-btn">A<sup>+</sup>
             </button>
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="decrease-font-input1-btn">A<sup>-</sup>
+                    id="decrease-font-input1-json-formatter-btn">A<sup>-</sup>
             </button>
           </div>
         </div>
 
         <!-- input editor -->
         <pre class="form-control"
-             id="json-input1"
+             id="json-input1-json-formatter"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
-        <div id="input1-footer" class="bg-dark p-5"></div>
+        <div id="input1-footer-json-formatter" class="bg-dark p-5">Ln: 1 Col: 1</div>
       </div>
-      <div id="json-input1-message"></div>
+      <div id="json-input1-json-formatter-message"></div>
     </div>
   </div>`;
   };
 
   this.init = () => {
-    const validateInput1Btn = document.getElementById('validate-input1-btn');
-    const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-btn');
-    const formatInput1Btn = document.getElementById('format-input1-btn');
-    const compactInput1Btn = document.getElementById('compact-input1-btn');
-    const foldInput1Btn = document.getElementById('fold-input1-btn');
-    const jsonInput1Message = document.getElementById('json-input1-message');
-    const jsonInput1 = document.getElementById('json-input1');
-    const input1Footer = document.getElementById('input1-footer');
-    const increaseFontInput1Btn = document.getElementById('increase-font-input1-btn');
-    const decreaseFontInput1Btn = document.getElementById('decrease-font-input1-btn');
+    const validateInput1Btn = document.getElementById('validate-input1-json-formatter-btn');
+    const toggleWrapInput1Btn = document.getElementById('toggle-wrap-input1-json-formatter-btn');
+    const formatInput1Btn = document.getElementById('format-input1-json-formatter-btn');
+    const compactInput1Btn = document.getElementById('compact-input1-json-formatter-btn');
+    const foldInput1Btn = document.getElementById('fold-input1-json-formatter-btn');
+    const jsonInput1Message = document.getElementById('json-input1-json-formatter-message');
+    const jsonInput1 = document.getElementById('json-input1-json-formatter');
+    const input1Footer = document.getElementById('input1-footer-json-formatter');
+    const increaseFontInput1Btn = document.getElementById(
+      'increase-font-input1-json-formatter-btn'
+    );
+    const decreaseFontInput1Btn = document.getElementById(
+      'decrease-font-input1-json-formatter-btn'
+    );
 
     let input1Editor;
 
@@ -89,11 +93,11 @@ module.exports = function JsonFormatterToolComponent() {
     // dracula*, gruvbox*, tomorrow_night_eighties*
     const mode = 'ace/mode/json';
 
-    input1Editor = window.ace.edit('json-input1');
+    input1Editor = window.ace.edit('json-input1-json-formatter');
     input1Editor.setTheme(theme);
     input1Editor.session.setMode(mode);
     input1Editor.selection.on('changeCursor', () => {
-      const { row, column } = input1Editor.getCursorPosition();
+      const { row = 0, column = 0 } = input1Editor.getCursorPosition();
       input1Footer.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
     });
 
