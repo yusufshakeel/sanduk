@@ -27,7 +27,7 @@ function createWindow() {
   });
 
   // for dev work
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   windowState.manage(mainWindow);
 

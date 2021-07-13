@@ -6,7 +6,12 @@ const utf8 = require('utf8');
 module.exports = function Base64EncoderDecoderToolComponent() {
   this.getHtml = () => {
     return `<!-- base64 encoder decoder -->
-  <style>.sanduk-textarea-container { resize: vertical }</style>
+  <style>
+    .sanduk-textarea-container {
+      resize: vertical; 
+      font-size: 1em;
+    }
+  </style>
   <div class="row">
     <div class="col-12 text-center">
       <p class="font-size-20 my-0">Base64 Encoder Decoder</p>
