@@ -5,8 +5,8 @@ const xmlFormatterOption = {
   indentation: '  '
 };
 
-const FileHandler = require('../../handlers/file-handler');
-const fileHandler = new FileHandler();
+// const FileHandler = require('../../handlers/file-handler');
+// const fileHandler = new FileHandler();
 
 const { ALERT_TYPE_ERROR, ALERT_TYPE_PRIMARY } = require('../constants/alert-type-constants');
 
