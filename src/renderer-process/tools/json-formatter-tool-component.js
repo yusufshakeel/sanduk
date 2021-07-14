@@ -1,4 +1,15 @@
 'use strict';
+const { ipcRenderer } = require('electron');
+
+const {
+  CHANNEL_OPEN_FILE_DIALOG_JSON,
+  CHANNEL_OPEN_FILE_DIALOG_JSON_FILE_PATH,
+  CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON,
+  CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH
+} = require('../../main-process/constants/channel-constants');
+
+const FileHandler = require('../../handlers/file-handler');
+const fileHandler = new FileHandler();
 
 const {
   ALERT_TYPE_SUCCESS,
@@ -56,6 +67,16 @@ module.exports = function JsonFormatterToolComponent() {
                     type="button"
                     id="decrease-font-input-json-formatter-btn">A<sup>-</sup>
             </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="open-file-json-formatter-btn">
+                    <i class="fas fa-folder-open"></i>
+            </button>
+            <button class="btn btn-primary btn-rounded"
+                    type="button"
+                    id="save-file-json-formatter-btn">
+                    <i class="fas fa-save"></i>
+            </button>
           </div>
         </div>
 
@@ -63,7 +84,7 @@ module.exports = function JsonFormatterToolComponent() {
         <pre class="form-control"
              id="json-input-json-formatter"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
-        <div id="input1-footer-json-formatter" class="bg-dark p-5">Ln: 1 Col: 1</div>
+        <div id="input-footer-json-formatter" class="bg-dark p-5">Ln: 1 Col: 1</div>
       </div>
       <div id="json-input-json-formatter-message"></div>
     </div>
@@ -78,13 +99,11 @@ module.exports = function JsonFormatterToolComponent() {
     const foldInputBtn = document.getElementById('fold-input-json-formatter-btn');
     const jsonInputMessage = document.getElementById('json-input-json-formatter-message');
     const jsonInput = document.getElementById('json-input-json-formatter');
-    const inputFooter = document.getElementById('input1-footer-json-formatter');
-    const increaseFontInputBtn = document.getElementById(
-      'increase-font-input-json-formatter-btn'
-    );
-    const decreaseFontInputBtn = document.getElementById(
-      'decrease-font-input-json-formatter-btn'
-    );
+    const inputFooter = document.getElementById('input-footer-json-formatter');
+    const openFileBtn = document.getElementById('open-file-json-formatter-btn');
+    const saveFileBtn = document.getElementById('save-file-json-formatter-btn');
+    const increaseFontInputBtn = document.getElementById('increase-font-input-json-formatter-btn');
+    const decreaseFontInputBtn = document.getElementById('decrease-font-input-json-formatter-btn');
 
     let jsonInputEditor;
 
@@ -119,6 +138,32 @@ module.exports = function JsonFormatterToolComponent() {
       }
       return false;
     }
+
+    ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
+      try {
+        const json = await fileHandler.readFile({ filePath: args.filePath });
+        jsonInputEditor.setValue(json, -1);
+      } catch (e) {
+        //
+      }
+    });
+
+    ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
+      try {
+        const data = jsonInputEditor.getValue();
+        await fileHandler.writeFile({ filePath: args.filePath, data });
+      } catch (e) {
+        //
+      }
+    });
+
+    openFileBtn.addEventListener('click', () => {
+      ipcRenderer.send(CHANNEL_OPEN_FILE_DIALOG_JSON);
+    });
+
+    saveFileBtn.addEventListener('click', () => {
+      ipcRenderer.send(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON);
+    });
 
     validateInputBtn.addEventListener('click', () => {
       const input = jsonInputEditor.getValue();
