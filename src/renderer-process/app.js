@@ -1,4 +1,5 @@
 'use strict';
+const packageJson = require('../../package.json');
 const ClickedToolHandler = require('../handlers/clicked-tool-handler');
 const navbarComponent = require('../renderer-process/navbar-component');
 const sidebarComponent = require('../renderer-process/sidebar-component');
@@ -16,7 +17,8 @@ async function addClickEventListenerToTools() {
 }
 
 window.onload = () => {
-  navbarComponent()
+  const { version } = packageJson;
+  navbarComponent({ version })
     .then(sidebarComponent)
     .then(contentComponent)
     .then(addClickEventListenerToTools);

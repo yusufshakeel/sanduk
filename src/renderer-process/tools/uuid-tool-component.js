@@ -33,7 +33,10 @@ module.exports = function UUIDToolComponent() {
     <div class="col-12 p-5">
       <div class="form-group">
         <label for="uuid-v5-name">String</label>
-        <input class="form-control" id="uuid-v5-name">
+        <textarea 
+          class="form-control" 
+          style="resize: vertical" 
+          id="uuid-v5-name"></textarea>
       </div>
       <div class="form-group">
         <label for="uuid-v5-namespace">Namespace</label>
