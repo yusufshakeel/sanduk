@@ -46,11 +46,13 @@ module.exports = function XmlToJsonToolComponent() {
         <div class="btn-group" role="group">
           <button class="btn btn-primary btn-rounded"
                   type="button"
-                  id="xml-to-json-increase-font-xml-editor-btn">A<sup>+</sup>
+                  id="xml-to-json-increase-font-xml-editor-btn">
+                    <i class="fas fa-search-plus"></i>
           </button>
           <button class="btn btn-primary btn-rounded"
                   type="button"
-                  id="xml-to-json-decrease-font-xml-editor-btn">A<sup>-</sup>
+                  id="xml-to-json-decrease-font-xml-editor-btn">
+                    <i class="fas fa-search-minus"></i>
           </button>
         </div>
       </div>    
@@ -120,13 +122,17 @@ module.exports = function XmlToJsonToolComponent() {
       setTimeout(() => hideMessage(element), 5000);
     }
 
+    function compactXml(input) {
+      return xmlFormatter(input, { indentation: '', lineSeparator: '' });
+    }
+
     transformBtn.addEventListener('click', () => {
       try {
         const xml = xmlEditor.getValue();
         if (!xml.length) {
           return;
         }
-        const result = xmljs.xml2json(xml, { compact: true });
+        const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
         const json = JSON.stringify(JSON.parse(result), null, 2);
         jsonEditor.setValue(json, -1);
       } catch (e) {
@@ -170,7 +176,7 @@ module.exports = function XmlToJsonToolComponent() {
         if (!input.length) {
           return;
         }
-        xmlEditor.setValue(xmlFormatter(input, { indentation: '', lineSeparator: '' }), -1);
+        xmlEditor.setValue(compactXml(input), -1);
       } catch (e) {
         showMessage(xmlToJsonMessage, e.message, ALERT_TYPE_ERROR);
       }

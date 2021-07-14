@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = async function navbarComponent() {
+module.exports = async function navbarComponent({ version }) {
   const html = `<div class="navbar-content">
       <button class="btn" type="button" onclick="halfmoon.toggleSidebar()">
         <i class="fas fa-bars" aria-hidden="true"></i>
@@ -9,7 +9,7 @@ module.exports = async function navbarComponent() {
     </div>
     <div class="navbar-text ml-5">
       <img src="../../resources/app-icons/stable/png/32.png" style="height: 20px; width: 20px;" alt="sanduk logo">
-      <span class="ml-5 font-weight-semi-bold">sanduk</span>
+      <span class="ml-5 font-weight-semi-bold">sanduk</span>&nbsp;<small>${version}</small>
     </div>`;
 
   document.getElementById('navbar').innerHTML = html;
