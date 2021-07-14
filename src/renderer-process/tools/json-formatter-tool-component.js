@@ -61,11 +61,11 @@ module.exports = function JsonFormatterToolComponent() {
 
         <!-- input editor -->
         <pre class="form-control"
-             id="json-input1-json-formatter"
+             id="json-input-json-formatter"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
         <div id="input1-footer-json-formatter" class="bg-dark p-5">Ln: 1 Col: 1</div>
       </div>
-      <div id="json-input1-json-formatter-message"></div>
+      <div id="json-input-json-formatter-message"></div>
     </div>
   </div>`;
   };
@@ -76,8 +76,8 @@ module.exports = function JsonFormatterToolComponent() {
     const formatInputBtn = document.getElementById('format-input-json-formatter-btn');
     const compactInputBtn = document.getElementById('compact-input-json-formatter-btn');
     const foldInputBtn = document.getElementById('fold-input-json-formatter-btn');
-    const jsonInputMessage = document.getElementById('json-input1-json-formatter-message');
-    const jsonInput = document.getElementById('json-input1-json-formatter');
+    const jsonInputMessage = document.getElementById('json-input-json-formatter-message');
+    const jsonInput = document.getElementById('json-input-json-formatter');
     const inputFooter = document.getElementById('input1-footer-json-formatter');
     const increaseFontInputBtn = document.getElementById(
       'increase-font-input-json-formatter-btn'
@@ -86,18 +86,18 @@ module.exports = function JsonFormatterToolComponent() {
       'decrease-font-input-json-formatter-btn'
     );
 
-    let input1Editor;
+    let jsonInputEditor;
 
     const theme = 'ace/theme/idle_fingers';
     // cobalt, idle_fingers, merbivore_soft
     // dracula*, gruvbox*, tomorrow_night_eighties*
     const mode = 'ace/mode/json';
 
-    input1Editor = window.ace.edit('json-input1-json-formatter');
-    input1Editor.setTheme(theme);
-    input1Editor.session.setMode(mode);
-    input1Editor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = input1Editor.getCursorPosition();
+    jsonInputEditor = window.ace.edit('json-input-json-formatter');
+    jsonInputEditor.setTheme(theme);
+    jsonInputEditor.session.setMode(mode);
+    jsonInputEditor.selection.on('changeCursor', () => {
+      const { row = 0, column = 0 } = jsonInputEditor.getCursorPosition();
       inputFooter.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
     });
 
@@ -121,7 +121,7 @@ module.exports = function JsonFormatterToolComponent() {
     }
 
     validateInputBtn.addEventListener('click', () => {
-      const input = input1Editor.getValue();
+      const input = jsonInputEditor.getValue();
       if (input.length && isValidJSON(input, jsonInputMessage)) {
         showMessage(jsonInputMessage, 'Valid JSON', ALERT_TYPE_SUCCESS);
       }
@@ -130,12 +130,12 @@ module.exports = function JsonFormatterToolComponent() {
     formatInputBtn.addEventListener('click', () => {
       try {
         hideMessage(jsonInputMessage);
-        const input = input1Editor.getValue();
+        const input = jsonInputEditor.getValue();
         if (!input.length) {
           return;
         }
         const json = JSON.stringify(JSON.parse(input), null, 2);
-        input1Editor.setValue(json, -1);
+        jsonInputEditor.setValue(json, -1);
       } catch (e) {
         showMessage(jsonInputMessage, e.message, ALERT_TYPE_ERROR);
       }
@@ -144,38 +144,38 @@ module.exports = function JsonFormatterToolComponent() {
     compactInputBtn.addEventListener('click', () => {
       try {
         hideMessage(jsonInputMessage);
-        const input = input1Editor.getValue();
+        const input = jsonInputEditor.getValue();
         if (!input.length) {
           return;
         }
         const json = JSON.stringify(JSON.parse(input));
-        input1Editor.setValue(json, -1);
+        jsonInputEditor.setValue(json, -1);
       } catch (e) {
         showMessage(jsonInputMessage, e.message, ALERT_TYPE_ERROR);
       }
     });
 
     toggleWrapInputBtn.addEventListener('click', () => {
-      if (!input1Editor.getValue().length) {
+      if (!jsonInputEditor.getValue().length) {
         return;
       }
       const isWrapped = toggleWrapInputBtn.dataset.wrap === 'yes';
       if (isWrapped) {
-        input1Editor.session.setUseWrapMode(false);
+        jsonInputEditor.session.setUseWrapMode(false);
         toggleWrapInputBtn.dataset.wrap = 'no';
         toggleWrapInputBtn.innerText = 'Wrap';
       } else {
-        input1Editor.session.setUseWrapMode(true);
+        jsonInputEditor.session.setUseWrapMode(true);
         toggleWrapInputBtn.dataset.wrap = 'yes';
         toggleWrapInputBtn.innerText = 'Unwrap';
       }
     });
 
     foldInputBtn.addEventListener('click', () => {
-      if (!input1Editor.getValue().length) {
+      if (!jsonInputEditor.getValue().length) {
         return;
       }
-      input1Editor.getSession().foldAll(1);
+      jsonInputEditor.getSession().foldAll(1);
     });
 
     increaseFontInputBtn.addEventListener('click', () => {
