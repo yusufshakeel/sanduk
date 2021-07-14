@@ -37,6 +37,14 @@ module.exports = async function sidebarComponent() {
          data-sanduk-tool-name="xml-to-json"
          id="xml-to-json-sidebar-link">XML to JSON
       </a>
+        
+      <div class="sidebar-divider"></div>
+      
+      <a href="#" class="sidebar-link font-weight-semi-bold sanduk-tool"
+         data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="editor"
+         id="editor-sidebar-link">Editor
+      </a>
     </div>`;
 
   document.getElementById('sidebar').innerHTML = html;
