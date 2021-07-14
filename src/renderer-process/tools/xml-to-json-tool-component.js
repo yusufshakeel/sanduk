@@ -46,11 +46,13 @@ module.exports = function XmlToJsonToolComponent() {
         <div class="btn-group" role="group">
           <button class="btn btn-primary btn-rounded"
                   type="button"
-                  id="xml-to-json-increase-font-xml-editor-btn">A<sup>+</sup>
+                  id="xml-to-json-increase-font-xml-editor-btn">
+                    <i class="fas fa-search-plus"></i>
           </button>
           <button class="btn btn-primary btn-rounded"
                   type="button"
-                  id="xml-to-json-decrease-font-xml-editor-btn">A<sup>-</sup>
+                  id="xml-to-json-decrease-font-xml-editor-btn">
+                    <i class="fas fa-search-minus"></i>
           </button>
         </div>
       </div>    

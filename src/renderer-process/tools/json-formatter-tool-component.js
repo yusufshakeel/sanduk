@@ -61,11 +61,13 @@ module.exports = function JsonFormatterToolComponent() {
           <div class="btn-group" role="group">
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="increase-font-input-json-formatter-btn">A<sup>+</sup>
+                    id="increase-font-input-json-formatter-btn">
+                    <i class="fas fa-search-plus"></i>
             </button>
             <button class="btn btn-primary btn-rounded"
                     type="button"
-                    id="decrease-font-input-json-formatter-btn">A<sup>-</sup>
+                    id="decrease-font-input-json-formatter-btn">
+                    <i class="fas fa-search-minus"></i>
             </button>
             <button class="btn btn-primary btn-rounded"
                     type="button"
