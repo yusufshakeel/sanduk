@@ -1,12 +1,18 @@
 'use strict';
+const { ipcRenderer } = require('electron');
 const xmlFormatter = require('xml-formatter');
+const fs = require('fs');
 
 const xmlFormatterOption = {
   indentation: '  '
 };
 
-// const FileHandler = require('../../handlers/file-handler');
-// const fileHandler = new FileHandler();
+const {
+  CHANNEL_OPEN_FILE_DIALOG_XML,
+  CHANNEL_OPEN_FILE_DIALOG_XML_FILE_PATH,
+  CHANNEL_OPEN_SAVE_FILE_DIALOG_XML,
+  CHANNEL_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH
+} = require('../../main-process/constants/channel-constants');
 
 const { ALERT_TYPE_ERROR, ALERT_TYPE_PRIMARY } = require('../constants/alert-type-constants');
 
@@ -112,32 +118,30 @@ module.exports = function XmlFormatterToolComponent() {
       setTimeout(() => hideMessage(element), 5000);
     }
 
-    // ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
-    //   try {
-    //     console.log(args);
-    //     const xml = await fileHandler.readFile({ filePath: args.filePath });
-    //     console.log(xml);
-    //     xmlInputEditor.setValue(xml, -1)
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // });
-    //
-    // ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
-    //   try {
-    //     const data = xmlInputEditor.getValue();
-    //     await fileHandler.writeFile({ filePath: args.filePath, data });
-    //   } catch (e) {
-    //     //
-    //   }
-    // });
+    ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
+      try {
+        const xml = fs.readFileSync(args.filePath, 'utf8').toString();
+        xmlInputEditor.setValue(xml, -1);
+      } catch (e) {
+        //
+      }
+    });
+
+    ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
+      try {
+        const data = xmlInputEditor.getValue();
+        fs.writeFileSync(args.filePath, data, 'utf8');
+      } catch (e) {
+        //
+      }
+    });
 
     openFileBtn.addEventListener('click', () => {
-      // ipcRenderer.send(CHANNEL_OPEN_FILE_DIALOG_XML);
+      ipcRenderer.send(CHANNEL_OPEN_FILE_DIALOG_XML);
     });
 
     saveFileBtn.addEventListener('click', () => {
-      // ipcRenderer.send(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML);
+      ipcRenderer.send(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML);
     });
 
     formatInputBtn.addEventListener('click', () => {

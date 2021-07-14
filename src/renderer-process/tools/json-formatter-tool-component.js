@@ -8,8 +8,7 @@ const {
   CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH
 } = require('../../main-process/constants/channel-constants');
 
-const FileHandler = require('../../handlers/file-handler');
-const fileHandler = new FileHandler();
+const fs = require('fs');
 
 const {
   ALERT_TYPE_SUCCESS,
@@ -143,8 +142,8 @@ module.exports = function JsonFormatterToolComponent() {
 
     ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
       try {
-        const json = await fileHandler.readFile({ filePath: args.filePath });
-        jsonInputEditor.setValue(json, -1);
+        const json = fs.readFileSync(args.filePath).toString();
+        jsonInputEditor.getSession().setValue(json, -1);
       } catch (e) {
         //
       }
@@ -153,7 +152,7 @@ module.exports = function JsonFormatterToolComponent() {
     ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
       try {
         const data = jsonInputEditor.getValue();
-        await fileHandler.writeFile({ filePath: args.filePath, data });
+        fs.writeFileSync(args.filePath, data, 'utf8');
       } catch (e) {
         //
       }
