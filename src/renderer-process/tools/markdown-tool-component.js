@@ -78,6 +78,7 @@ module.exports = function MarkdownToolComponent() {
         id="markdown-iframe-output"
         class="py-5"
         style="border: 1px solid #444; 
+          background-color: rgba(255,255,255,.05);
           overflow: scroll; 
           padding: 5px;
           margin-top: 16px;
