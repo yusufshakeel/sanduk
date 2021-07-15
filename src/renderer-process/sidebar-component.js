@@ -24,6 +24,11 @@ module.exports = async function sidebarComponent() {
       </a>
       <a href="#" class="sidebar-link font-weight-semi-bold sanduk-tool"
          data-sanduk-tool-isActive="false"
+         data-sanduk-tool-name="markdown"
+         id="markdown-sidebar-link">Markdown
+      </a>
+      <a href="#" class="sidebar-link font-weight-semi-bold sanduk-tool"
+         data-sanduk-tool-isActive="false"
          data-sanduk-tool-name="uuid"
          id="uuid-sidebar-link">UUID
       </a>
