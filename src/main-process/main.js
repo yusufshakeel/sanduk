@@ -1,5 +1,5 @@
 'use strict';
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const fileManagement = require('./file-management');
 const applicationMenu = require('./application-menu');
@@ -38,6 +38,11 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  mainWindow.webContents.on('will-navigate', function (event, url) {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 }
 

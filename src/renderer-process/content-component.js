@@ -7,6 +7,7 @@ const XmlFormatterToolComponent = require('./tools/xml-formatter-tool-component'
 const JwtDecoderToolComponent = require('./tools/jwt-decoder-tool-component');
 const XmlToJsonToolComponent = require('./tools/xml-to-json-tool-component');
 const EditorToolComponent = require('./tools/editor-tool-component');
+const MarkdownToolComponent = require('./tools/markdown-tool-component');
 
 const uuidToolComponent = new UUIDToolComponent();
 const epochToolComponent = new EpochToolComponent();
@@ -16,6 +17,7 @@ const xmlFormatterToolComponent = new XmlFormatterToolComponent();
 const jwtDecoderToolComponent = new JwtDecoderToolComponent();
 const xmlToJsonToolComponent = new XmlToJsonToolComponent();
 const editorToolComponent = new EditorToolComponent();
+const markdownToolComponent = new MarkdownToolComponent();
 
 module.exports = async function contentComponent() {
   const html = `<div class="container-fluid p-10">
@@ -44,6 +46,12 @@ module.exports = async function contentComponent() {
              data-sanduk-tool-name="jwt-decoder"
              class="sandook-tool-content-wrapper d-none">
              ${jwtDecoderToolComponent.getHtml()}
+        </div>
+        <div id="markdown-content-wrapper"
+             data-sanduk-tool-isActive="false"
+             data-sanduk-tool-name="markdown"
+             class="sandook-tool-content-wrapper d-none">
+             ${markdownToolComponent.getHtml()}
         </div>
         <div id="uuid-content-wrapper"
              data-sanduk-tool-isActive="false"
@@ -86,4 +94,5 @@ module.exports = async function contentComponent() {
   jwtDecoderToolComponent.init();
   xmlToJsonToolComponent.init();
   editorToolComponent.init();
+  markdownToolComponent.init();
 };
