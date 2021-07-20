@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const { dialog } = require("electron");
+const { dialog } = require('electron');
 
 module.exports = function messageDialog(browserWindow) {
   const showOpenDialog = async option => {
@@ -15,29 +15,29 @@ module.exports = function messageDialog(browserWindow) {
 
   const showErrorDialog = async error => {
     await dialog.showMessageBox(browserWindow, {
-      type: "error",
-      message: error?.message ? message : "Some error occurred!"
+      type: 'error',
+      message: error.message ? error.message : 'Some error occurred!'
     });
   };
 
   const showOpenDialogToSelectJsonFile = async () => {
     return showOpenDialog({
-      filters: [{ name: "JSON", extensions: ["json"] }],
-      properties: ["openFile", "openDirectory"]
+      filters: [{ name: 'JSON', extensions: ['json'] }],
+      properties: ['openFile', 'openDirectory']
     });
   };
 
   const showSaveDialogToSaveJsonFile = async () => {
     return showSaveDialog({
-      filters: [{ name: "JSON", extensions: ["json"] }],
-      properties: ["openDirectory"]
+      filters: [{ name: 'JSON', extensions: ['json'] }],
+      properties: ['openDirectory']
     });
   };
 
   const showOpenDialogToSelectXmlFile = async () => {
     return showOpenDialog({
-      filters: [{ name: "XML", extensions: ["xml"] }],
-      properties: ["openFile", "openDirectory"]
+      filters: [{ name: 'XML', extensions: ['xml'] }],
+      properties: ['openFile', 'openDirectory']
     });
   };
 

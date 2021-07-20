@@ -1,5 +1,5 @@
 'use strict';
-const { dialog, ipcMain } = require('electron');
+const { ipcMain } = require('electron');
 const messageDialog = require('./dialog/message-dialog');
 
 const {
@@ -34,7 +34,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_FILE_DIALOG_JSON_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -45,7 +45,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -56,7 +56,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_FILE_DIALOG_XML_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -67,7 +67,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -78,7 +78,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_FILE_DIALOG_EDITOR_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -89,7 +89,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_SAVE_FILE_DIALOG_EDITOR_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -100,7 +100,7 @@ module.exports = function fileManagement(browserWindow) {
         event.reply(CHANNEL_OPEN_FILE_DIALOG_MARKDOWN_FILE_PATH, { filePath: result.filePath });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 
@@ -113,7 +113,7 @@ module.exports = function fileManagement(browserWindow) {
         });
       }
     } catch (e) {
-      await showErrorDialog(e);
+      await msgDialog.showErrorDialog(e);
     }
   });
 };
