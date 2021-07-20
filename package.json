@@ -1,11 +1,12 @@
 {
   "name": "sanduk",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Helper app for development.",
   "main": "src/main-process/main.js",
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
+    "pre-commit": "npm run lint && npm run test:all",
     "pre-build": "rm -rf dist",
     "build:all-platform": "npm run pre-build && npx electron-builder -mwl",
     "build:for-mac": "npm run pre-build && npx electron-builder -m",
@@ -50,7 +51,8 @@
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.9",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "spectron": "^15.0.0"
   },
   "dependencies": {
     "base-64": "^1.0.0",
@@ -58,7 +60,6 @@
     "eventemitter2": "^6.4.4",
     "jwt-decode": "^3.1.2",
     "markdown-it": "^12.1.0",
-    "marked": "^2.1.3",
     "sanitize-html": "^2.4.0",
     "utf8": "^3.0.0",
     "uuid": "^8.3.2",
