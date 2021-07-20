@@ -1,5 +1,6 @@
 'use strict';
 const { ipcRenderer } = require('electron');
+const path = require('path');
 
 const {
   CHANNEL_OPEN_FILE_DIALOG_JSON,
@@ -85,7 +86,14 @@ module.exports = function JsonFormatterToolComponent() {
         <pre class="form-control"
              id="json-input-json-formatter"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
-        <div id="input-footer-json-formatter" class="bg-dark p-5">Ln: 1 Col: 1</div>
+        <div class="bg-dark p-5">
+          <span 
+            id="input-footer-json-formatter" 
+            class="d-inline-block">Ln: 1 Col: 1</span>
+          <span 
+            id="opened-filename-footer-json-formatter" 
+            class="d-inline-block float-right">Untitled</span>
+        </div>
       </div>
       <div id="json-input-json-formatter-message"></div>
     </div>
@@ -105,7 +113,10 @@ module.exports = function JsonFormatterToolComponent() {
     const saveFileBtn = document.getElementById('save-file-json-formatter-btn');
     const increaseFontInputBtn = document.getElementById('increase-font-input-json-formatter-btn');
     const decreaseFontInputBtn = document.getElementById('decrease-font-input-json-formatter-btn');
+    const openedFileName = document.getElementById('opened-filename-footer-json-formatter');
 
+    const dummyFileName = 'Untitled';
+    let openedFilePath;
     let jsonInputEditor;
 
     const theme = 'ace/theme/idle_fingers';
@@ -119,6 +130,36 @@ module.exports = function JsonFormatterToolComponent() {
     jsonInputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = jsonInputEditor.getCursorPosition();
       inputFooter.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    });
+
+    jsonInputEditor.commands.on('afterExec', eventData => {
+      if (eventData.command.name === 'insertstring') {
+        if (openedFilePath) {
+          openedFileName.innerText = `${path.basename(openedFilePath).substr(0, 20)}*`;
+        } else {
+          openedFileName.innerText = `${dummyFileName}*`;
+        }
+      }
+    });
+
+    jsonInputEditor.commands.addCommand({
+      name: 'save',
+      bindKey: { win: 'Ctrl-S', mac: 'Cmd-S' },
+      exec: () => {
+        if (!openedFilePath) {
+          ipcRenderer.send(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON);
+        } else {
+          writeToFile(openedFilePath);
+        }
+      }
+    });
+
+    jsonInputEditor.commands.addCommand({
+      name: 'open',
+      bindKey: { win: 'Ctrl-O', mac: 'Cmd-O' },
+      exec: () => {
+        ipcRenderer.send(CHANNEL_OPEN_FILE_DIALOG_JSON);
+      }
     });
 
     function hideMessage(element) {
@@ -140,8 +181,21 @@ module.exports = function JsonFormatterToolComponent() {
       return false;
     }
 
+    function writeToFile(filePath) {
+      try {
+        openedFilePath = filePath;
+        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
+        const data = jsonInputEditor.getValue();
+        fs.writeFileSync(filePath, data, 'utf8');
+      } catch (e) {
+        //
+      }
+    }
+
     ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
       try {
+        openedFilePath = args.filePath;
+        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
         const json = fs.readFileSync(args.filePath).toString();
         jsonInputEditor.getSession().setValue(json, -1);
       } catch (e) {
@@ -150,12 +204,7 @@ module.exports = function JsonFormatterToolComponent() {
     });
 
     ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH, async (e, args) => {
-      try {
-        const data = jsonInputEditor.getValue();
-        fs.writeFileSync(args.filePath, data, 'utf8');
-      } catch (e) {
-        //
-      }
+      writeToFile(args.filePath);
     });
 
     openFileBtn.addEventListener('click', () => {
