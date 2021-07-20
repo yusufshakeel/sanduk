@@ -1,5 +1,6 @@
 'use strict';
 const { ipcRenderer } = require('electron');
+const path = require('path');
 const xmlFormatter = require('xml-formatter');
 const fs = require('fs');
 
@@ -77,7 +78,14 @@ module.exports = function XmlFormatterToolComponent() {
         <pre class="form-control"
              id="xml-formatter-input"
              style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
-        <div id="xml-formatter-input-footer" class="bg-dark p-5">Ln: 1 Col: 1</div>
+        <div class="bg-dark p-5">
+          <span 
+            id="xml-formatter-input-footer" 
+            class="d-inline-block">Ln: 1 Col: 1</span>
+          <span 
+            id="opened-filename-footer-xml-formatter" 
+            class="d-inline-block float-right">Untitled</span>
+        </div>
       </div>
       <div id="xml-formatter-xml-input1-message"></div>
     </div>
@@ -95,7 +103,11 @@ module.exports = function XmlFormatterToolComponent() {
     const saveFileBtn = document.getElementById('save-file-xml-formatter-btn');
     const increaseFontInputBtn = document.getElementById('xml-formatter-increase-font-input-btn');
     const decreaseFontInputBtn = document.getElementById('xml-formatter-decrease-font-input-btn');
+    const openedFileName = document.getElementById('opened-filename-footer-xml-formatter');
 
+    const dummyFileName = 'Untitled';
+    let openedFilePath;
+    let openedFileChanged = false;
     let xmlInputEditor;
 
     const theme = 'ace/theme/idle_fingers';
@@ -109,6 +121,37 @@ module.exports = function XmlFormatterToolComponent() {
       inputFooter.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
     });
 
+    xmlInputEditor.commands.on('afterExec', eventData => {
+      if (!openedFileChanged && eventData.command.name === 'insertstring') {
+        openedFileChanged = true;
+        if (openedFilePath) {
+          openedFileName.innerText = `${path.basename(openedFilePath).substr(0, 20)}*`;
+        } else {
+          openedFileName.innerText = `${dummyFileName}*`;
+        }
+      }
+    });
+
+    xmlInputEditor.commands.addCommand({
+      name: 'save',
+      bindKey: { win: 'Ctrl-S', mac: 'Cmd-S' },
+      exec: () => {
+        if (!openedFilePath) {
+          ipcRenderer.send(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML);
+        } else {
+          writeToFile(openedFilePath);
+        }
+      }
+    });
+
+    xmlInputEditor.commands.addCommand({
+      name: 'open',
+      bindKey: { win: 'Ctrl-O', mac: 'Cmd-O' },
+      exec: () => {
+        ipcRenderer.send(CHANNEL_OPEN_FILE_DIALOG_XML);
+      }
+    });
+
     function hideMessage(element) {
       element.innerHTML = '';
     }
@@ -118,8 +161,24 @@ module.exports = function XmlFormatterToolComponent() {
       setTimeout(() => hideMessage(element), 5000);
     }
 
+    function writeToFile(filePath) {
+      try {
+        openedFileName.innerText = 'Saving...';
+        const data = xmlInputEditor.getValue();
+        fs.writeFileSync(filePath, data, 'utf8');
+      } catch (e) {
+        //
+      } finally {
+        openedFileChanged = false;
+        openedFilePath = filePath;
+        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
+      }
+    }
+
     ipcRenderer.on(CHANNEL_OPEN_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
       try {
+        openedFilePath = args.filePath;
+        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
         const xml = fs.readFileSync(args.filePath, 'utf8').toString();
         xmlInputEditor.setValue(xml, -1);
       } catch (e) {
@@ -128,12 +187,7 @@ module.exports = function XmlFormatterToolComponent() {
     });
 
     ipcRenderer.on(CHANNEL_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
-      try {
-        const data = xmlInputEditor.getValue();
-        fs.writeFileSync(args.filePath, data, 'utf8');
-      } catch (e) {
-        //
-      }
+      writeToFile(args.filePath);
     });
 
     openFileBtn.addEventListener('click', () => {

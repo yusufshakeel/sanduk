@@ -117,6 +117,7 @@ module.exports = function JsonFormatterToolComponent() {
 
     const dummyFileName = 'Untitled';
     let openedFilePath;
+    let openedFileChanged = false;
     let jsonInputEditor;
 
     const theme = 'ace/theme/idle_fingers';
@@ -133,7 +134,8 @@ module.exports = function JsonFormatterToolComponent() {
     });
 
     jsonInputEditor.commands.on('afterExec', eventData => {
-      if (eventData.command.name === 'insertstring') {
+      if (!openedFileChanged && eventData.command.name === 'insertstring') {
+        openedFileChanged = true;
         if (openedFilePath) {
           openedFileName.innerText = `${path.basename(openedFilePath).substr(0, 20)}*`;
         } else {
@@ -183,12 +185,15 @@ module.exports = function JsonFormatterToolComponent() {
 
     function writeToFile(filePath) {
       try {
-        openedFilePath = filePath;
-        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
+        openedFileName.innerText = 'Saving...';
         const data = jsonInputEditor.getValue();
         fs.writeFileSync(filePath, data, 'utf8');
       } catch (e) {
         //
+      } finally {
+        openedFileChanged = false;
+        openedFilePath = filePath;
+        openedFileName.innerText = path.basename(openedFilePath).substr(0, 20);
       }
     }
 
