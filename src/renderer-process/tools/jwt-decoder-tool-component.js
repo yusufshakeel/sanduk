@@ -8,15 +8,14 @@ module.exports = function JwtDecoderToolComponent() {
     textarea#jwt-decoder-input {
       resize: vertical;
       font-size: 1em;
+      height: 20vh;
     }
     
     #jwt-decoder-decoded-header,
     #jwt-decoder-decoded-payload {
       overflow-y: scroll;
       -webkit-user-select: text;
-      height: max-content;
-      min-height: 100px;
-      max-height: 400px;
+      height: 20vh;
       padding: 5px 5px 10px 5px;
       margin: 0;
       font-size: 1em;
@@ -31,7 +30,9 @@ module.exports = function JwtDecoderToolComponent() {
     <div class="col-12 p-5">
       <div class="form-group">
         <label for="jwt-decoder-input">JWT</label>
-        <textarea class="form-control" id="jwt-decoder-input"></textarea>
+        <pre class="form-control" 
+          id="jwt-decoder-input"
+          style="height: 20vh; font-size: 16px; margin-bottom: 0"></pre>
       </div>
       <div id="jwt-decoder-input-message"></div>
     </div>
@@ -40,13 +41,17 @@ module.exports = function JwtDecoderToolComponent() {
     <div class="col-6 p-5">
       <div class="form-group">
         <label for="jwt-decoder-decoded-header">Header</label>
-        <pre class="form-control" id="jwt-decoder-decoded-header"></pre>
+        <pre class="form-control" 
+          id="jwt-decoder-decoded-header"
+          style="height: 40vh; font-size: 16px; margin-bottom: 0"></pre>
       </div>
     </div>
     <div class="col-6 p-5">
       <div class="form-group">
         <label for="jwt-decoder-decoded-payload">Payload</label>
-        <pre class="form-control" id="jwt-decoder-decoded-payload"></pre>
+        <pre class="form-control" 
+          id="jwt-decoder-decoded-payload"
+          style="height: 40vh; font-size: 16px; margin-bottom: 0"></pre>
       </div>
     </div>
   </div>
@@ -59,12 +64,25 @@ module.exports = function JwtDecoderToolComponent() {
   };
 
   this.init = () => {
-    const jwtInput = document.getElementById('jwt-decoder-input');
     const jwtInputMessage = document.getElementById('jwt-decoder-input-message');
-    const jwtDecodedPayload = document.getElementById('jwt-decoder-decoded-payload');
-    const jwtDecodedHeader = document.getElementById('jwt-decoder-decoded-header');
     const decodeJWTBtn = document.getElementById('jwt-decoder-decode-btn');
     const clearJWTBtn = document.getElementById('jwt-deocder-clear-btn');
+
+    const theme = 'ace/theme/idle_fingers';
+    const mode = 'ace/mode/json';
+
+    let jwtInputEditor = window.ace.edit('jwt-decoder-input');
+    jwtInputEditor.setTheme(theme);
+    jwtInputEditor.session.setMode('ace/mode/text');
+    jwtInputEditor.session.setUseWrapMode(true);
+
+    let decodedHeaderEditor = window.ace.edit('jwt-decoder-decoded-header');
+    decodedHeaderEditor.setTheme(theme);
+    decodedHeaderEditor.session.setMode(mode);
+
+    let decodedPayloadEditor = window.ace.edit('jwt-decoder-decoded-payload');
+    decodedPayloadEditor.setTheme(theme);
+    decodedPayloadEditor.session.setMode(mode);
 
     function hideError() {
       jwtInputMessage.innerHTML = '';
@@ -78,22 +96,14 @@ module.exports = function JwtDecoderToolComponent() {
     decodeJWTBtn.addEventListener('click', () => {
       try {
         hideError();
-        const input = jwtInput.value.trim();
+        const input = jwtInputEditor.getValue().trim();
         if (!input.length) {
           return;
         }
         const decodedHeader = jwtDecode(input, { header: true });
         const decodedJWT = jwtDecode(input);
-        jwtDecodedHeader.innerText = JSON.stringify(decodedHeader, null, 2);
-        jwtDecodedPayload.innerText = JSON.stringify(decodedJWT, null, 2);
-        const heightOfJwtDecodedHeader = jwtDecodedHeader.offsetHeight;
-        const heightOfjwtDecodedPayload = jwtDecodedPayload.offsetHeight;
-        const maxHeight =
-          heightOfJwtDecodedHeader > heightOfjwtDecodedPayload
-            ? heightOfJwtDecodedHeader
-            : heightOfjwtDecodedPayload;
-        jwtDecodedHeader.style.height = `${maxHeight}px`;
-        jwtDecodedPayload.style.height = `${maxHeight}px`;
+        decodedHeaderEditor.setValue(JSON.stringify(decodedHeader, null, 2), -1);
+        decodedPayloadEditor.setValue(JSON.stringify(decodedJWT, null, 2), -1);
       } catch (e) {
         showError(e.message);
       }
@@ -101,9 +111,9 @@ module.exports = function JwtDecoderToolComponent() {
 
     clearJWTBtn.addEventListener('click', () => {
       hideError();
-      jwtInput.value = '';
-      jwtDecodedHeader.innerText = '';
-      jwtDecodedPayload.innerText = '';
+      jwtInputEditor.setValue('');
+      decodedHeaderEditor.setValue('');
+      decodedPayloadEditor.setValue('');
     });
   };
 };
