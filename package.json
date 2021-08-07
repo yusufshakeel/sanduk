@@ -1,6 +1,6 @@
 {
   "name": "sanduk",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Helper app for development.",
   "main": "src/main-process/main.js",
   "scripts": {
