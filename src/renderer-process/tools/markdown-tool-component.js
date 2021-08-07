@@ -1,5 +1,6 @@
 'use strict';
 const { ipcRenderer } = require('electron');
+const immutabilityHelper = require('immutability-helper');
 const markdown = require('markdown-it')();
 const sanitizeHtml = require('sanitize-html');
 const fs = require('fs');
@@ -69,24 +70,21 @@ module.exports = function MarkdownToolComponent() {
       <!-- markdown editor -->
       <pre class="form-control"
            id="markdown-editor"
-           style="height: 65vh; font-size: 16px; margin-bottom: 0"></pre>
+           style="height: 60vh; font-size: 16px; margin-bottom: 0"></pre>
        <div id="markdown-editor-footer" class="bg-dark p-5">Ln: 1 Col: 1</div>
     </div>
     
     <div class="col-6 px-5">
-      <div
+      <iframe
         id="markdown-iframe-output"
         class="py-5"
         style="border: 1px solid #444; 
-          background-color: rgba(255,255,255,.05);
+          background-color: rgba(255,255,255, 0.9);
           overflow: scroll; 
           padding: 5px;
           margin-top: 16px;
-          height: 69.5vh;"></div>
-    </div>
-    
-    <div class="col-12 p-5">
-      <div id="xml-to-json-message"></div>
+          width: 100%;
+          height: 60vh;"></iframe>
     </div>
   </div>`;
   };
@@ -104,7 +102,7 @@ module.exports = function MarkdownToolComponent() {
 
     let markdownInputEditor;
 
-    let isAutoloading = false;
+    let isAutoLoading = false;
 
     const theme = 'ace/theme/idle_fingers';
     // cobalt, idle_fingers, merbivore_soft
@@ -147,18 +145,37 @@ module.exports = function MarkdownToolComponent() {
 
     const renderMarkdown = () => {
       const markdownData = markdownInputEditor.getValue();
-      // markdownOutput.innerHTML = sanitizeHtml(marked(markdownData));
-      markdownOutput.innerHTML = markdown.render(sanitizeHtml(markdownData));
+      const html = markdown.render(markdownData);
+      const sanitizedHtml = sanitizeHtml(html, {
+        transformTags: {
+          a: function (tagName, attribs) {
+            const modifiedAttributes = immutabilityHelper(attribs, {
+              href: { $set: '#' }
+            });
+            return {
+              tagName: tagName,
+              attribs: modifiedAttributes
+            };
+          }
+        }
+      });
+      const enrichedHtml = `
+      <style>
+      pre { border: 1px solid #aaa; background-color: #eee; padding: 5px; font-family: monospace; }
+      </style>
+      ${sanitizedHtml}`;
+      markdownOutput.contentDocument.write(enrichedHtml);
+      markdownOutput.contentDocument.close();
     };
 
     markdownInputEditor.commands.on('afterExec', () => {
-      if (isAutoloading) {
+      if (isAutoLoading) {
         renderMarkdown();
       }
     });
 
     autoLoadBtn.addEventListener('click', () => {
-      isAutoloading = true;
+      isAutoLoading = true;
       autoLoadBtn.classList.remove('btn-default');
       autoLoadBtn.classList.add('btn-primary');
       generateBtn.classList.remove('btn-primary');
@@ -167,8 +184,8 @@ module.exports = function MarkdownToolComponent() {
     });
 
     generateBtn.addEventListener('click', () => {
-      if (isAutoloading) {
-        isAutoloading = false;
+      if (isAutoLoading) {
+        isAutoLoading = false;
         generateBtn.classList.add('btn-primary');
         generateBtn.classList.remove('btn-default');
         autoLoadBtn.classList.add('btn-default');
