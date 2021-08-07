@@ -10,6 +10,7 @@ module.exports = function Base64EncoderDecoderToolComponent() {
     .sanduk-textarea-container {
       resize: vertical; 
       font-size: 1em;
+      height: 25vh;
     }
   </style>
   <div class="row">
