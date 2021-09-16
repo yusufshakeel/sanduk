@@ -34,10 +34,10 @@ A `dist` directory will be created which will have the dmg file.
 ## Tests
 
 ```
-npm run test:all
+npm run test
 ```
 
-Test code is inside `test` directory.
+Test code is inside `src/__tests__` directory.
 
 ## License
 
