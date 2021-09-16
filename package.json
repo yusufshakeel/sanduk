@@ -26,6 +26,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "pre-build": "rm -rf dist build",
+    "pre-commit": "npm run lint",
+    "lint": "npx eslint -c .eslintrc.json src",
+    "lint:fix": "npx eslint --fix -c .eslintrc.json src",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run start\" \"wait-on tcp:3000 && electron .\"",
     "build:all-platform": "npm run pre-build && npm run build && npx electron-builder -mwl",
     "build:for-mac": "npm run pre-build && npm run build && electron-builder -m"
@@ -81,6 +84,12 @@
     "cross-env": "^7.0.3",
     "electron": "^14.0.0",
     "electron-builder": "^22.11.7",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.25.1",
+    "prettier": "^2.4.1",
     "wait-on": "^6.0.0"
   }
 }

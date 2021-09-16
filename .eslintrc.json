@@ -1,14 +1,13 @@
 {
   "env": {
     "browser": true,
-    "commonjs": true,
     "es6": true,
-    "node": true,
-    "jest": true
+    "node": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:node/recommended",
+    "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
   "plugins": [
@@ -18,10 +17,13 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
+  "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 2018
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
   },
   "rules": {
+    "react/react-in-jsx-scope": "off",
     "node/no-unpublished-require": [
       "error",
       {
@@ -146,5 +148,10 @@
       "off",
       "always"
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
