@@ -1,5 +1,12 @@
+import { Box } from '@mui/material';
+import NavigationBar from './components/NavigationBar';
+
 function App() {
-  return <h1>Hello Sanduk!</h1>;
+  return (
+    <Box>
+      <NavigationBar />
+    </Box>
+  );
 }
 
 export default App;
