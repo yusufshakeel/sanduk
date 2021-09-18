@@ -67,7 +67,7 @@ function NavigationBar() {
           className={'sanduk-brand-logo'}
           alt="Remy Sharp"
           src={logo}
-          style={{ width: '28px', height: '28px', marginRight: '5px' }}
+          style={{ width: '28px', height: '28px', marginRight: '10px' }}
         />
         <Typography
           className={'sanduk-brand-name'}

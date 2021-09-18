@@ -6,13 +6,20 @@
     "jest": true
   },
   "extends": [
+    "react-app",
+    "react-app/jest",
     "eslint:recommended",
     "plugin:node/recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:testing-library/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
   ],
   "plugins": [
-    "prettier"
+    "prettier",
+    "jest-dom",
+    "testing-library"
   ],
   "globals": {
     "Atomics": "readonly",
