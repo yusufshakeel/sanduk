@@ -1,17 +1,8 @@
-/* eslint react/prop-types: 0 */
-import React from 'react';
-import logo from '../static/logo64.png';
+import PropTypes from 'prop-types';
 import AppConstants from '../constants/app-constants';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Avatar,
-  FormControlLabel,
-  FormGroup,
-  Switch
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, FormControlLabel, FormGroup, Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -61,21 +52,12 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function NavigationBar(props) {
+  const [isDarkMode, setDarkMode] = useState(props.darkModeEnabled);
+
   return (
     <AppBar position="static">
       <Toolbar>
-        <Avatar
-          className={'sanduk-brand-logo'}
-          alt="Remy Sharp"
-          src={logo}
-          style={{ width: '28px', height: '28px', marginRight: '10px' }}
-        />
-        <Typography
-          className={'sanduk-brand-name'}
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1 }}
-        >
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {AppConstants.APP_NAME}
         </Typography>
         <FormGroup>
@@ -83,8 +65,11 @@ function NavigationBar(props) {
             control={
               <MaterialUISwitch
                 sx={{ m: -2 }}
-                checked={props.darkModeEnabled}
-                onChange={() => props.toggleTheme()}
+                checked={isDarkMode}
+                onChange={() => {
+                  props.toggleTheme();
+                  setDarkMode(!isDarkMode);
+                }}
               />
             }
             label={''}
@@ -94,5 +79,10 @@ function NavigationBar(props) {
     </AppBar>
   );
 }
+
+NavigationBar.propTypes = {
+  toggleTheme: PropTypes.func.isRequired,
+  darkModeEnabled: PropTypes.bool.isRequired
+};
 
 export default NavigationBar;
