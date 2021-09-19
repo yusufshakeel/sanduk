@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import AppContext from '../store/app-context';
 import AppConstants from '../constants/app-constants';
 import { AppBar, Toolbar, Typography, FormControlLabel, FormGroup, Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -52,8 +52,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function NavigationBar(props) {
-  const [isDarkMode, setDarkMode] = useState(props.darkModeEnabled);
-
+  const ctx = useContext(AppContext);
   return (
     <AppBar position="static">
       <Toolbar>
@@ -63,14 +62,7 @@ function NavigationBar(props) {
         <FormGroup>
           <FormControlLabel
             control={
-              <MaterialUISwitch
-                sx={{ m: -2 }}
-                checked={isDarkMode}
-                onChange={() => {
-                  props.toggleTheme();
-                  setDarkMode(!isDarkMode);
-                }}
-              />
+              <MaterialUISwitch sx={{ m: -2 }} defaultChecked onChange={() => ctx.toggleTheme()} />
             }
             label={''}
           />
@@ -79,10 +71,5 @@ function NavigationBar(props) {
     </AppBar>
   );
 }
-
-NavigationBar.propTypes = {
-  toggleTheme: PropTypes.func.isRequired,
-  darkModeEnabled: PropTypes.bool.isRequired
-};
 
 export default NavigationBar;

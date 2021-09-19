@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Paper, Grid } from '@mui/material';
 import NavigationBar from './components/NavigationBar';
 import AppConstants from './constants/app-constants';
+import AppContext from './store/app-context';
 
 function App() {
   const [isDarkModeThemeEnabled, setDarkModeTheme] = useState(true);
@@ -20,19 +21,21 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Paper style={{ height: '100vh' }}>
-        <NavigationBar toggleTheme={onToggleTheme} darkModeEnabled={isDarkModeThemeEnabled} />
-        <Grid container>
-          <Grid item sm={3}>
-            <h1>Hello</h1>
+    <AppContext.Provider value={{ toggleTheme: onToggleTheme }}>
+      <ThemeProvider theme={theme}>
+        <Paper style={{ height: '100vh' }}>
+          <NavigationBar />
+          <Grid container>
+            <Grid item sm={3}>
+              <h1>Hello</h1>
+            </Grid>
+            <Grid item sm={9}>
+              <h1>Hello</h1>
+            </Grid>
           </Grid>
-          <Grid item sm={9}>
-            <h1>Hello</h1>
-          </Grid>
-        </Grid>
-      </Paper>
-    </ThemeProvider>
+        </Paper>
+      </ThemeProvider>
+    </AppContext.Provider>
   );
 }
 
