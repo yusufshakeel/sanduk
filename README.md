@@ -37,8 +37,6 @@ A `dist` directory will be created which will have the dmg file.
 npm run test
 ```
 
-Test code is inside `src/__tests__` directory.
-
 ## License
 
 It's free :smiley:
