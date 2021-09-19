@@ -1,7 +1,16 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tabs, Tab, Box, Typography } from '@mui/material';
+import { Grid, Tabs, Tab, Box } from '@mui/material';
 import AppConstants from '../constants/app-constants';
+import ToolBase64EncoderDecoder from './tools/ToolBase64EncoderDecoder';
+import ToolEpoch from './tools/ToolEpoch';
+import ToolJSONFormatter from './tools/ToolJSONFormatter';
+import ToolJWTDecoder from './tools/ToolJWTDecoder';
+import ToolMarkdown from './tools/ToolMarkdown';
+import ToolUUID from './tools/ToolUUID';
+import ToolXMLFormatter from './tools/ToolXMLFormatter';
+import ToolXMLToJSON from './tools/ToolXMLToJSON';
+import ToolEditor from './tools/ToolEditor';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,49 +80,31 @@ function AppBody() {
       </Grid>
       <Grid item sx={{ width: `calc(100% - 250px)`, height: '100%', overflow: 'scroll' }}>
         <TabPanel value={selectedTab} index={0}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            Base64 Encoder Decoder
-          </Typography>
+          <ToolBase64EncoderDecoder />
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            Epoch
-          </Typography>
+          <ToolEpoch />
         </TabPanel>
         <TabPanel value={selectedTab} index={2}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            JSON Formatter
-          </Typography>
+          <ToolJSONFormatter />
         </TabPanel>
         <TabPanel value={selectedTab} index={3}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            JWT Decoder
-          </Typography>
+          <ToolJWTDecoder />
         </TabPanel>
         <TabPanel value={selectedTab} index={4}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            Markdown
-          </Typography>
+          <ToolMarkdown />
         </TabPanel>
         <TabPanel value={selectedTab} index={5}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            UUID
-          </Typography>
+          <ToolUUID />
         </TabPanel>
         <TabPanel value={selectedTab} index={6}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            XML Formatter
-          </Typography>
+          <ToolXMLFormatter />
         </TabPanel>
         <TabPanel value={selectedTab} index={7}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            XML to JSON
-          </Typography>
+          <ToolXMLToJSON />
         </TabPanel>
         <TabPanel value={selectedTab} index={8}>
-          <Typography variant="h5" sx={{ textAlign: 'center' }}>
-            Editor
-          </Typography>
+          <ToolEditor />
         </TabPanel>
       </Grid>
     </Grid>
