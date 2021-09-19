@@ -8,7 +8,7 @@ let mainWindow;
 
 function createWindow () {
     const windowState = windowStateKeeper({
-        defaultWidth: 800,
+        defaultWidth: 1024,
         defaultHeight: 600
     });
 
