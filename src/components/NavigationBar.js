@@ -54,7 +54,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 function NavigationBar(props) {
   const ctx = useContext(AppContext);
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {AppConstants.APP_NAME}

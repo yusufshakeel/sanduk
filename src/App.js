@@ -23,9 +23,9 @@ function App() {
   return (
     <AppContext.Provider value={{ toggleTheme: onToggleTheme }}>
       <ThemeProvider theme={theme}>
-        <Paper style={{ height: '100vh' }}>
+        <Paper sx={{ height: '100vh' }}>
           <NavigationBar />
-          <Grid container>
+          <Grid container sx={{ pt: 8 }}>
             <Grid item sm={3}>
               <h1>Hello</h1>
             </Grid>
