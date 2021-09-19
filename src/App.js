@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Paper, Grid } from '@mui/material';
+import { Paper } from '@mui/material';
 import NavigationBar from './components/NavigationBar';
 import AppConstants from './constants/app-constants';
 import AppContext from './store/app-context';
+import AppBody from './components/AppBody';
 
 function App() {
   const [isDarkModeThemeEnabled, setDarkModeTheme] = useState(true);
@@ -25,14 +26,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Paper sx={{ height: '100vh' }}>
           <NavigationBar />
-          <Grid container sx={{ pt: 8 }}>
-            <Grid item sm={3}>
-              <h1>Hello</h1>
-            </Grid>
-            <Grid item sm={9}>
-              <h1>Hello</h1>
-            </Grid>
-          </Grid>
+          <AppBody />
         </Paper>
       </ThemeProvider>
     </AppContext.Provider>
