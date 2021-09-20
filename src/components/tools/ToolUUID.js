@@ -9,19 +9,19 @@ function ToolUUID() {
   const [generatedUUIDV5, setGeneratedUUIDV5] = useState('');
   const [uuidV5String, setUuidV5String] = useState('');
   const [uuidV5Namespace, setUuidV5Namespace] = useState('');
-  const [uuidV5MessageContainer, setUuidV5MessageContainer] = useState(<React.Fragment />);
+  const [uuidV5Message, setUuidV5Message] = useState(<React.Fragment />);
 
   const handleClearUUIDV5Fields = () => {
     setGeneratedUUIDV5('');
     setUuidV5String('');
     setUuidV5Namespace('');
-    setUuidV5MessageContainer('');
+    setUuidV5Message('');
   };
 
   const handleUUIDV5 = () => {
-    setUuidV5MessageContainer('');
+    setUuidV5Message('');
     if (!uuidV5Namespace.trim().length) {
-      setUuidV5MessageContainer(
+      setUuidV5Message(
         <Alert variant="filled" severity="error">
           <AlertTitle>Error</AlertTitle>
           <strong>Namespace</strong> is required!
@@ -31,7 +31,7 @@ function ToolUUID() {
       try {
         setGeneratedUUIDV5(uuidV5(uuidV5String, uuidV5Namespace));
       } catch (err) {
-        setUuidV5MessageContainer(
+        setUuidV5Message(
           <Alert variant="filled" severity="error">
             <AlertTitle>Error</AlertTitle>
             {err.message} | {err.stack}
@@ -161,7 +161,7 @@ function ToolUUID() {
             Clear
           </Button>
         </div>
-        <div id="uuidV5MessageContainer">{uuidV5MessageContainer}</div>
+        <div id="uuidV5MessageContainer">{uuidV5Message}</div>
       </Grid>
     </Grid>
   );
