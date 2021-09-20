@@ -3,7 +3,7 @@ import { Typography, Grid, TextField, FormControl, Button } from '@mui/material'
 function ToolBase64EncoderDecoder() {
   return (
     <Grid container>
-      <Grid item sm={12}>
+      <Grid item xs={12} sm={12} sx={{ p: 1 }}>
         <Typography variant="h5" sx={{ textAlign: 'center', mb: 5 }}>
           Base64 Encoder Decoder
         </Typography>

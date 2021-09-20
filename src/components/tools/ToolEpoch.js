@@ -14,14 +14,20 @@ import {
 function ToolEpoch() {
   return (
     <Grid container>
-      <Grid item sm={12}>
+      <Grid item xs={12} sm={12} sx={{ p: 1 }}>
         <Typography variant="h5" sx={{ textAlign: 'center', mb: 5 }}>
           Epoch
         </Typography>
       </Grid>
       <Grid item xs={12} sm={12} sx={{ p: 1 }}>
         <FormControl fullWidth sx={{ mb: 5 }}>
-          <TextField id="epochInput" label="Enter epoch time" />
+          <TextField
+            id="epochInput"
+            label="Enter epoch time"
+            inputProps={{
+              style: { fontSize: '1.5em' }
+            }}
+          />
         </FormControl>
         <FormControl fullWidth sx={{ mb: 5 }}>
           <TextField
@@ -29,6 +35,9 @@ function ToolEpoch() {
             label="Time in UTC"
             disabled
             defaultValue={new Date().toUTCString()}
+            inputProps={{
+              style: { fontSize: '1.5em' }
+            }}
           />
         </FormControl>
         <FormControl fullWidth sx={{ mb: 5 }}>
@@ -37,6 +46,9 @@ function ToolEpoch() {
             label="Time in locale"
             disabled
             defaultValue={new Date().toLocaleString()}
+            inputProps={{
+              style: { fontSize: '1.5em' }
+            }}
           />
         </FormControl>
         <div style={{ marginBottom: '40px' }}>
@@ -49,7 +61,7 @@ function ToolEpoch() {
         </div>
         <div id="messageContainer" />
       </Grid>
-      <Grid item sm={12}>
+      <Grid item xs={12} sm={12} sx={{ p: 1 }}>
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
           Current
         </Typography>
