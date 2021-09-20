@@ -24,7 +24,7 @@ function ToolUUID() {
       setUuidV5Message(
         <Alert variant="filled" severity="error">
           <AlertTitle>Error</AlertTitle>
-          <strong>Namespace</strong> is required!
+          <strong>Namespace</strong> is required.
         </Alert>
       );
     } else {
