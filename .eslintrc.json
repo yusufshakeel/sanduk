@@ -32,6 +32,22 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "node/no-extraneous-import": [
+      "error",
+      {
+        "allowModules": [
+          "ace-builds"
+        ]
+      }
+    ],
+    "node/no-unpublished-import": [
+      "error",
+      {
+        "allowModules": [
+          "electron"
+        ]
+      }
+    ],
     "node/no-unpublished-require": [
       "error",
       {

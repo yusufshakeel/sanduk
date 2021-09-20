@@ -2,8 +2,6 @@ fileignoreconfig:
 - filename: .talisman.rc
   checksum: ee56c532e05a0022730272b79f72cff6d7d895f79a2b29191f2deaed932d1411
 - filename: yarn.lock
-  checksum: 3dcaba1c55f750595a4d07658e12bfab8c10ccbee629bfdae9f2e89aa7b0a729
+  checksum: ac2d80a6fae670921c7b2270aa7cefde56779a470b8a41ee1bf7f37a0ae798f8
 - filename: package-lock.json
-  checksum: 6bcadae44bd8ca01acf76db882ff651c11b183bbd76175b6f8a141c64703b377
-
-
+  checksum: 5b34ec9286eeab71140d39d92fb07a4377c792edf11eef52cfcea80e1bdb0e88

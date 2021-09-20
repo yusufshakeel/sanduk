@@ -1,10 +1,7 @@
 import React from 'react';
 import AceEditor from 'react-ace';
-// eslint-disable-next-line node/no-extraneous-import
 import 'ace-builds/src-noconflict/mode-java';
-// eslint-disable-next-line node/no-extraneous-import
 import 'ace-builds/src-noconflict/theme-github';
-// eslint-disable-next-line node/no-extraneous-import
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { Button, Grid, Typography } from '@mui/material';
 
