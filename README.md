@@ -31,12 +31,6 @@ npm run build:for-mac
 
 A `dist` directory will be created which will have the dmg file.
 
-## Tests
-
-```
-npm run test
-```
-
 ## License
 
 It's free :smiley:
