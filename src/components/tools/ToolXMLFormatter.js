@@ -7,7 +7,8 @@ import {
   WrapText as WrapTextIcon,
   TextFormat as TextFormatIcon,
   ZoomIn as ZoomInIcon,
-  ZoomOut as ZoomOutIcon
+  ZoomOut as ZoomOutIcon,
+  ExpandLess as ExpandLessIcon
 } from '@mui/icons-material';
 import AceEditor from 'react-ace';
 import 'ace-builds/webpack-resolver';
@@ -75,6 +76,10 @@ function ToolXMLFormatter() {
     }
   };
 
+  const handleFold = () => {
+    editor.current.editor.session.foldAll(1);
+  };
+
   const handleZoomIn = () => {
     if (fontSize < 48) {
       setFontSize(fontSize + 1);
@@ -118,6 +123,11 @@ function ToolXMLFormatter() {
           <Tooltip title="Expand">
             <Button onClick={handleExpand}>
               <ExpandIcon sx={{ fontSize: '1.5em' }} />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Fold">
+            <Button onClick={handleFold}>
+              <ExpandLessIcon sx={{ fontSize: '1.5em' }} />
             </Button>
           </Tooltip>
           <Tooltip title="Wrap">
