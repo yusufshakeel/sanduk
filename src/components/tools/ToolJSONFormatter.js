@@ -18,13 +18,15 @@ import {
 import DisappearingComponent from '../helpers/DisappearingComponent';
 import AlertError from '../helpers/AlertError';
 import AlertSuccess from '../helpers/AlertSuccess';
+import EditorStatusBar from '../helpers/EditorStatusBar';
 
 function ToolJSONFormatter() {
   const editor = useRef(null);
   const [fontSize, setFontSize] = useState(16);
   const [jsonInput, setJsonInput] = useState('');
   const [isWrapEnabled, setWrapEnabled] = useState(false);
-  const [lineColumn, setLineColumn] = useState('Ln: 0 Col: 0');
+  const [lineNumber, setLineNumber] = useState(1);
+  const [columnNumber, setColumnNumber] = useState(1);
   const [tabSize] = useState(2);
   const [message, setMessage] = useState(<React.Fragment />);
 
@@ -114,7 +116,8 @@ function ToolJSONFormatter() {
 
   const handleCursorChange = () => {
     const { row = 0, column = 0 } = editor.current.editor.getCursorPosition();
-    setLineColumn(`Ln: ${row + 1} Col: ${column + 1}`);
+    setLineNumber(row + 1);
+    setColumnNumber(column + 1);
   };
 
   return (
@@ -195,38 +198,12 @@ function ToolJSONFormatter() {
               showPrintMargin: false
             }}
           />
-          <div style={{ backgroundColor: '#333', padding: '10px' }}>
-            <span
-              style={{
-                marginRight: '5px',
-                padding: '0 10px',
-                borderRight: '1px solid #aaa',
-                display: 'inline-block'
-              }}
-            >
-              <Typography fontFamily="monospace">{lineColumn}</Typography>
-            </span>
-            <span
-              style={{
-                marginRight: '5px',
-                padding: '0 10px',
-                borderRight: '1px solid #aaa',
-                display: 'inline-block'
-              }}
-            >
-              <Typography fontFamily="monospace">Font {fontSize}px</Typography>
-            </span>
-            <span
-              style={{
-                marginRight: '5px',
-                padding: '0 10px',
-                borderRight: '1px solid #aaa',
-                display: 'inline-block'
-              }}
-            >
-              <Typography fontFamily="monospace">Spaces {tabSize}</Typography>
-            </span>
-          </div>
+          <EditorStatusBar
+            fontSize={fontSize}
+            line={lineNumber}
+            column={columnNumber}
+            tabSize={tabSize}
+          />
         </div>
         <div id="messageContainer">{message}</div>
       </Grid>
