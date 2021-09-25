@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json5';
 import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { Grid, Typography, ButtonGroup, Button, Tooltip } from '@mui/material';
 import {
@@ -19,9 +20,14 @@ import DisappearingComponent from '../helpers/DisappearingComponent';
 import AlertError from '../helpers/AlertError';
 import AlertSuccess from '../helpers/AlertSuccess';
 import EditorStatusBar from '../helpers/EditorStatusBar';
+import AppContext from '../../store/app-context';
 
 function ToolJSONFormatter() {
   const editor = useRef(null);
+  const ctx = useContext(AppContext);
+  const { isDarkModeEnabled } = ctx;
+
+  const [editorTheme, setEditorTheme] = useState('monokai');
   const [fontSize, setFontSize] = useState(16);
   const [jsonInput, setJsonInput] = useState('');
   const [isWrapEnabled, setWrapEnabled] = useState(false);
@@ -29,6 +35,11 @@ function ToolJSONFormatter() {
   const [columnNumber, setColumnNumber] = useState(1);
   const [tabSize] = useState(2);
   const [message, setMessage] = useState(<React.Fragment />);
+
+  useEffect(() => {
+    const editorTheme = isDarkModeEnabled ? 'monokai' : 'github';
+    setEditorTheme(editorTheme);
+  }, [isDarkModeEnabled]);
 
   const showErrorMessage = message => {
     setMessage(
@@ -185,7 +196,7 @@ function ToolJSONFormatter() {
           <AceEditor
             ref={editor}
             mode="json5"
-            theme="monokai"
+            theme={editorTheme}
             fontSize={fontSize}
             value={jsonInput}
             wrapEnabled={isWrapEnabled}
