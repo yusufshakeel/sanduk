@@ -5,6 +5,8 @@ function DisappearingComponent(props) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
+    setShow(true);
+
     const timeId = setTimeout(() => {
       setShow(false);
     }, props.timeout);
@@ -12,7 +14,7 @@ function DisappearingComponent(props) {
     return () => {
       clearTimeout(timeId);
     };
-  }, [props.timeout]);
+  }, [props.timeout, props.children]);
 
   if (!show) {
     return null;
