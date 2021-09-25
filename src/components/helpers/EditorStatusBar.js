@@ -13,27 +13,20 @@ const spanStyle = {
 function EditorStatusBar(props) {
   const ctx = useContext(AppContext);
   const { isDarkModeEnabled } = ctx;
-  const bgColor = isDarkModeEnabled
-    ? ctx.editorStatusBarTheme.dark
-    : ctx.editorStatusBarTheme.light;
-  const textColor = '#fff';
+  const bgColor = isDarkModeEnabled ? '#333' : '#eee';
 
   return (
     <div style={{ backgroundColor: bgColor, padding: '10px', fontSize: '0.8em' }}>
       <span style={spanStyle}>
-        <Typography fontFamily="monospace" color={textColor}>
+        <Typography fontFamily="monospace">
           Ln: {props.line} Col: {props.column}
         </Typography>
       </span>
       <span style={spanStyle}>
-        <Typography fontFamily="monospace" color={textColor}>
-          Font {props.fontSize}px
-        </Typography>
+        <Typography fontFamily="monospace">Font {props.fontSize}px</Typography>
       </span>
       <span style={spanStyle}>
-        <Typography fontFamily="monospace" color={textColor}>
-          Spaces {props.tabSize}
-        </Typography>
+        <Typography fontFamily="monospace">Spaces {props.tabSize}</Typography>
       </span>
     </div>
   );
