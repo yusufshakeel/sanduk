@@ -158,7 +158,7 @@ function ToolXMLFormatter() {
         </ButtonGroup>
       </Grid>
       <Grid item xs={12} sm={12} sx={{ p: 1 }}>
-        <div id="jsonFormatterEditorContainer">
+        <div id="xmlFormatterEditorContainer">
           <AceEditor
             ref={editor}
             mode="xml"
