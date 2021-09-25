@@ -55,7 +55,7 @@ function AppBody() {
         sx={{
           width: '250px',
           height: '100%',
-          overflow: 'scroll',
+          overflowY: 'scroll',
           borderRight: 1,
           borderColor: 'divider'
         }}
@@ -78,7 +78,7 @@ function AppBody() {
           })}
         </Tabs>
       </Grid>
-      <Grid item sx={{ width: `calc(100% - 250px)`, height: '100%', overflow: 'scroll' }}>
+      <Grid item sx={{ width: `calc(100% - 250px)`, height: '100%', overflowY: 'scroll' }}>
         <TabPanel value={selectedTab} index={0}>
           <ToolBase64EncoderDecoder />
         </TabPanel>

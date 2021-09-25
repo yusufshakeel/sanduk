@@ -34,7 +34,7 @@ function ToolUUID() {
         setUuidV5Message(
           <Alert variant="filled" severity="error">
             <AlertTitle>Error</AlertTitle>
-            {err.message} | {err.stack}
+            {err.message}
           </Alert>
         );
       }
