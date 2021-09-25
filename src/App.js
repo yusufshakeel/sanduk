@@ -7,18 +7,16 @@ import AppContext from './store/app-context';
 import AppBody from './components/AppBody';
 
 function App() {
-  const [isDarkModeThemeEnabled, setDarkModeTheme] = useState(true);
+  const [isDarkModeTheme, setDarkModeTheme] = useState(true);
 
   const theme = createTheme({
     palette: {
-      mode: isDarkModeThemeEnabled
-        ? AppConstants.APP_THEME_MODE_DARK
-        : AppConstants.APP_THEME_MODE_LIGHT
+      mode: isDarkModeTheme ? AppConstants.APP_THEME_MODE_DARK : AppConstants.APP_THEME_MODE_LIGHT
     }
   });
 
   const onToggleTheme = () => {
-    setDarkModeTheme(!isDarkModeThemeEnabled);
+    setDarkModeTheme(!isDarkModeTheme);
   };
 
   return (
