@@ -5,7 +5,9 @@ import 'ace-builds/src-noconflict/mode-json5';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import jwtDecode from 'jwt-decode';
-import { Alert, AlertTitle, Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
+import DisappearingComponent from '../helpers/DisappearingComponent';
+import AlertError from '../helpers/AlertError';
 
 function ToolJWTDecoder() {
   const [jwtInput, setJwtInput] = useState('');
@@ -30,10 +32,9 @@ function ToolJWTDecoder() {
       setJwtPayload(JSON.stringify(decodedJWT, null, 2));
     } catch (e) {
       setMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          {e.message}
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>{e.message}</AlertError>
+        </DisappearingComponent>
       );
     }
   };
@@ -56,7 +57,7 @@ function ToolJWTDecoder() {
         <Typography variant="h6" sx={{ mb: 1 }}>
           JWT
         </Typography>
-        <div id="jwtEditorContainer" sx={{ mb: 5 }}>
+        <div id="jwtEditorContainer">
           <AceEditor
             mode="text"
             theme="monokai"
@@ -99,7 +100,7 @@ function ToolJWTDecoder() {
         <Typography variant="h6" sx={{ mb: 1 }}>
           Header
         </Typography>
-        <div id="jwtHeaderEditorContainer" sx={{ mb: 5 }}>
+        <div id="jwtHeaderEditorContainer">
           <AceEditor
             mode="json5"
             theme="monokai"
@@ -118,7 +119,7 @@ function ToolJWTDecoder() {
         <Typography variant="h6" sx={{ mb: 1 }}>
           Payload
         </Typography>
-        <div id="jwtPayloadEditorContainer" sx={{ mb: 5 }}>
+        <div id="jwtPayloadEditorContainer">
           <AceEditor
             mode="json5"
             theme="monokai"

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import base64 from 'base-64';
 import utf8 from 'utf8';
-import { Typography, Grid, TextField, FormControl, Button, AlertTitle, Alert } from '@mui/material';
+import { Typography, Grid, TextField, FormControl, Button } from '@mui/material';
+import DisappearingComponent from '../helpers/DisappearingComponent';
+import AlertError from '../helpers/AlertError';
 const electron = window.require('electron');
 const { clipboard } = electron;
 
@@ -20,10 +22,11 @@ function ToolBase64EncoderDecoder() {
 
     if (!encodeInput.length) {
       setEncodeMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          <strong>Plain Text</strong> is required.
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>
+            <strong>Plain Text</strong> is required.
+          </AlertError>
+        </DisappearingComponent>
       );
       return;
     }
@@ -33,10 +36,9 @@ function ToolBase64EncoderDecoder() {
       setEncodeResult(base64.encode(utf8.encode(input)));
     } catch (e) {
       setEncodeMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          {e.message}
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>{e.message}</AlertError>
+        </DisappearingComponent>
       );
     }
   };
@@ -53,10 +55,11 @@ function ToolBase64EncoderDecoder() {
 
     if (!decodeInput.length) {
       setDecodeMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          <strong>Encode Text</strong> is required.
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>
+            <strong>Encode Text</strong> is required.
+          </AlertError>
+        </DisappearingComponent>
       );
       return;
     }
@@ -66,10 +69,9 @@ function ToolBase64EncoderDecoder() {
       setDecodeResult(utf8.decode(base64.decode(input)));
     } catch (e) {
       setDecodeMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          {e.message}
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>{e.message}</AlertError>
+        </DisappearingComponent>
       );
     }
   };

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
-import { Button, FormControl, Grid, TextField, Typography, Alert, AlertTitle } from '@mui/material';
+import { Button, FormControl, Grid, TextField, Typography } from '@mui/material';
+import DisappearingComponent from '../helpers/DisappearingComponent';
+import AlertError from '../helpers/AlertError';
 const electron = window.require('electron');
 const { clipboard } = electron;
 
@@ -22,20 +24,20 @@ function ToolUUID() {
     setUuidV5Message('');
     if (!uuidV5Namespace.trim().length) {
       setUuidV5Message(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          <strong>Namespace</strong> is required.
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>
+            <strong>Namespace</strong> is required.
+          </AlertError>
+        </DisappearingComponent>
       );
     } else {
       try {
         setGeneratedUUIDV5(uuidV5(uuidV5String, uuidV5Namespace));
       } catch (err) {
         setUuidV5Message(
-          <Alert variant="filled" severity="error">
-            <AlertTitle>Error</AlertTitle>
-            {err.message}
-          </Alert>
+          <DisappearingComponent>
+            <AlertError>{err.message}</AlertError>
+          </DisappearingComponent>
         );
       }
     }

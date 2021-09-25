@@ -9,10 +9,10 @@ import {
   TableContainer,
   TableRow,
   TextField,
-  Typography,
-  Alert,
-  AlertTitle
+  Typography
 } from '@mui/material';
+import DisappearingComponent from '../helpers/DisappearingComponent';
+import AlertError from '../helpers/AlertError';
 const electron = window.require('electron');
 const { clipboard } = electron;
 
@@ -58,19 +58,17 @@ function ToolEpoch() {
     const epoch = Number(epochInput);
     if (!epochInput.length) {
       setMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          Epoch is required.
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>Epoch is required.</AlertError>
+        </DisappearingComponent>
       );
       return;
     }
     if (!Number.isInteger(epoch)) {
       setMessage(
-        <Alert variant="filled" severity="error">
-          <AlertTitle>Error</AlertTitle>
-          Epoch should be an integer value.
-        </Alert>
+        <DisappearingComponent>
+          <AlertError>Epoch should be an integer value.</AlertError>
+        </DisappearingComponent>
       );
       return;
     }

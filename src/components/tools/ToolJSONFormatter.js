@@ -3,7 +3,7 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-json5';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import { Grid, Typography, ButtonGroup, Button, Tooltip, Alert } from '@mui/material';
+import { Grid, Typography, ButtonGroup, Button, Tooltip } from '@mui/material';
 import {
   Spellcheck as SpellcheckIcon,
   ZoomIn as ZoomInIcon,
@@ -16,6 +16,8 @@ import {
   Clear as ClearIcon
 } from '@mui/icons-material';
 import DisappearingComponent from '../helpers/DisappearingComponent';
+import AlertError from '../helpers/AlertError';
+import AlertSuccess from '../helpers/AlertSuccess';
 
 function ToolJSONFormatter() {
   const editor = useRef(null);
@@ -27,9 +29,7 @@ function ToolJSONFormatter() {
   const showErrorMessage = message => {
     setMessage(
       <DisappearingComponent>
-        <Alert variant="filled" severity="error">
-          {message}
-        </Alert>
+        <AlertError>{message}</AlertError>
       </DisappearingComponent>
     );
   };
@@ -37,9 +37,7 @@ function ToolJSONFormatter() {
   const showSuccessMessage = message => {
     setMessage(
       <DisappearingComponent>
-        <Alert variant="filled" severity="success">
-          {message}
-        </Alert>
+        <AlertSuccess>{message}</AlertSuccess>
       </DisappearingComponent>
     );
   };
