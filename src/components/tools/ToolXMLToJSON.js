@@ -132,7 +132,7 @@ function ToolXMLToJSON() {
       const json = JSON.stringify(JSON.parse(result), null, tabSize);
       setJsonOutput(json, -1);
     } catch (e) {
-      setMessage(e.message);
+      showErrorMessage(e.message);
     }
   };
 
