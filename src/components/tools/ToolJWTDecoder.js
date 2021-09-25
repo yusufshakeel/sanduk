@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/mode-json5';
 import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import jwtDecode from 'jwt-decode';
 import { Button, Grid, Typography } from '@mui/material';
 import DisappearingComponent from '../helpers/DisappearingComponent';
 import AlertError from '../helpers/AlertError';
+import AppContext from '../../store/app-context';
 
 function ToolJWTDecoder() {
+  const ctx = useContext(AppContext);
+  const { isDarkModeEnabled } = ctx;
+
+  const [editorTheme, setEditorTheme] = useState('monokai');
+
   const [jwtInput, setJwtInput] = useState('');
   const [jwtHeader, setJwtHeader] = useState('');
   const [jwtPayload, setJwtPayload] = useState('');
 
   const [message, setMessage] = useState(<React.Fragment />);
+
+  useEffect(() => {
+    const editorTheme = isDarkModeEnabled ? 'monokai' : 'github';
+    setEditorTheme(editorTheme);
+  }, [isDarkModeEnabled]);
 
   const handleDecodeJwt = () => {
     try {
@@ -60,7 +72,7 @@ function ToolJWTDecoder() {
         <div id="jwtEditorContainer">
           <AceEditor
             mode="text"
-            theme="monokai"
+            theme={editorTheme}
             value={jwtInput}
             onChange={e => setJwtInput(e)}
             wrapEnabled={true}
@@ -103,7 +115,7 @@ function ToolJWTDecoder() {
         <div id="jwtHeaderEditorContainer">
           <AceEditor
             mode="json5"
-            theme="monokai"
+            theme={editorTheme}
             value={jwtHeader}
             name="jwtHeaderEditor"
             style={{ width: '100%', height: '400px', marginBottom: '40px' }}
@@ -122,7 +134,7 @@ function ToolJWTDecoder() {
         <div id="jwtPayloadEditorContainer">
           <AceEditor
             mode="json5"
-            theme="monokai"
+            theme={editorTheme}
             value={jwtPayload}
             name="jwtPayloadEditor"
             style={{ width: '100%', height: '400px', marginBottom: '40px' }}
