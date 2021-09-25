@@ -1,7 +1,0 @@
-body {
-    -webkit-user-select: none;
-}
-
-a.sidebar-link.sanduk-tool[data-sanduk-tool-isActive="true"] {
-    border-left: 3px solid dodgerblue;
-}
