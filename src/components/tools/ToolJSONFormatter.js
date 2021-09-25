@@ -11,9 +11,9 @@ import {
   WrapText as WrapTextIcon,
   Expand as ExpandIcon,
   Compress as CompressIcon,
-  FormatAlignJustify as FormatAlignJustifyIcon,
+  ExpandLess as ExpandLessIcon,
   TextFormat as TextFormatIcon,
-  Clear as ClearIcon
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 import DisappearingComponent from '../helpers/DisappearingComponent';
 import AlertError from '../helpers/AlertError';
@@ -24,6 +24,8 @@ function ToolJSONFormatter() {
   const [fontSize, setFontSize] = useState(16);
   const [jsonInput, setJsonInput] = useState('');
   const [isWrapEnabled, setWrapEnabled] = useState(false);
+  const [lineColumn, setLineColumn] = useState('Ln: 0 Col: 0');
+  const [tabSize] = useState(2);
   const [message, setMessage] = useState(<React.Fragment />);
 
   const showErrorMessage = message => {
@@ -73,12 +75,13 @@ function ToolJSONFormatter() {
   };
 
   const handleExpandJSON = () => {
+    editor.current.editor.session.unfold(null);
     try {
       setMessage('');
       if (!jsonInput.length) {
         return;
       }
-      const json = JSON.stringify(JSON.parse(jsonInput), null, 2);
+      const json = JSON.stringify(JSON.parse(jsonInput), null, tabSize);
       setJsonInput(json);
     } catch (e) {
       showErrorMessage(e.message);
@@ -107,6 +110,11 @@ function ToolJSONFormatter() {
 
   const handleClear = () => {
     setJsonInput('');
+  };
+
+  const handleCursorChange = () => {
+    const { row = 0, column = 0 } = editor.current.editor.getCursorPosition();
+    setLineColumn(`Ln: ${row + 1} Col: ${column + 1}`);
   };
 
   return (
@@ -139,7 +147,7 @@ function ToolJSONFormatter() {
           </Tooltip>
           <Tooltip title="Fold">
             <Button onClick={handleFold}>
-              <FormatAlignJustifyIcon sx={{ fontSize: '1.5em' }} />
+              <ExpandLessIcon sx={{ fontSize: '1.5em' }} />
             </Button>
           </Tooltip>
           <Tooltip title="Wrap">
@@ -164,7 +172,7 @@ function ToolJSONFormatter() {
           </Tooltip>
           <Tooltip title="Clear">
             <Button onClick={handleClear}>
-              <ClearIcon sx={{ fontSize: '1.5em' }} />
+              <DeleteIcon sx={{ fontSize: '1.5em' }} />
             </Button>
           </Tooltip>
         </ButtonGroup>
@@ -179,12 +187,46 @@ function ToolJSONFormatter() {
             value={jsonInput}
             wrapEnabled={isWrapEnabled}
             onChange={e => setJsonInput(e)}
-            style={{ width: '100%', height: '70vh', marginBottom: '5px' }}
+            onCursorChange={handleCursorChange}
+            style={{ width: '100%', height: '70vh' }}
             setOptions={{
-              tabSize: 2,
+              tabSize: tabSize,
+              useSoftTabs: true,
               showPrintMargin: false
             }}
           />
+          <div style={{ backgroundColor: '#333', padding: '10px' }}>
+            <span
+              style={{
+                marginRight: '5px',
+                padding: '0 10px',
+                borderRight: '1px solid #aaa',
+                display: 'inline-block'
+              }}
+            >
+              <Typography fontFamily="monospace">{lineColumn}</Typography>
+            </span>
+            <span
+              style={{
+                marginRight: '5px',
+                padding: '0 10px',
+                borderRight: '1px solid #aaa',
+                display: 'inline-block'
+              }}
+            >
+              <Typography fontFamily="monospace">Font {fontSize}px</Typography>
+            </span>
+            <span
+              style={{
+                marginRight: '5px',
+                padding: '0 10px',
+                borderRight: '1px solid #aaa',
+                display: 'inline-block'
+              }}
+            >
+              <Typography fontFamily="monospace">Spaces {tabSize}</Typography>
+            </span>
+          </div>
         </div>
         <div id="messageContainer">{message}</div>
       </Grid>
