@@ -1,9 +1,10 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-json5';
-import 'ace-builds/src-noconflict/theme-monokai';
-import 'ace-builds/src-noconflict/theme-github';
-import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/webpack-resolver';
+import 'ace-builds/src-min-noconflict/mode-json5';
+import 'ace-builds/src-min-noconflict/theme-monokai';
+import 'ace-builds/src-min-noconflict/theme-github';
+import 'ace-builds/src-min-noconflict/ext-searchbox';
 import { Grid, Typography, ButtonGroup, Button, Tooltip } from '@mui/material';
 import {
   Spellcheck as SpellcheckIcon,

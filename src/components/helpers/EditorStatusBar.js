@@ -17,17 +17,26 @@ function EditorStatusBar(props) {
 
   return (
     <div style={{ backgroundColor: bgColor, padding: '10px', fontSize: '0.8em' }}>
-      <span style={spanStyle}>
-        <Typography fontFamily="monospace">
-          Ln: {props.line} Col: {props.column}
-        </Typography>
-      </span>
-      <span style={spanStyle}>
-        <Typography fontFamily="monospace">Font {props.fontSize}px</Typography>
-      </span>
-      <span style={spanStyle}>
-        <Typography fontFamily="monospace">Spaces {props.tabSize}</Typography>
-      </span>
+      {props.line && (
+        <span style={spanStyle}>
+          <Typography fontFamily="monospace">Ln: {props.line}</Typography>
+        </span>
+      )}
+      {props.column && (
+        <span style={spanStyle}>
+          <Typography fontFamily="monospace">Col: {props.column}</Typography>
+        </span>
+      )}
+      {props.fontSize && (
+        <span style={spanStyle}>
+          <Typography fontFamily="monospace">Font {props.fontSize}px</Typography>
+        </span>
+      )}
+      {props.tabSize && (
+        <span style={spanStyle}>
+          <Typography fontFamily="monospace">Spaces {props.tabSize}</Typography>
+        </span>
+      )}
     </div>
   );
 }

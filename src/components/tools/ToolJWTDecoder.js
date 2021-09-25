@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-text';
-import 'ace-builds/src-noconflict/mode-json5';
-import 'ace-builds/src-noconflict/theme-monokai';
-import 'ace-builds/src-noconflict/theme-github';
-import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/webpack-resolver';
+import 'ace-builds/src-min-noconflict/mode-text';
+import 'ace-builds/src-min-noconflict/mode-json5';
+import 'ace-builds/src-min-noconflict/theme-monokai';
+import 'ace-builds/src-min-noconflict/theme-github';
+import 'ace-builds/src-min-noconflict/ext-searchbox';
 import jwtDecode from 'jwt-decode';
 import { Button, Grid, Typography } from '@mui/material';
 import DisappearingComponent from '../helpers/DisappearingComponent';
