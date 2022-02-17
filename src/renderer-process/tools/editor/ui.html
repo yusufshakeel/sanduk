@@ -1,0 +1,94 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-1">
+  <div class="container-fluid">
+    <span class="pe-3">Editor</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#editor-navbar"
+            aria-controls="editor-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="editor-navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="wrap-input-editor-btn">Wrap</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="increase-font-input-editor-btn"><i class="fas fa-search-plus"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="decrease-font-input-editor-btn"><i class="fas fa-search-minus"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="reset-font-input-editor-btn"><i class="fas fa-font"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<ul class="nav nav-tabs" id="editorTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab active" data-tabid="1" id="editor-tab-1" data-bs-toggle="tab" data-bs-target="#editor-tab-1-content" type="button" role="tab" aria-controls="tab-1" aria-selected="true">Tab 1</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="2" id="editor-tab-2" data-bs-toggle="tab" data-bs-target="#editor-tab-2-content" type="button" role="tab" aria-controls="tab-2" aria-selected="false">Tab 2</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="3" id="editor-tab-3" data-bs-toggle="tab" data-bs-target="#editor-tab-3-content" type="button" role="tab" aria-controls="tab-3" aria-selected="false">Tab 3</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="4" id="editor-tab-4" data-bs-toggle="tab" data-bs-target="#editor-tab-4-content" type="button" role="tab" aria-controls="tab-4" aria-selected="false">Tab 4</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="5" id="editor-tab-5" data-bs-toggle="tab" data-bs-target="#editor-tab-5-content" type="button" role="tab" aria-controls="tab-5" aria-selected="false">Tab 5</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="6" id="editor-tab-6" data-bs-toggle="tab" data-bs-target="#editor-tab-6-content" type="button" role="tab" aria-controls="tab-6" aria-selected="false">Tab 6</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-editor-tab" data-tabid="7" id="editor-tab-7" data-bs-toggle="tab" data-bs-target="#editor-tab-7-content" type="button" role="tab" aria-controls="tab-7" aria-selected="false">Tab 7</button>
+  </li>
+</ul>
+<div class="tab-content" id="editorTabContent">
+  <div class="tab-pane show active" id="editor-tab-1-content" role="tabpanel" aria-labelledby="tab-1">
+    <pre class="form-control"
+         id="editor-input-tab-1"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-1-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-2-content" role="tabpanel" aria-labelledby="tab-2">
+    <pre class="form-control"
+         id="editor-input-tab-2"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-2-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-3-content" role="tabpanel" aria-labelledby="tab-3">
+    <pre class="form-control"
+         id="editor-input-tab-3"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-3-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-4-content" role="tabpanel" aria-labelledby="tab-4">
+    <pre class="form-control"
+         id="editor-input-tab-4"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-4-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-5-content" role="tabpanel" aria-labelledby="tab-5">
+    <pre class="form-control"
+         id="editor-input-tab-5"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-5-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-6-content" role="tabpanel" aria-labelledby="tab-6">
+    <pre class="form-control"
+         id="editor-input-tab-6"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-6-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+  <div class="tab-pane" id="editor-tab-7-content" role="tabpanel" aria-labelledby="tab-7">
+    <pre class="form-control"
+         id="editor-input-tab-7"
+         style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+    <div id="editor-input-tab-7-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+  </div>
+</div>
+<div id="editor-input-message"></div>

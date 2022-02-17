@@ -1,7 +1,17 @@
+html {
+    margin: 0;
+    padding: 0;
+}
 body {
     -webkit-user-select: none;
 }
 
-a.sidebar-link.sanduk-tool[data-sanduk-tool-isActive="true"] {
-    border-left: 3px solid dodgerblue;
+#v-pills-tab {
+    width: 250px;
+    height: 100vh;
+    border-right: 1px solid #eee;
+}
+
+#v-pills-tabContent {
+    width: calc(100% - 250px);
 }

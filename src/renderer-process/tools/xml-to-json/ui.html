@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+  <div class="container-fluid">
+    <span class="pe-3">XML to JSON</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#xml-to-json-formatter-navbar"
+            aria-controls="xml-to-json-formatter-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="xml-to-json-formatter-navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="xml-to-json-format-xml-editor-btn">Pretty</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="xml-to-json-compact-xml-editor-btn">Compact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="xml-to-json-transform-xml-editor-btn">Transform</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="xml-to-json-toggle-wrap-xml-editor-btn" data-wrap="no">Wrap</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+          <span class="pe-3">XML</span>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link py-0" href="#" id="xml-to-json-xml-editor-copy-btn">Copy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link py-0 pe-0" href="#" id="xml-to-json-xml-editor-clear-btn">Clear</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- xml editor -->
+      <pre class="form-control"
+           id="xml-to-json-xml-editor"
+           style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+      <div id="xml-to-json-xml-editor-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+    </div>
+
+    <div class="col-6">
+      <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+          <span class="pe-3">JSON</span>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link py-0" href="#" id="xml-to-json-json-editor-copy-btn">Copy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link py-0 pe-0" href="#" id="xml-to-json-json-editor-clear-btn">Clear</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- json editor -->
+      <pre class="form-control"
+           id="xml-to-json-json-editor"
+           style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+      <div id="xml-to-json-json-editor-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
+    </div>
+
+    <div class="col-12">
+      <div id="xml-to-json-message"></div>
+    </div>
+  </div>
+</div>

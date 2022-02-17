@@ -1,11 +1,12 @@
 'use strict';
+
 const { app, BrowserWindow, shell } = require('electron');
 const windowStateKeeper = require('electron-window-state');
-const fileManagement = require('./file-management');
 const applicationMenu = require('./application-menu');
 
 // global variable to prevent it from getting garbage collected.
 let mainWindow;
+const isDevEnv = process.env.SANDUK_ENV === 'dev';
 
 function createWindow() {
   const windowState = windowStateKeeper({
@@ -20,7 +21,7 @@ function createWindow() {
     height: windowState.height,
     minWidth: 800,
     minHeight: 500,
-    backgroundColor: '#25282c',
+    backgroundColor: '#fff',
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true
@@ -28,13 +29,11 @@ function createWindow() {
   });
 
   // for dev work
-  // mainWindow.webContents.openDevTools();
+  isDevEnv && mainWindow.webContents.openDevTools();
 
   windowState.manage(mainWindow);
 
   mainWindow.loadFile(__dirname + '/../static/app.html');
-
-  fileManagement(mainWindow);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
