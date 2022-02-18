@@ -1,69 +1,75 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top mb-3">
+<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top mb-1">
   <div class="container-fluid">
     <span class="pe-3">UUID</span>
   </div>
 </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12 text-center">
-      <h5>UUID v4</h5>
+<ul class="nav nav-tabs" id="uuidTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-uuid-tab active" data-tabid="1" id="uuid-tab-1" data-bs-toggle="tab" data-bs-target="#uuid-tab-1-content" type="button" role="tab" aria-controls="tab-1" aria-selected="true">UUID v4</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link sanduk-uuid-tab" data-tabid="2" id="uuid-tab-2" data-bs-toggle="tab" data-bs-target="#uuid-tab-2-content" type="button" role="tab" aria-controls="tab-2" aria-selected="false">UUID v5</button>
+  </li>
+</ul>
+<div class="tab-content" id="uuidTabContent">
+  <div class="tab-pane show active" id="uuid-tab-1-content" role="tabpanel" aria-labelledby="tab-1">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group input-group-lg">
+            <label for="uuid-v4-output" class="form-label">Generated UUID v4</label>
+            <input class="form-control text-center font-monospace" id="uuid-v4-output" readonly>
+          </div>
+
+          <div class="btn-group my-3" role="group" aria-label="Basic example">
+            <button type="button" id="generate-uuid-v4-btn" class="btn btn-outline-primary">Generate</button>
+            <button type="button" id="copy-uuid-v4-btn" class="btn btn-outline-primary">Copy</button>
+            <button type="button" id="clear-uuid-v4-btn" class="btn btn-outline-primary">Clear</button>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="uuid-v4-history" class="form-label">History</label>
+          <div id="uuid-v4-history"></div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="tab-pane" id="uuid-tab-2-content" role="tabpanel" aria-labelledby="tab-2">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group input-group-lg">
+            <label for="uuid-v5-name" class="form-label">String</label>
+            <textarea
+              class="form-control"
+              style="resize: vertical"
+              id="uuid-v5-name"></textarea>
+          </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="form-group input-group-lg">
-        <label for="uuid-v4-output" class="form-label">UUID v4</label>
-        <input class="form-control text-center font-monospace" id="uuid-v4-output" readonly>
-      </div>
+          <div class="form-group input-group-lg">
+            <label for="uuid-v5-namespace" class="form-label">Namespace</label>
+            <input class="form-control" id="uuid-v5-namespace">
+            <div id="uuid-v5-namespace-message"></div>
+          </div>
 
-      <div class="btn-group my-3" role="group" aria-label="Basic example">
-        <button type="button" id="generate-uuid-v4-btn" class="btn btn-outline-primary">Generate</button>
-        <button type="button" id="copy-uuid-v4-btn" class="btn btn-outline-primary">Copy</button>
-        <button type="button" id="clear-uuid-v4-btn" class="btn btn-outline-primary">Clear</button>
-      </div>
-    </div>
+          <div class="form-group input-group-lg">
+            <label for="uuid-v5-output" class="form-label">Generated UUID v5</label>
+            <input class="form-control text-center font-monospace" id="uuid-v5-output" readonly>
+          </div>
 
-    <div class="col-12">
-      <label for="uuid-v4-history" class="form-label">History</label>
-      <div id="uuid-v4-history" style="max-height: 250px; overflow-y: scroll;"></div>
-    </div>
-  </div>
+          <div class="btn-group my-3" role="group" aria-label="Basic example">
+            <button type="button" id="generate-uuid-v5-btn" class="btn btn-outline-primary">Generate</button>
+            <button type="button" id="copy-uuid-v5-btn" class="btn btn-outline-primary">Copy</button>
+            <button type="button" id="clear-uuid-v5-btn" class="btn btn-outline-primary">Clear</button>
+          </div>
 
-  <hr>
-
-  <div class="row">
-    <div class="col-12 text-center">
-      <h5>UUID v5</h5>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <div class="form-group input-group-lg">
-        <label for="uuid-v5-name" class="form-label">String</label>
-        <textarea
-          class="form-control"
-          style="resize: vertical"
-          id="uuid-v5-name"></textarea>
-      </div>
-
-      <div class="form-group input-group-lg">
-        <label for="uuid-v5-namespace" class="form-label">Namespace</label>
-        <input class="form-control" id="uuid-v5-namespace">
-        <div id="uuid-v5-namespace-message"></div>
-      </div>
-
-      <div class="form-group input-group-lg">
-        <label for="uuid-v5-output" class="form-label">UUID v5</label>
-        <input class="form-control text-center font-monospace" id="uuid-v5-output" readonly>
-      </div>
-
-      <div class="btn-group my-3" role="group" aria-label="Basic example">
-        <button type="button" id="generate-uuid-v5-btn" class="btn btn-outline-primary">Generate</button>
-        <button type="button" id="copy-uuid-v5-btn" class="btn btn-outline-primary">Copy</button>
-        <button type="button" id="clear-uuid-v5-btn" class="btn btn-outline-primary">Clear</button>
+          <div class="col-12">
+            <label for="uuid-v5-history" class="form-label">History</label>
+            <div id="uuid-v5-history"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

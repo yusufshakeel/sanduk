@@ -5,7 +5,7 @@ const path = require('path');
 const { clipboard } = require('electron');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
-const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
+const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
 module.exports = function epoch() {
   document.getElementById('v-pills-epoch').innerHTML = fs.readFileSync(
@@ -61,7 +61,12 @@ module.exports = function epoch() {
   });
 
   copyCurrentTimeEpochBtn.addEventListener('click', () => {
-    inProgressTextAnimate(copyCurrentTimeEpochBtn, 'Copy', 'Copied!', 200);
+    inProgressHtmlAnimate(
+      copyCurrentTimeEpochBtn,
+      '<i class="far fa-clipboard"></i>',
+      '<i class="fas fa-clipboard-check"></i>',
+      200
+    );
     clipboard.writeText(currentTimeEpoch.innerText);
   });
 };

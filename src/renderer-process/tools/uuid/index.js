@@ -9,6 +9,29 @@ const clearContent = require('../../helpers/clear-content');
 const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
 const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
+function renderHistory(history, historyContainer) {
+  historyContainer.innerHTML = history
+    .map(
+      v =>
+        `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy border border-1 p-1" data-value="${v}" style="cursor: pointer"><i class="far fa-clipboard"></i></span></p>`
+    )
+    .reverse()
+    .join('');
+
+  const elems = document.getElementsByClassName('sanduk-click-to-copy');
+  for (const el of elems) {
+    el.addEventListener('click', () => {
+      inProgressHtmlAnimate(
+        el,
+        '<i class="far fa-clipboard"></i>',
+        '<i class="fas fa-clipboard-check"></i>',
+        200
+      );
+      clipboard.writeText(el.dataset.value);
+    });
+  }
+}
+
 function uuidV4Handler() {
   const btnGenerateUUIDV4 = document.getElementById('generate-uuid-v4-btn');
   const btnCopyUUIDV4 = document.getElementById('copy-uuid-v4-btn');
@@ -19,35 +42,12 @@ function uuidV4Handler() {
   const historyLimit = 20;
   const history = [];
 
-  const renderHistory = () => {
-    historyElem.innerHTML = history
-      .map(
-        v =>
-          `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy border border-1 p-1" data-value="${v}" style="cursor: pointer"><i class="far fa-clipboard"></i></span></p>`
-      )
-      .reverse()
-      .join('');
-
-    const elems = document.getElementsByClassName('sanduk-click-to-copy');
-    for (const el of elems) {
-      el.addEventListener('click', () => {
-        inProgressHtmlAnimate(
-          el,
-          '<i class="far fa-clipboard"></i>',
-          '<i class="fas fa-clipboard-check"></i>',
-          200
-        );
-        clipboard.writeText(el.dataset.value);
-      });
-    }
-  };
-
   btnGenerateUUIDV4.addEventListener('click', () => {
     const value = uuidV4();
     uuidV4Output.value = value;
     history.length >= historyLimit && history.splice(0, 1);
     history.push(value);
-    renderHistory();
+    renderHistory(history, historyElem);
   });
 
   btnCopyUUIDV4.addEventListener('click', () => {
@@ -71,6 +71,10 @@ function uuidV5Handler() {
   const btnCopyUUIDV5 = document.getElementById('copy-uuid-v5-btn');
   const btnClearUUIDV5 = document.getElementById('clear-uuid-v5-btn');
   const uuidV5Output = document.getElementById('uuid-v5-output');
+  const historyElem = document.getElementById('uuid-v5-history');
+
+  const historyLimit = 20;
+  const history = [];
 
   btnGenerateUUIDV5.addEventListener('click', () => {
     try {
@@ -79,7 +83,11 @@ function uuidV5Handler() {
         popError(uuidV5NamespaceMessage, 'Namespace required.');
         return;
       }
-      uuidV5Output.value = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
+      let value = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
+      uuidV5Output.value = value;
+      history.length >= historyLimit && history.splice(0, 1);
+      history.push(value);
+      renderHistory(history, historyElem);
     } catch (e) {
       popError(uuidV5NamespaceMessage, e.message);
     }
