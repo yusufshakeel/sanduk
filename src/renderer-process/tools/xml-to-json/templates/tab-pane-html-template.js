@@ -13,7 +13,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
     <div class="row">
       <div class="col-6">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
-          <div class="container-fluid px-0">
+          <div class="container-fluid">
             <span class="pe-3">XML</span>
             <ul class="navbar-nav">
               <li class="nav-item">
