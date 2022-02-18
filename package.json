@@ -12,6 +12,8 @@
     "build:for-mac": "npm run pre-build && npx electron-builder -m",
     "lint": "npx eslint -c .eslintrc.json src",
     "lint:fix": "npx eslint --fix -c .eslintrc.json src test/unit",
+    "lint:fix:test": "npx eslint --fix -c .eslintrc.json test/unit",
+    "lint:fix:src": "npx eslint --fix -c .eslintrc.json src",
     "test:all": "npm run bootstrap && npm run test:unit",
     "test:unit": "npm run bootstrap && jest -c jest.config.json",
     "bootstrap": "mkdirp output"
