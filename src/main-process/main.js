@@ -2,6 +2,7 @@
 
 const { app, BrowserWindow, shell } = require('electron');
 const windowStateKeeper = require('electron-window-state');
+const fileManagement = require('./file-management');
 const applicationMenu = require('./application-menu');
 
 // global variable to prevent it from getting garbage collected.
@@ -34,6 +35,8 @@ function createWindow() {
   windowState.manage(mainWindow);
 
   mainWindow.loadFile(__dirname + '/../static/app.html');
+
+  fileManagement(mainWindow);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
