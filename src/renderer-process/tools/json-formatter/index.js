@@ -8,6 +8,7 @@ const clearContent = require('../../helpers/clear-content');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
 
 module.exports = function jsonFormatterTool() {
   document.getElementById('v-pills-json-formatter').innerHTML = fs.readFileSync(
@@ -37,7 +38,11 @@ module.exports = function jsonFormatterTool() {
     wrappedTabContent.push(false);
 
     let jsonInputEditor = window.ace.edit(`json-formatter-input-tab-${i}`);
-    setupEditor({ editor: jsonInputEditor, rowColumnPositionElement: inputFooters[i - 1] });
+    setupEditor({
+      editor: jsonInputEditor,
+      rowColumnPositionElement: inputFooters[i - 1],
+      mode: aceMode.json
+    });
     jsonInputEditors.push(jsonInputEditor);
 
     jsonInputElems.push(document.getElementById(`json-formatter-input-tab-${i}`));

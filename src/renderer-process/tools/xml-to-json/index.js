@@ -69,7 +69,7 @@ module.exports = function xmlToJson() {
 
     let outputEditor = window.ace.edit(`xml-to-json-output-editor-${id}`);
     setupEditor({
-      editor: inputEditor,
+      editor: outputEditor,
       rowColumnPositionElement: outputFooters[id - 1],
       mode: aceMode.json
     });

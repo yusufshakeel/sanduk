@@ -6,6 +6,7 @@ const jwtDecode = require('jwt-decode');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
 const setupEditor = require('../../editor/setup-editor');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
 
 module.exports = function jwtDecoder() {
   document.getElementById('v-pills-jwt-decoder').innerHTML = fs.readFileSync(
@@ -21,10 +22,10 @@ module.exports = function jwtDecoder() {
   setupEditor({ editor: jwtInputEditor, useWrapMode: true });
 
   let decodedHeaderEditor = window.ace.edit('jwt-decoder-decoded-header');
-  setupEditor({ editor: decodedHeaderEditor });
+  setupEditor({ editor: decodedHeaderEditor, mode: aceMode.json });
 
   let decodedPayloadEditor = window.ace.edit('jwt-decoder-decoded-payload');
-  setupEditor({ editor: decodedPayloadEditor });
+  setupEditor({ editor: decodedPayloadEditor, mode: aceMode.json });
 
   decodeJWTBtn.addEventListener('click', () => {
     try {
