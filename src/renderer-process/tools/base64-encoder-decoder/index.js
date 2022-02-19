@@ -5,6 +5,7 @@ const path = require('path');
 const base64 = require('base-64');
 const utf8 = require('utf8');
 const popError = require('../../helpers/pop-error');
+const popInfo = require('../../helpers/pop-info');
 const clearContent = require('../../helpers/clear-content');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
@@ -112,8 +113,12 @@ module.exports = function base64EncoderDecoder() {
       try {
         clearContent(base64EncodeDecodeMessage);
         const input = inputEditors[activeTabId - 1].getValue();
-        inProgressTextAnimate(encodeBtns[activeTabId - 1], 'Encode', 'Encoding!', 200);
-        outputEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
+        if (input.length) {
+          inProgressTextAnimate(encodeBtns[activeTabId - 1], 'Encode', 'Encoding!', 200);
+          outputEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
+        } else {
+          popInfo(base64EncodeDecodeMessage, 'Nothing to encode', 1000);
+        }
       } catch (e) {
         popError(base64EncodeDecodeMessage, e.message);
       }
@@ -126,8 +131,12 @@ module.exports = function base64EncoderDecoder() {
       try {
         clearContent(base64EncodeDecodeMessage);
         const input = outputEditors[activeTabId - 1].getValue();
-        inProgressTextAnimate(decodeBtns[activeTabId - 1], 'Decode', 'Decoding!', 200);
-        inputEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
+        if (input.length) {
+          inProgressTextAnimate(decodeBtns[activeTabId - 1], 'Decode', 'Decoding!', 200);
+          inputEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
+        } else {
+          popInfo(base64EncodeDecodeMessage, 'Nothing to decode', 1000);
+        }
       } catch (e) {
         popError(base64EncodeDecodeMessage, e.message);
       }

@@ -3,8 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
-const fontSize = require('../../editor/font-size');
 const activeTabElement = require('../../helpers/active-tab-element');
+const tabHtmlTemplate = require('./templates/tab-html-template');
+const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 
 module.exports = function editorTool() {
   document.getElementById('v-pills-editor').innerHTML = fs.readFileSync(
@@ -12,65 +14,39 @@ module.exports = function editorTool() {
     'utf8'
   );
 
-  const increaseFontInputBtn = document.getElementById('increase-font-input-editor-btn');
-  const decreaseFontInputBtn = document.getElementById('decrease-font-input-editor-btn');
-  const resetFontInputBtn = document.getElementById('reset-font-input-editor-btn');
-  const wrapInputBtn = document.getElementById('wrap-input-editor-btn');
+  // const editorMessage = document.getElementById('editor-input-message');
 
   const totalTabs = 7;
+  document.getElementById('editorTab').innerHTML = Array.from(Array(totalTabs).keys())
+    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
+    .join('');
+  document.getElementById('editorTabContent').innerHTML = Array.from(Array(totalTabs).keys())
+    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
+    .join('');
 
-  let inputFooters = [];
-  let wrappedTabContent = [];
-  let editorInputEditors = [];
-  let editorInputElems = [];
-  for (let i = 1; i <= totalTabs; i++) {
-    inputFooters.push(document.getElementById(`editor-input-tab-${i}-footer`));
+  const inputFooters = [];
+  const inputEditors = [];
+  // const inputElems = [];
+  const wrapInputBtns = document.getElementsByClassName('editor-input-editor-wrap-btn');
 
-    wrappedTabContent.push(false);
+  for (let id = 1; id <= totalTabs; id++) {
+    inputFooters.push(document.getElementById(`editor-input-editor-${id}-footer`));
 
-    let editorInputEditor = window.ace.edit(`editor-input-tab-${i}`);
-    editorInputEditor.setTheme(aceTheme);
-    editorInputEditor.session.setMode(aceMode.text);
-    editorInputEditor.setShowPrintMargin(false);
-    editorInputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = editorInputEditor.getCursorPosition();
-      inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    let inputEditor = window.ace.edit(`editor-input-editor-${id}`);
+    inputEditor.setTheme(aceTheme);
+    inputEditor.session.setMode(aceMode.text);
+    inputEditor.setShowPrintMargin(false);
+    inputEditor.selection.on('changeCursor', () => {
+      const { row = 0, column = 0 } = inputEditor.getCursorPosition();
+      inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
     });
-    editorInputEditors.push(editorInputEditor);
+    inputEditors.push(inputEditor);
 
-    editorInputElems.push(document.getElementById(`editor-input-tab-${i}`));
+    // inputElems.push(document.getElementById(`editor-input-editor-${id}`));
   }
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName('sanduk-editor-tab active', 'tabid');
 
-  increaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(editorInputElems[activeTabId - 1]);
-  });
-
-  decreaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(editorInputElems[activeTabId - 1]);
-  });
-
-  resetFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(editorInputElems[activeTabId - 1]);
-  });
-
-  wrapInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    if (!editorInputEditors[activeTabId - 1].getValue().length) {
-      return;
-    }
-    const isWrapped = wrappedTabContent[activeTabId - 1];
-    if (isWrapped) {
-      editorInputEditors[activeTabId - 1].session.setUseWrapMode(false);
-      wrappedTabContent[activeTabId - 1] = false;
-    } else {
-      editorInputEditors[activeTabId - 1].session.setUseWrapMode(true);
-      wrappedTabContent[activeTabId - 1] = true;
-    }
-  });
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
 };

@@ -41,12 +41,12 @@ module.exports = function xmlToJson() {
     .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
     .join('');
 
-  let inputFooters = [];
-  let outputFooters = [];
-  let inputEditors = [];
-  let inputElems = [];
-  let outputEditors = [];
-  let outputElems = [];
+  const inputFooters = [];
+  const outputFooters = [];
+  const inputEditors = [];
+  const inputElems = [];
+  const outputEditors = [];
+  const outputElems = [];
   const wrapInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-wrap-btn');
   const copyInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-copy-btn');
   const clearInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-clear-btn');
