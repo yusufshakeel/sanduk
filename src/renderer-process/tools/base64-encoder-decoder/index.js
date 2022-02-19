@@ -11,7 +11,7 @@ const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
 const activeTabElement = require('../../helpers/active-tab-element');
-const wrapContentHandler = require('../../editor/handlers/wrap-content-handler');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
@@ -99,8 +99,8 @@ module.exports = function base64EncoderDecoder() {
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName('sanduk-base64-encoder-decoder-tab active', 'tabid');
 
-  wrapContentHandler.initWrapContentHandler(getActiveTabId, plainTextWrapBtns, inputEditors);
-  wrapContentHandler.initWrapContentHandler(getActiveTabId, encodedTextWrapBtns, outputEditors);
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, plainTextWrapBtns, inputEditors);
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, encodedTextWrapBtns, outputEditors);
   copyBtnHandler.initCopyBtnHandler(getActiveTabId, plainTextCopyBtns, inputEditors);
   copyBtnHandler.initCopyBtnHandler(getActiveTabId, encodedTextCopyBtns, outputEditors);
   clearBtnHandler.initClearBtnHandler(getActiveTabId, plainTextClearBtns, inputEditors);

@@ -15,7 +15,7 @@ describe('Testing active tab element', () => {
 
     describe('When matching element exists', () => {
       test('Should return the first match', () => {
-        expect(getActiveTabIdByClassName('some class name', 'tabid', fakeDocumentDOM)).toBe('1');
+        expect(getActiveTabIdByClassName('some class name', 'tabid', fakeDocumentDOM)).toBe(1);
       });
     });
 

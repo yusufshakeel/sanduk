@@ -11,7 +11,7 @@ const activeTabElement = require('../../helpers/active-tab-element');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const fontSize = require('../../editor/font-size');
-const wrapContentHandler = require('../../editor/handlers/wrap-content-handler');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
@@ -89,8 +89,8 @@ module.exports = function xmlToJson() {
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName('sanduk-xml-to-json-tab active', 'tabid');
 
-  wrapContentHandler.initWrapContentHandler(getActiveTabId, wrapInputBtns, inputEditors);
-  wrapContentHandler.initWrapContentHandler(getActiveTabId, wrapOutputBtns, outputEditors);
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapOutputBtns, outputEditors);
   copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyInputBtns, inputEditors);
   copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyOutputBtns, outputEditors);
   clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);

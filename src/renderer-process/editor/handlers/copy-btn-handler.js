@@ -3,7 +3,7 @@
 const { clipboard } = require('electron');
 const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
-function initCopyBtnHandler(getActiveTabId, copyBtns, editors) {
+function initCopyBtnHandler(getActiveTabId, copyBtns, editors, electronClipboard = clipboard) {
   for (const copyBtn of copyBtns) {
     copyBtn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
@@ -14,7 +14,7 @@ function initCopyBtnHandler(getActiveTabId, copyBtns, editors) {
         '<i class="fas fa-clipboard-check"></i>',
         200
       );
-      clipboard.writeText(editor.getValue());
+      electronClipboard.writeText(editor.getValue());
     });
   }
 }

@@ -2,7 +2,7 @@
 
 const wrapUnwrapContent = require('../wrap-unwrap-content');
 
-function initWrapContentHandler(getActiveTabId, wrapBtns, editors) {
+function initWrapBtnHandler(getActiveTabId, wrapBtns, editors) {
   for (const wrapBtn of wrapBtns) {
     wrapBtn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
@@ -17,4 +17,4 @@ function initWrapContentHandler(getActiveTabId, wrapBtns, editors) {
   }
 }
 
-module.exports = { initWrapContentHandler };
+module.exports = { initWrapBtnHandler };
