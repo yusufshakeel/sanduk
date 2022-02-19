@@ -11,9 +11,9 @@ const activeTabElement = require('../../helpers/active-tab-element');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const fontSize = require('../../editor/font-size');
-const wrapContentHandler = require('./handlers/wrap-content-handler');
-const copyBtnHandler = require('./handlers/copy-btn-handler');
-const clearBtnHandler = require('./handlers/clear-btn-handler');
+const wrapContentHandler = require('../../editor/handlers/wrap-content-handler');
+const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
+const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
 const xmlFormatterOption = {
   indentation: '  '

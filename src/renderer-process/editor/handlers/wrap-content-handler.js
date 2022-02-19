@@ -1,6 +1,6 @@
 'use strict';
 
-const wrapUnwrapContent = require('../../../editor/wrap-unwrap-content');
+const wrapUnwrapContent = require('../wrap-unwrap-content');
 
 function initWrapContentHandler(getActiveTabId, wrapBtns, editors) {
   for (const wrapBtn of wrapBtns) {

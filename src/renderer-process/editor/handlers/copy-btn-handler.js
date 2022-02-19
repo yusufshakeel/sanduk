@@ -1,7 +1,7 @@
 'use strict';
 
 const { clipboard } = require('electron');
-const inProgressHtmlAnimate = require('../../../helpers/in-progress-html-animate');
+const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
 function initCopyBtnHandler(getActiveTabId, copyBtns, editors) {
   for (const copyBtn of copyBtns) {

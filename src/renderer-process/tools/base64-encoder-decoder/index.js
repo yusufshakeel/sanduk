@@ -2,12 +2,18 @@
 
 const fs = require('fs');
 const path = require('path');
-const { clipboard } = require('electron');
 const base64 = require('base-64');
 const utf8 = require('utf8');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
+const tabHtmlTemplate = require('./templates/tab-html-template');
+const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
+const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
+const activeTabElement = require('../../helpers/active-tab-element');
+const wrapContentHandler = require('../../editor/handlers/wrap-content-handler');
+const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
+const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
 module.exports = function base64EncoderDecoder() {
   document.getElementById('v-pills-base64-encoder-decoder').innerHTML = fs.readFileSync(
@@ -15,65 +21,116 @@ module.exports = function base64EncoderDecoder() {
     'utf8'
   );
 
-  const plainTextInput = document.getElementById('plain-text-input');
-  const plainTextMessage = document.getElementById('plain-text-message');
-  const base64EncodedOutput = document.getElementById('base64-encoded-output');
-  const encodeBtn = document.getElementById('encode-btn');
-  const clearEncodedBtn = document.getElementById('clear-encoded-btn');
-  const copyEncodedBtn = document.getElementById('copy-encoded-btn');
+  const base64EncodeDecodeMessage = document.getElementById('base64-encoder-decoder-message');
 
-  const plainTextOutput = document.getElementById('plain-text-output');
-  const base64EncodeMessage = document.getElementById('base64-encode-message');
-  const base64EncodedInput = document.getElementById('base64-encoded-input');
-  const decodeBtn = document.getElementById('decode-btn');
-  const clearDecodedBtn = document.getElementById('clear-decoded-btn');
-  const copyDecodedBtn = document.getElementById('copy-decoded-btn');
+  const totalTabs = 7;
+  document.getElementById('base64EncoderDecoderTab').innerHTML = Array.from(Array(totalTabs).keys())
+    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
+    .join('');
+  document.getElementById('base64EncoderDecoderTabContent').innerHTML = Array.from(
+    Array(totalTabs).keys()
+  )
+    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
+    .join('');
 
-  encodeBtn.addEventListener('click', () => {
-    try {
-      clearContent(plainTextMessage);
-      const input = plainTextInput.value.trim();
-      base64EncodedOutput.value = base64.encode(utf8.encode(input));
-    } catch (e) {
-      popError(plainTextMessage, e.message);
-    }
-  });
+  const inputFooters = [];
+  const outputFooters = [];
+  const inputEditors = [];
+  const inputElems = [];
+  const outputEditors = [];
+  const outputElems = [];
+  const encodeBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-plaintext-input-editor-encode-btn'
+  );
+  const decodeBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-encoded-output-editor-decode-btn'
+  );
+  const plainTextWrapBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-plaintext-input-editor-wrap-btn'
+  );
+  const encodedTextWrapBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-encoded-output-editor-wrap-btn'
+  );
+  const plainTextCopyBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-plaintext-input-editor-copy-btn'
+  );
+  const encodedTextCopyBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-encoded-output-editor-copy-btn'
+  );
+  const plainTextClearBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-plaintext-input-editor-clear-btn'
+  );
+  const encodedTextClearBtns = document.getElementsByClassName(
+    'base64-encoder-decoder-encoded-output-editor-clear-btn'
+  );
 
-  clearEncodedBtn.addEventListener('click', () => {
-    clearContent(plainTextMessage);
-    plainTextInput.value = '';
-    base64EncodedOutput.value = '';
-  });
+  for (let id = 1; id <= totalTabs; id++) {
+    inputFooters.push(
+      document.getElementById(`base64-encoder-decoder-plaintext-input-editor-${id}-footer`)
+    );
+    outputFooters.push(
+      document.getElementById(`base64-encoder-decoder-encoded-output-editor-${id}-footer`)
+    );
 
-  copyEncodedBtn.addEventListener('click', () => {
-    if (!base64EncodedOutput.value.trim().length) {
-      return;
-    }
-    inProgressTextAnimate(copyEncodedBtn, 'Copy', 'Copied!', 200);
-    clipboard.writeText(base64EncodedOutput.value);
-  });
+    let inputEditor = window.ace.edit(`base64-encoder-decoder-plaintext-input-editor-${id}`);
+    inputEditor.setTheme(aceTheme);
+    inputEditor.session.setMode(aceMode.text);
+    inputEditor.setShowPrintMargin(false);
+    inputEditor.selection.on('changeCursor', () => {
+      const { row = 0, column = 0 } = inputEditor.getCursorPosition();
+      inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    });
+    inputEditors.push(inputEditor);
 
-  decodeBtn.addEventListener('click', () => {
-    try {
-      clearContent(base64EncodeMessage);
-      const input = base64EncodedInput.value.trim();
-      plainTextOutput.value = utf8.decode(base64.decode(input));
-    } catch (e) {
-      popError(base64EncodeMessage, e.message);
-    }
-  });
+    let outputEditor = window.ace.edit(`base64-encoder-decoder-encoded-output-editor-${id}`);
+    outputEditor.setTheme(aceTheme);
+    outputEditor.session.setMode(aceMode.text);
+    outputEditor.setShowPrintMargin(false);
+    outputEditor.selection.on('changeCursor', () => {
+      const { row = 0, column = 0 } = outputEditor.getCursorPosition();
+      outputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    });
+    outputEditors.push(outputEditor);
 
-  clearDecodedBtn.addEventListener('click', () => {
-    clearContent(base64EncodeMessage);
-    plainTextOutput.value = '';
-    base64EncodedInput.value = '';
-  });
+    inputElems.push(document.getElementById(`base64-encoder-decoder-plaintext-input-editor-${id}`));
+    outputElems.push(document.getElementById(`base64-encoder-decoder-encoded-output-editor-${id}`));
+  }
 
-  copyDecodedBtn.addEventListener('click', () => {
-    if (!plainTextOutput.value.trim().length) {
-      return;
-    }
-    inProgressTextAnimate(copyDecodedBtn, 'Copy', 'Copied!', 200);
-    clipboard.writeText(plainTextOutput.value);
-  });
+  const getActiveTabId = () =>
+    activeTabElement.getActiveTabIdByClassName('sanduk-base64-encoder-decoder-tab active', 'tabid');
+
+  wrapContentHandler.initWrapContentHandler(getActiveTabId, plainTextWrapBtns, inputEditors);
+  wrapContentHandler.initWrapContentHandler(getActiveTabId, encodedTextWrapBtns, outputEditors);
+  copyBtnHandler.initCopyBtnHandler(getActiveTabId, plainTextCopyBtns, inputEditors);
+  copyBtnHandler.initCopyBtnHandler(getActiveTabId, encodedTextCopyBtns, outputEditors);
+  clearBtnHandler.initClearBtnHandler(getActiveTabId, plainTextClearBtns, inputEditors);
+  clearBtnHandler.initClearBtnHandler(getActiveTabId, encodedTextClearBtns, outputEditors);
+
+  for (const btn of encodeBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(base64EncodeDecodeMessage);
+        const input = inputEditors[activeTabId - 1].getValue();
+        inProgressTextAnimate(encodeBtns[activeTabId - 1], 'Encode', 'Encoding!', 200);
+        outputEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
+      } catch (e) {
+        popError(base64EncodeDecodeMessage, e.message);
+      }
+    });
+  }
+
+  for (const btn of decodeBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(base64EncodeDecodeMessage);
+        const input = outputEditors[activeTabId - 1].getValue();
+        inProgressTextAnimate(decodeBtns[activeTabId - 1], 'Decode', 'Decoding!', 200);
+        inputEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
+      } catch (e) {
+        popError(base64EncodeDecodeMessage, e.message);
+      }
+    });
+  }
 };
