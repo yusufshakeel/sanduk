@@ -15,6 +15,7 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const setupEditor = require('../../editor/setup-editor');
+const fontSize = require('../../editor/font-size');
 
 module.exports = function base64EncoderDecoder() {
   document.getElementById('v-pills-base64-encoder-decoder').innerHTML = fs.readFileSync(
@@ -22,6 +23,13 @@ module.exports = function base64EncoderDecoder() {
     'utf8'
   );
 
+  const increaseFontInputBtn = document.getElementById(
+    'increase-font-input-base64-encoder-decoder-btn'
+  );
+  const decreaseFontInputBtn = document.getElementById(
+    'decrease-font-input-base64-encoder-decoder-btn'
+  );
+  const resetFontInputBtn = document.getElementById('reset-font-input-base64-encoder-decoder-btn');
   const base64EncodeDecodeMessage = document.getElementById('base64-encoder-decoder-message');
 
   const totalTabs = 7;
@@ -130,4 +138,22 @@ module.exports = function base64EncoderDecoder() {
       }
     });
   }
+
+  increaseFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
+    fontSize.increaseFontSize(outputElems[activeTabId - 1]);
+  });
+
+  decreaseFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
+    fontSize.decreaseFontSize(outputElems[activeTabId - 1]);
+  });
+
+  resetFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.resetFontSize(inputElems[activeTabId - 1]);
+    fontSize.resetFontSize(outputElems[activeTabId - 1]);
+  });
 };
