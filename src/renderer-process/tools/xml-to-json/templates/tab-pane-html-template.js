@@ -11,7 +11,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
   return `<div class="tab-pane ${showActiveClassName}" id="xml-to-json-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
             <span class="pe-3">XML</span>
@@ -31,7 +31,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
         <pre class="form-control" id="xml-to-json-input-editor-${id}" style="height: calc(100vh - 250px); font-size: ${ACE_EDITOR_DEFAULT_FONT_SIZE_IN_PIXELS}px; margin-bottom: 0"></pre>
         <div class="bg-light p-1 font-monospace"><span id="xml-to-json-input-editor-${id}-footer">Ln: 1 Col: 1</span></div>
       </div>
-      <div class="col-6">
+      <div class="col-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
             <span class="pe-3">JSON</span>

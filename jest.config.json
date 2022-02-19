@@ -12,7 +12,6 @@
     "!**/resources/**",
     "!**/src/main-process/**",
     "!**/src/renderer-process/app.js",
-    "!**/src/renderer-process/helpers/**",
     "!**/src/renderer-process/tools/**",
     "!**/src/static/**",
     "!**/test/**"
