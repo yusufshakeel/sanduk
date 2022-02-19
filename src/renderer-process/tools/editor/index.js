@@ -31,6 +31,7 @@ module.exports = function editorTool() {
     let editorInputEditor = window.ace.edit(`editor-input-tab-${i}`);
     editorInputEditor.setTheme(aceTheme);
     editorInputEditor.session.setMode(aceMode.text);
+    editorInputEditor.setShowPrintMargin(false);
     editorInputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = editorInputEditor.getCursorPosition();
       inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;

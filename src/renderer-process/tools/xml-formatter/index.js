@@ -35,6 +35,7 @@ module.exports = function xmlFormatterTool() {
     let xmlInputEditor = window.ace.edit(`xml-formatter-input-tab-${i}`);
     xmlInputEditor.setTheme(aceTheme);
     xmlInputEditor.session.setMode(aceMode.xml);
+    xmlInputEditor.setShowPrintMargin(false);
     xmlInputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = xmlInputEditor.getCursorPosition();
       inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;

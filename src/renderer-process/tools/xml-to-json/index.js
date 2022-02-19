@@ -61,6 +61,7 @@ module.exports = function xmlToJson() {
     let inputEditor = window.ace.edit(`xml-to-json-input-editor-${id}`);
     inputEditor.setTheme(aceTheme);
     inputEditor.session.setMode(aceMode.xml);
+    inputEditor.setShowPrintMargin(false);
     inputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = inputEditor.getCursorPosition();
       inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
@@ -70,6 +71,7 @@ module.exports = function xmlToJson() {
     let outputEditor = window.ace.edit(`xml-to-json-output-editor-${id}`);
     outputEditor.setTheme(aceTheme);
     outputEditor.session.setMode(aceMode.json);
+    outputEditor.setShowPrintMargin(false);
     outputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = outputEditor.getCursorPosition();
       outputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;

@@ -34,6 +34,7 @@ module.exports = function markdownTool() {
   markdownInputEditor = window.ace.edit('markdown-editor');
   markdownInputEditor.setTheme(aceTheme);
   markdownInputEditor.session.setMode(aceMode.markdown);
+  markdownInputEditor.setShowPrintMargin(false);
   markdownInputEditor.selection.on('changeCursor', () => {
     const { row = 0, column = 0 } = markdownInputEditor.getCursorPosition();
     inputFooter.innerText = `Ln: ${row + 1} Col: ${column + 1}`;

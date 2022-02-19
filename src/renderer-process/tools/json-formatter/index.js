@@ -39,6 +39,7 @@ module.exports = function jsonFormatterTool() {
     let jsonInputEditor = window.ace.edit(`json-formatter-input-tab-${i}`);
     jsonInputEditor.setTheme(aceTheme);
     jsonInputEditor.session.setMode(aceMode.json);
+    jsonInputEditor.setShowPrintMargin(false);
     jsonInputEditor.selection.on('changeCursor', () => {
       const { row = 0, column = 0 } = jsonInputEditor.getCursorPosition();
       inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;

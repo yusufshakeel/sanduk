@@ -24,14 +24,17 @@ module.exports = function jwtDecoder() {
   jwtInputEditor.setTheme(theme);
   jwtInputEditor.session.setMode(aceMode.text);
   jwtInputEditor.session.setUseWrapMode(true);
+  jwtInputEditor.setShowPrintMargin(false);
 
   let decodedHeaderEditor = window.ace.edit('jwt-decoder-decoded-header');
   decodedHeaderEditor.setTheme(theme);
   decodedHeaderEditor.session.setMode(mode);
+  decodedHeaderEditor.setShowPrintMargin(false);
 
   let decodedPayloadEditor = window.ace.edit('jwt-decoder-decoded-payload');
   decodedPayloadEditor.setTheme(theme);
   decodedPayloadEditor.session.setMode(mode);
+  decodedPayloadEditor.setShowPrintMargin(false);
 
   decodeJWTBtn.addEventListener('click', () => {
     try {
