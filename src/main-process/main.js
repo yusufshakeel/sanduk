@@ -10,7 +10,7 @@ const isDevEnv = process.env.SANDUK_ENV === 'dev';
 
 function createWindow() {
   const windowState = windowStateKeeper({
-    defaultWidth: 800,
+    defaultWidth: 900,
     defaultHeight: 600
   });
 
@@ -19,8 +19,8 @@ function createWindow() {
     y: windowState.y,
     width: windowState.width,
     height: windowState.height,
-    minWidth: 800,
-    minHeight: 500,
+    minWidth: 900,
+    minHeight: 600,
     backgroundColor: '#fff',
     webPreferences: {
       contextIsolation: false,
