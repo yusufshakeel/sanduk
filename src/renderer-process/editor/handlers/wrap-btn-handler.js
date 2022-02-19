@@ -10,8 +10,8 @@ function initWrapBtnHandler(getActiveTabId, wrapBtns, editors) {
       wrapUnwrapContent({
         wrapBtn,
         editor,
-        wrapInnerHtml: 'Wrap',
-        unWrapInnerHtml: 'Unwrap'
+        wrapInnerHtml: '<i title="Wrap" class="bi-body-text"></i>',
+        unWrapInnerHtml: '<i title="Unwrap" class="bi-text-paragraph"></i>'
       });
     });
   }

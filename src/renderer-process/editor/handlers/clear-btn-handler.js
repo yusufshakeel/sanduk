@@ -1,10 +1,18 @@
 'use strict';
 
+const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
+
 function initClearBtnHandler(getActiveTabId, clearBtns, editors) {
-  for (const copyBtn of clearBtns) {
-    copyBtn.addEventListener('click', () => {
+  for (const clearBtn of clearBtns) {
+    clearBtn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       const editor = editors[activeTabId - 1];
+      inProgressHtmlAnimate(
+        clearBtn,
+        '<i title="Copy" class="bi-eraser"></i>',
+        '<i title="Copy" class="bi-eraser-fill"></i>',
+        200
+      );
       editor.setValue('');
     });
   }

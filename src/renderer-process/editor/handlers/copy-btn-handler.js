@@ -10,8 +10,8 @@ function initCopyBtnHandler(getActiveTabId, copyBtns, editors, electronClipboard
       const editor = editors[activeTabId - 1];
       inProgressHtmlAnimate(
         copyBtn,
-        '<i class="far fa-clipboard"></i>',
-        '<i class="fas fa-clipboard-check"></i>',
+        '<i title="Copy" class="bi-clipboard"></i>',
+        '<i title="Copy" class="bi-clipboard-check-fill"></i>',
         200
       );
       electronClipboard.writeText(editor.getValue());

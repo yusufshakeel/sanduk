@@ -5,7 +5,7 @@ const wrapUnwrapContent = require('../../../../../src/renderer-process/editor/wr
 describe('Testing editor wrap unwrap content', () => {
   const fakeWrapBtn = jest.fn(() => ({
     dataset: { wrap: 'no' },
-    innerText: 'Wrap'
+    innerHTML: 'Wrap'
   }));
 
   const fakeEditor = jest.fn(value => ({
@@ -23,7 +23,7 @@ describe('Testing editor wrap unwrap content', () => {
       const editor = fakeEditor('Hello');
       wrapUnwrapContent({ wrapBtn, editor });
       expect(wrapBtn.dataset.wrap).toBe('yes');
-      expect(wrapBtn.innerText).toBe('Unwrap');
+      expect(wrapBtn.innerHTML).toBe('Unwrap');
       expect(editor.session.setUseWrapMode).toHaveBeenCalledTimes(1);
       expect(editor.session.setUseWrapMode).toHaveBeenCalledWith(true);
     });
@@ -36,13 +36,13 @@ describe('Testing editor wrap unwrap content', () => {
       // first we wrap
       wrapUnwrapContent({ wrapBtn, editor });
       expect(wrapBtn.dataset.wrap).toBe('yes');
-      expect(wrapBtn.innerText).toBe('Unwrap');
+      expect(wrapBtn.innerHTML).toBe('Unwrap');
       expect(editor.session.setUseWrapMode).toHaveBeenCalledWith(true);
 
       // next we unwrap
       wrapUnwrapContent({ wrapBtn, editor });
       expect(wrapBtn.dataset.wrap).toBe('no');
-      expect(wrapBtn.innerText).toBe('Wrap');
+      expect(wrapBtn.innerHTML).toBe('Wrap');
       expect(editor.session.setUseWrapMode).toHaveBeenCalledWith(false);
     });
   });
@@ -53,7 +53,7 @@ describe('Testing editor wrap unwrap content', () => {
       const editor = fakeEditor('');
       wrapUnwrapContent({ wrapBtn, editor });
       expect(wrapBtn.dataset.wrap).toBe('no');
-      expect(wrapBtn.innerText).toBe('Wrap');
+      expect(wrapBtn.innerHTML).toBe('Wrap');
       expect(editor.session.setUseWrapMode).toHaveBeenCalledTimes(0);
     });
   });

@@ -9,6 +9,11 @@ const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
+const tabHtmlTemplate = require('./templates/tab-html-template');
+const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
+const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
+const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
 module.exports = function jsonFormatterTool() {
   document.getElementById('v-pills-json-formatter').innerHTML = fs.readFileSync(
@@ -19,33 +24,39 @@ module.exports = function jsonFormatterTool() {
   const increaseFontInputBtn = document.getElementById('increase-font-input-json-formatter-btn');
   const decreaseFontInputBtn = document.getElementById('decrease-font-input-json-formatter-btn');
   const resetFontInputBtn = document.getElementById('reset-font-input-json-formatter-btn');
-  const validateInputBtn = document.getElementById('validate-input-json-formatter-btn');
-  const formatInputBtn = document.getElementById('format-input-json-formatter-btn');
-  const compactInputBtn = document.getElementById('compact-input-json-formatter-btn');
-  const foldInputBtn = document.getElementById('fold-input-json-formatter-btn');
-  const toggleWrapInputBtn = document.getElementById('toggle-wrap-input-json-formatter-btn');
   const jsonInputMessage = document.getElementById('json-formatter-input-message');
 
   const totalTabs = 7;
+  document.getElementById('jsonFormatterTab').innerHTML = Array.from(Array(totalTabs).keys())
+    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
+    .join('');
+  document.getElementById('jsonFormatterTabContent').innerHTML = Array.from(Array(totalTabs).keys())
+    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
+    .join('');
 
-  let inputFooters = [];
-  let wrappedTabContent = [];
-  let jsonInputEditors = [];
-  let jsonInputElems = [];
-  for (let i = 1; i <= totalTabs; i++) {
-    inputFooters.push(document.getElementById(`json-formatter-input-tab-${i}-footer`));
+  const inputFooters = [];
+  const inputEditors = [];
+  const inputElems = [];
+  const validateInputBtns = document.getElementsByClassName('json-formatter-editor-validate-btn');
+  const prettyInputBtns = document.getElementsByClassName('json-formatter-editor-pretty-btn');
+  const compactInputBtns = document.getElementsByClassName('json-formatter-editor-compact-btn');
+  const foldInputBtns = document.getElementsByClassName('json-formatter-editor-fold-btn');
+  const wrapInputBtns = document.getElementsByClassName('json-formatter-editor-wrap-btn');
+  const copyInputBtns = document.getElementsByClassName('json-formatter-editor-copy-btn');
+  const clearInputBtns = document.getElementsByClassName('json-formatter-editor-clear-btn');
 
-    wrappedTabContent.push(false);
+  for (let id = 1; id <= totalTabs; id++) {
+    inputFooters.push(document.getElementById(`json-formatter-input-editor-${id}-footer`));
 
-    let jsonInputEditor = window.ace.edit(`json-formatter-input-tab-${i}`);
+    let inputEditor = window.ace.edit(`json-formatter-input-editor-${id}`);
     setupEditor({
-      editor: jsonInputEditor,
-      rowColumnPositionElement: inputFooters[i - 1],
+      editor: inputEditor,
+      rowColumnPositionElement: inputFooters[id - 1],
       mode: aceMode.json
     });
-    jsonInputEditors.push(jsonInputEditor);
+    inputEditors.push(inputEditor);
 
-    jsonInputElems.push(document.getElementById(`json-formatter-input-tab-${i}`));
+    inputElems.push(document.getElementById(`json-formatter-input-editor-${id}`));
   }
 
   const getActiveTabId = () =>
@@ -61,79 +72,73 @@ module.exports = function jsonFormatterTool() {
     return false;
   };
 
-  validateInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    const input = jsonInputEditors[activeTabId - 1].getValue();
-    if (input.length && isValidJSON(input, jsonInputMessage)) {
-      popSuccess(jsonInputMessage, 'Valid JSON');
-    }
-  });
+  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
+  copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyInputBtns, inputEditors);
+  clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);
 
-  formatInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    try {
-      clearContent(jsonInputMessage);
-      const input = jsonInputEditors[activeTabId - 1].getValue();
-      if (!input.length) {
-        return;
+  for (const btn of validateInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      const input = inputEditors[activeTabId - 1].getValue();
+      if (input.length && isValidJSON(input, jsonInputMessage)) {
+        popSuccess(jsonInputMessage, 'Valid JSON');
       }
-      const json = JSON.stringify(JSON.parse(input), null, 2);
-      jsonInputEditors[activeTabId - 1].setValue(json, -1);
-    } catch (e) {
-      popError(jsonInputMessage, e.message);
-    }
-  });
+    });
+  }
 
-  compactInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    try {
-      clearContent(jsonInputMessage);
-      const input = jsonInputEditors[activeTabId - 1].getValue();
-      if (!input.length) {
-        return;
+  for (const btn of prettyInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(jsonInputMessage);
+        const input = inputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, 2);
+          inputEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(jsonInputMessage, e.message);
       }
-      const json = JSON.stringify(JSON.parse(input));
-      jsonInputEditors[activeTabId - 1].setValue(json, -1);
-    } catch (e) {
-      popError(jsonInputMessage, e.message);
-    }
-  });
+    });
+  }
 
-  toggleWrapInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    if (!jsonInputEditors[activeTabId - 1].getValue().length) {
-      return;
-    }
-    const isWrapped = wrappedTabContent[activeTabId - 1];
-    if (isWrapped) {
-      jsonInputEditors[activeTabId - 1].session.setUseWrapMode(false);
-      wrappedTabContent[activeTabId - 1] = false;
-    } else {
-      jsonInputEditors[activeTabId - 1].session.setUseWrapMode(true);
-      wrappedTabContent[activeTabId - 1] = true;
-    }
-  });
+  for (const btn of compactInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(jsonInputMessage);
+        const input = inputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input));
+          inputEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(jsonInputMessage, e.message);
+      }
+    });
+  }
 
-  foldInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    if (!jsonInputEditors[activeTabId - 1].getValue().length) {
-      return;
-    }
-    jsonInputEditors[activeTabId - 1].getSession().foldAll(1);
-  });
+  for (const btn of foldInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      if (inputEditors[activeTabId - 1].getValue().length) {
+        inputEditors[activeTabId - 1].getSession().foldAll(1);
+      }
+    });
+  }
 
   increaseFontInputBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(jsonInputElems[activeTabId - 1]);
+    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
   });
 
   decreaseFontInputBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(jsonInputElems[activeTabId - 1]);
+    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
   });
 
   resetFontInputBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(jsonInputElems[activeTabId - 1]);
+    fontSize.resetFontSize(inputElems[activeTabId - 1]);
   });
 };

@@ -13,11 +13,11 @@ module.exports = function wrapUnwrapContent({
     if (isWrapped) {
       editor.session.setUseWrapMode(false);
       wrapBtn.dataset.wrap = CONTENT_WRAPPED_NO;
-      wrapBtn.innerText = wrapInnerHtml;
+      wrapBtn.innerHTML = wrapInnerHtml;
     } else {
       editor.session.setUseWrapMode(true);
       wrapBtn.dataset.wrap = CONTENT_WRAPPED_YES;
-      wrapBtn.innerText = unWrapInnerHtml;
+      wrapBtn.innerHTML = unWrapInnerHtml;
     }
   }
 };

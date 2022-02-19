@@ -15,3 +15,8 @@ body {
 #v-pills-tabContent {
     width: calc(100% - 250px);
 }
+
+i[class*="bi-"] {
+    font-size: 20px;
+    color: #333;
+}
