@@ -10,9 +10,10 @@
     "!**/dist/**",
     "!**/node_modules/**",
     "!**/resources/**",
-    "!**/src/clicked-tool-handler.js/**",
     "!**/src/main-process/**",
-    "!**/src/renderer-process/**",
+    "!**/src/renderer-process/app.js",
+    "!**/src/renderer-process/helpers/**",
+    "!**/src/renderer-process/tools/**",
     "!**/src/static/**",
     "!**/test/**"
   ],

@@ -1,20 +1,22 @@
 'use strict';
 
-module.exports = function wrapUnwrapEditorContent({
+const { CONTENT_WRAPPED_NO, CONTENT_WRAPPED_YES } = require('../constants/editor-constants');
+
+module.exports = function wrapUnwrapContent({
   wrapBtn,
   editor,
   wrapInnerHtml = 'Wrap',
   unWrapInnerHtml = 'Unwrap'
 }) {
   if (editor.getValue().length) {
-    const isWrapped = wrapBtn.dataset.wrap === 'yes';
+    const isWrapped = wrapBtn.dataset.wrap === CONTENT_WRAPPED_YES;
     if (isWrapped) {
       editor.session.setUseWrapMode(false);
-      wrapBtn.dataset.wrap = 'no';
+      wrapBtn.dataset.wrap = CONTENT_WRAPPED_NO;
       wrapBtn.innerText = wrapInnerHtml;
     } else {
       editor.session.setUseWrapMode(true);
-      wrapBtn.dataset.wrap = 'yes';
+      wrapBtn.dataset.wrap = CONTENT_WRAPPED_YES;
       wrapBtn.innerText = unWrapInnerHtml;
     }
   }

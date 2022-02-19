@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
-const fontSize = require('../../helpers/font-size');
+const fontSize = require('../../editor/font-size');
 const activeTabElement = require('../../helpers/active-tab-element');
 
 module.exports = function editorTool() {

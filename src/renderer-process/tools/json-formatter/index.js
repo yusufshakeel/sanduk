@@ -6,7 +6,7 @@ const popError = require('../../helpers/pop-error');
 const popSuccess = require('../../helpers/pop-success');
 const clearContent = require('../../helpers/clear-content');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
-const fontSize = require('../../helpers/font-size');
+const fontSize = require('../../editor/font-size');
 const activeTabElement = require('../../helpers/active-tab-element');
 
 module.exports = function jsonFormatterTool() {
@@ -29,14 +29,12 @@ module.exports = function jsonFormatterTool() {
 
   let inputFooters = [];
   let wrappedTabContent = [];
-  let foldedTabContent = [];
   let jsonInputEditors = [];
   let jsonInputElems = [];
   for (let i = 1; i <= totalTabs; i++) {
     inputFooters.push(document.getElementById(`json-formatter-input-tab-${i}-footer`));
 
     wrappedTabContent.push(false);
-    foldedTabContent.push(false);
 
     let jsonInputEditor = window.ace.edit(`json-formatter-input-tab-${i}`);
     jsonInputEditor.setTheme(aceTheme);
