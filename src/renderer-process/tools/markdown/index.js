@@ -55,16 +55,7 @@ module.exports = function markdownTool() {
         }
       }
     });
-    const enrichedHtml = `
-      <style>${gitHubMarkdownCss}</style>
-      <style>
-      /*pre { border: 1px solid #999; padding: 5px; font-family: monospace; }*/
-      /*table th, table td { border: 1px solid #999; padding: 5px; margin: 0; }*/
-      .markdown-body {
-        box-sizing: border-box;
-      }
-      </style>
-      <article class="markdown-body">${sanitizedHtml}</article>`;
+    const enrichedHtml = `<style>${gitHubMarkdownCss}</style><article class="markdown-body">${sanitizedHtml}</article>`;
     markdownOutput.contentDocument.write(enrichedHtml);
     markdownOutput.contentDocument.close();
   };
