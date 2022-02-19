@@ -11,7 +11,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
   return `<div class="tab-pane ${showActiveClassName}" id="json-formatter-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
-      <span class="pe-3">JSON</span>
+      <span class="pe-3" id="json-formatter-editor-filename-${id}" data-id="${id}" data-filepath="">Untitled</span>
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link py-0 json-formatter-editor-validate-btn" data-id="${id}" href="#"><i title="Validate" class="bi-check2-square"></i></a>

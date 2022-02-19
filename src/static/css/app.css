@@ -2,6 +2,7 @@ html {
     margin: 0;
     padding: 0;
 }
+
 body {
     -webkit-user-select: none;
 }
@@ -19,4 +20,8 @@ body {
 i[class*="bi-"] {
     font-size: 20px;
     color: #333;
+}
+
+.my-dropdown-toggle-without-arrow::after {
+    content: none !important;
 }
