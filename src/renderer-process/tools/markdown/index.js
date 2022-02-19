@@ -5,8 +5,9 @@ const path = require('path');
 const immutabilityHelper = require('immutability-helper');
 const markdown = require('markdown-it')();
 const sanitizeHtml = require('sanitize-html');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
+const setupEditor = require('../../editor/setup-editor');
 const wrapUnwrapContent = require('../../editor/wrap-unwrap-content');
 
 module.exports = function markdownTool() {
@@ -33,14 +34,11 @@ module.exports = function markdownTool() {
   const inputFooter = document.getElementById('markdown-editor-footer');
   const markdownInputElem = document.getElementById('markdown-editor');
 
-  let markdownInputEditor;
-  markdownInputEditor = window.ace.edit('markdown-editor');
-  markdownInputEditor.setTheme(aceTheme);
-  markdownInputEditor.session.setMode(aceMode.markdown);
-  markdownInputEditor.setShowPrintMargin(false);
-  markdownInputEditor.selection.on('changeCursor', () => {
-    const { row = 0, column = 0 } = markdownInputEditor.getCursorPosition();
-    inputFooter.innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+  let markdownInputEditor = window.ace.edit('markdown-editor');
+  setupEditor({
+    editor: markdownInputEditor,
+    rowColumnPositionElement: inputFooter,
+    mode: aceMode.markdown
   });
 
   const renderMarkdown = () => {

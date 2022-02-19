@@ -26,7 +26,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
           </div>
         </nav>
         <pre class="form-control" id="editor-input-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="editor-input-editor-${id}-footer">Ln: 1 Col: 1</span></div>
+        <div class="bg-light p-1 font-monospace"><span id="editor-input-editor-${id}-footer">1:1</span></div>
       </div>
     </div>
   </div>

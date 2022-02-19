@@ -5,8 +5,8 @@ const path = require('path');
 const popError = require('../../helpers/pop-error');
 const popSuccess = require('../../helpers/pop-success');
 const clearContent = require('../../helpers/clear-content');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
+const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
 
 module.exports = function jsonFormatterTool() {
@@ -37,13 +37,7 @@ module.exports = function jsonFormatterTool() {
     wrappedTabContent.push(false);
 
     let jsonInputEditor = window.ace.edit(`json-formatter-input-tab-${i}`);
-    jsonInputEditor.setTheme(aceTheme);
-    jsonInputEditor.session.setMode(aceMode.json);
-    jsonInputEditor.setShowPrintMargin(false);
-    jsonInputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = jsonInputEditor.getCursorPosition();
-      inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
-    });
+    setupEditor({ editor: jsonInputEditor, rowColumnPositionElement: inputFooters[i - 1] });
     jsonInputEditors.push(jsonInputEditor);
 
     jsonInputElems.push(document.getElementById(`json-formatter-input-tab-${i}`));

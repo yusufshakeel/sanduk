@@ -4,13 +4,14 @@ const fs = require('fs');
 const path = require('path');
 const xmlFormatter = require('xml-formatter');
 const xmljs = require('xml-js');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
 const activeTabElement = require('../../helpers/active-tab-element');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const fontSize = require('../../editor/font-size');
+const setupEditor = require('../../editor/setup-editor');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
@@ -59,22 +60,18 @@ module.exports = function xmlToJson() {
     outputFooters.push(document.getElementById(`xml-to-json-output-editor-${id}-footer`));
 
     let inputEditor = window.ace.edit(`xml-to-json-input-editor-${id}`);
-    inputEditor.setTheme(aceTheme);
-    inputEditor.session.setMode(aceMode.xml);
-    inputEditor.setShowPrintMargin(false);
-    inputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = inputEditor.getCursorPosition();
-      inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    setupEditor({
+      editor: inputEditor,
+      rowColumnPositionElement: inputFooters[id - 1],
+      mode: aceMode.xml
     });
     inputEditors.push(inputEditor);
 
     let outputEditor = window.ace.edit(`xml-to-json-output-editor-${id}`);
-    outputEditor.setTheme(aceTheme);
-    outputEditor.session.setMode(aceMode.json);
-    outputEditor.setShowPrintMargin(false);
-    outputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = outputEditor.getCursorPosition();
-      outputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    setupEditor({
+      editor: inputEditor,
+      rowColumnPositionElement: outputFooters[id - 1],
+      mode: aceMode.json
     });
     outputEditors.push(outputEditor);
 

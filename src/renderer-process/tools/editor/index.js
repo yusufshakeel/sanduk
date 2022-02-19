@@ -2,11 +2,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const activeTabElement = require('../../helpers/active-tab-element');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
+const fontSize = require('../../editor/font-size');
+const setupEditor = require('../../editor/setup-editor');
 
 module.exports = function editorTool() {
   document.getElementById('v-pills-editor').innerHTML = fs.readFileSync(
@@ -14,6 +15,9 @@ module.exports = function editorTool() {
     'utf8'
   );
 
+  const increaseFontInputBtn = document.getElementById('increase-font-editor-btn');
+  const decreaseFontInputBtn = document.getElementById('decrease-font-editor-btn');
+  const resetFontInputBtn = document.getElementById('reset-font-editor-btn');
   // const editorMessage = document.getElementById('editor-input-message');
 
   const totalTabs = 7;
@@ -26,27 +30,36 @@ module.exports = function editorTool() {
 
   const inputFooters = [];
   const inputEditors = [];
-  // const inputElems = [];
+  const inputElems = [];
   const wrapInputBtns = document.getElementsByClassName('editor-input-editor-wrap-btn');
 
   for (let id = 1; id <= totalTabs; id++) {
     inputFooters.push(document.getElementById(`editor-input-editor-${id}-footer`));
 
     let inputEditor = window.ace.edit(`editor-input-editor-${id}`);
-    inputEditor.setTheme(aceTheme);
-    inputEditor.session.setMode(aceMode.text);
-    inputEditor.setShowPrintMargin(false);
-    inputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = inputEditor.getCursorPosition();
-      inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
-    });
+    setupEditor({ editor: inputEditor, rowColumnPositionElement: inputFooters[id - 1] });
     inputEditors.push(inputEditor);
 
-    // inputElems.push(document.getElementById(`editor-input-editor-${id}`));
+    inputElems.push(document.getElementById(`editor-input-editor-${id}`));
   }
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName('sanduk-editor-tab active', 'tabid');
 
   wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
+
+  increaseFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
+  });
+
+  decreaseFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
+  });
+
+  resetFontInputBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.resetFontSize(inputElems[activeTabId - 1]);
+  });
 };

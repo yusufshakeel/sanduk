@@ -32,7 +32,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
           </div>
         </nav>
         <pre class="form-control" id="base64-encoder-decoder-plaintext-input-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-plaintext-input-editor-${id}-footer">Ln: 1 Col: 1</span></div>
+        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-plaintext-input-editor-${id}-footer">1:1</span></div>
       </div>
       <div class="col-md-12 col-lg-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
@@ -55,7 +55,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
           </div>
         </nav>
         <pre class="form-control" id="base64-encoder-decoder-encoded-output-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-encoded-output-editor-${id}-footer">Ln: 1 Col: 1</span></div>
+        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-encoded-output-editor-${id}-footer">1:1</span></div>
       </div>
     </div>
   </div>

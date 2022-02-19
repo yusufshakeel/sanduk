@@ -9,12 +9,12 @@ const popInfo = require('../../helpers/pop-info');
 const clearContent = require('../../helpers/clear-content');
 const tabHtmlTemplate = require('./templates/tab-html-template');
 const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
 const activeTabElement = require('../../helpers/active-tab-element');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
+const setupEditor = require('../../editor/setup-editor');
 
 module.exports = function base64EncoderDecoder() {
   document.getElementById('v-pills-base64-encoder-decoder').innerHTML = fs.readFileSync(
@@ -74,23 +74,11 @@ module.exports = function base64EncoderDecoder() {
     );
 
     let inputEditor = window.ace.edit(`base64-encoder-decoder-plaintext-input-editor-${id}`);
-    inputEditor.setTheme(aceTheme);
-    inputEditor.session.setMode(aceMode.text);
-    inputEditor.setShowPrintMargin(false);
-    inputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = inputEditor.getCursorPosition();
-      inputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
-    });
+    setupEditor({ editor: inputEditor, rowColumnPositionElement: inputFooters[id - 1] });
     inputEditors.push(inputEditor);
 
     let outputEditor = window.ace.edit(`base64-encoder-decoder-encoded-output-editor-${id}`);
-    outputEditor.setTheme(aceTheme);
-    outputEditor.session.setMode(aceMode.text);
-    outputEditor.setShowPrintMargin(false);
-    outputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = outputEditor.getCursorPosition();
-      outputFooters[id - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
-    });
+    setupEditor({ editor: outputEditor, rowColumnPositionElement: outputFooters[id - 1] });
     outputEditors.push(outputEditor);
 
     inputElems.push(document.getElementById(`base64-encoder-decoder-plaintext-input-editor-${id}`));

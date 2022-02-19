@@ -5,8 +5,9 @@ const path = require('path');
 const xmlFormatter = require('xml-formatter');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
-const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const activeTabElement = require('../../helpers/active-tab-element');
+const setupEditor = require('../../editor/setup-editor');
 const xmlFormatterOption = {
   indentation: '  '
 };
@@ -33,12 +34,10 @@ module.exports = function xmlFormatterTool() {
     wrappedTabContent.push(false);
 
     let xmlInputEditor = window.ace.edit(`xml-formatter-input-tab-${i}`);
-    xmlInputEditor.setTheme(aceTheme);
-    xmlInputEditor.session.setMode(aceMode.xml);
-    xmlInputEditor.setShowPrintMargin(false);
-    xmlInputEditor.selection.on('changeCursor', () => {
-      const { row = 0, column = 0 } = xmlInputEditor.getCursorPosition();
-      inputFooters[i - 1].innerText = `Ln: ${row + 1} Col: ${column + 1}`;
+    setupEditor({
+      editor: xmlInputEditor,
+      rowColumnPositionElement: inputFooters[i - 1],
+      mode: aceMode.xml
     });
     xmlInputEditors.push(xmlInputEditor);
   }
