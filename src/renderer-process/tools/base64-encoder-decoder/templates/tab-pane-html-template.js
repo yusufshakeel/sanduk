@@ -20,13 +20,13 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
                 <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-encode-btn" data-id="${id}" href="#">Encode</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no">Wrap</a>
+                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-copy-btn" data-id="${id}" href="#"><i class="far fa-clipboard"></i></a>
+                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 pe-0 base64-encoder-decoder-plaintext-input-editor-clear-btn" data-id="${id}" href="#"><i class="fas fa-eraser"></i></a>
+                <a class="nav-link py-0 pe-0 base64-encoder-decoder-plaintext-input-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
               </li>
             </ul>
           </div>
@@ -43,13 +43,13 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
                 <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-decode-btn" data-id="${id}" href="#">Decode</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no">Wrap</a>
+                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-copy-btn" data-id="${id}" href="#"><i class="far fa-clipboard"></i></a>
+                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 pe-0 base64-encoder-decoder-encoded-output-editor-clear-btn" data-id="${id}" href="#"><i class="fas fa-eraser"></i></a>
+                <a class="nav-link py-0 pe-0 base64-encoder-decoder-encoded-output-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
               </li>
             </ul>
           </div>

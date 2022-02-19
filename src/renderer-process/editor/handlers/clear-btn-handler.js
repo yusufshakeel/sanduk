@@ -9,8 +9,8 @@ function initClearBtnHandler(getActiveTabId, clearBtns, editors) {
       const editor = editors[activeTabId - 1];
       inProgressHtmlAnimate(
         clearBtn,
-        '<i title="Copy" class="bi-eraser"></i>',
-        '<i title="Copy" class="bi-eraser-fill"></i>',
+        '<i title="Erase" class="bi-eraser"></i>',
+        '<i title="Erase" class="bi-eraser-fill"></i>',
         200
       );
       editor.setValue('');
