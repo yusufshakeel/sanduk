@@ -7,6 +7,7 @@ const markdown = require('markdown-it')();
 const sanitizeHtml = require('sanitize-html');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
+const wrapUnwrapContent = require('../../editor/wrap-unwrap-content');
 
 module.exports = function markdownTool() {
   document.getElementById('v-pills-markdown').innerHTML = fs.readFileSync(
@@ -22,15 +23,17 @@ module.exports = function markdownTool() {
   const increaseFontInputBtn = document.getElementById('increase-font-input-markdown-btn');
   const decreaseFontInputBtn = document.getElementById('decrease-font-input-markdown-btn');
   const resetFontInputBtn = document.getElementById('reset-font-input-markdown-btn');
-  const autoLoadBtn = document.getElementById('auto-load-markdown-btn');
+  const viewEditorOnlyBtn = document.getElementById('view-editor-only-markdown-btn');
+  const viewEditorAndPreviewBtn = document.getElementById('view-editor-and-preview-markdown-btn');
+  const viewPreviewOnlyBtn = document.getElementById('view-preview-only-markdown-btn');
+  const toggleWrapInputBtn = document.getElementById('markdown-toggle-wrap-input-btn');
+  const markdownEditorColumnElem = document.getElementById('sanduk-markdown-editor-column');
+  const markdownOutputColumnElem = document.getElementById('sanduk-markdown-output-column');
   const markdownOutput = document.getElementById('markdown-iframe-output');
-  const generateBtn = document.getElementById('generate-markdown-btn');
   const inputFooter = document.getElementById('markdown-editor-footer');
   const markdownInputElem = document.getElementById('markdown-editor');
 
   let markdownInputEditor;
-  let isAutoLoading = false;
-
   markdownInputEditor = window.ace.edit('markdown-editor');
   markdownInputEditor.setTheme(aceTheme);
   markdownInputEditor.session.setMode(aceMode.markdown);
@@ -62,27 +65,6 @@ module.exports = function markdownTool() {
   };
 
   markdownInputEditor.commands.on('afterExec', () => {
-    if (isAutoLoading) {
-      renderMarkdown();
-    }
-  });
-
-  autoLoadBtn.addEventListener('click', () => {
-    if (isAutoLoading) {
-      isAutoLoading = false;
-      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-off"></i>';
-    } else {
-      isAutoLoading = true;
-      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-on"></i>';
-    }
-    renderMarkdown();
-  });
-
-  generateBtn.addEventListener('click', () => {
-    if (isAutoLoading) {
-      isAutoLoading = false;
-      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-off"></i>';
-    }
     renderMarkdown();
   });
 
@@ -96,5 +78,35 @@ module.exports = function markdownTool() {
 
   resetFontInputBtn.addEventListener('click', () => {
     fontSize.resetFontSize(markdownInputElem);
+  });
+
+  viewEditorOnlyBtn.addEventListener('click', () => {
+    markdownEditorColumnElem.className =
+      markdownEditorColumnElem.getAttribute('data-viewEditorOnly');
+    markdownOutputColumnElem.className =
+      markdownOutputColumnElem.getAttribute('data-viewEditorOnly');
+  });
+
+  viewEditorAndPreviewBtn.addEventListener('click', () => {
+    markdownEditorColumnElem.className = markdownEditorColumnElem.getAttribute(
+      'data-viewEditorAndPreview'
+    );
+    markdownOutputColumnElem.className = markdownOutputColumnElem.getAttribute(
+      'data-viewEditorAndPreview'
+    );
+  });
+
+  viewPreviewOnlyBtn.addEventListener('click', () => {
+    markdownEditorColumnElem.className =
+      markdownEditorColumnElem.getAttribute('data-viewPreviewOnly');
+    markdownOutputColumnElem.className =
+      markdownOutputColumnElem.getAttribute('data-viewPreviewOnly');
+  });
+
+  toggleWrapInputBtn.addEventListener('click', () => {
+    wrapUnwrapContent({
+      wrapBtn: toggleWrapInputBtn,
+      editor: markdownInputEditor
+    });
   });
 };
