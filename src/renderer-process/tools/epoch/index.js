@@ -63,8 +63,8 @@ module.exports = function epoch() {
   copyCurrentTimeEpochBtn.addEventListener('click', () => {
     inProgressHtmlAnimate(
       copyCurrentTimeEpochBtn,
-      '<i class="far fa-clipboard"></i>',
-      '<i class="fas fa-clipboard-check"></i>',
+      '<i title="Copy" class="bi-clipboard"></i>',
+      '<i title="Copy" class="bi-clipboard-check-fill"></i>',
       200
     );
     clipboard.writeText(currentTimeEpoch.innerText);

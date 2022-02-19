@@ -17,13 +17,22 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
             <span class="pe-3">XML</span>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no">Wrap</a>
+                <a class="nav-link py-0 xml-to-json-xml-editor-transform-btn" data-id="${id}" href="#"><i title="Transform" class="bi-wrench-adjustable"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-copy-btn" data-id="${id}" href="#"><i class="far fa-clipboard"></i></a>
+                <a class="nav-link py-0 xml-to-json-xml-editor-pretty-btn" data-id="${id}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 pe-0 xml-to-json-xml-editor-clear-btn" data-id="${id}" href="#"><i class="fas fa-eraser"></i></a>
+                <a class="nav-link py-0 xml-to-json-xml-editor-compact-btn" data-id="${id}" href="#"><i title="Compact" class="bi-justify-left"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link py-0 xml-to-json-xml-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link py-0 xml-to-json-xml-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link py-0 pe-0 xml-to-json-xml-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
               </li>
             </ul>
           </div>
@@ -37,13 +46,19 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
             <span class="pe-3">JSON</span>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no">Wrap</a>
+                <a class="nav-link py-0 xml-to-json-json-editor-pretty-btn" data-id="${id}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-copy-btn" data-id="${id}" href="#"><i class="far fa-clipboard"></i></a>
+                <a class="nav-link py-0 xml-to-json-json-editor-fold-btn" data-id="${id}" href="#"><i title="Fold" class="bi-arrows-collapse"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link py-0 pe-0 xml-to-json-json-editor-clear-btn" data-id="${id}" href="#"><i class="fas fa-eraser"></i></a>
+                <a class="nav-link py-0 xml-to-json-json-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link py-0 xml-to-json-json-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link py-0 pe-0 xml-to-json-json-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
               </li>
             </ul>
           </div>

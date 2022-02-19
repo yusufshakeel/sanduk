@@ -30,9 +30,6 @@ module.exports = function xmlToJson() {
   const decreaseFontInputBtn = document.getElementById('decrease-font-xml-to-json-btn');
   const resetFontInputBtn = document.getElementById('reset-font-xml-to-json-btn');
   const xmlToJsonMessage = document.getElementById('xml-to-json-message');
-  const formatXmlBtn = document.getElementById('xml-to-json-format-xml-editor-btn');
-  const transformBtn = document.getElementById('xml-to-json-transform-xml-editor-btn');
-  const compactXmlInputBtn = document.getElementById('xml-to-json-compact-xml-editor-btn');
 
   const totalTabs = 7;
   document.getElementById('xmlToJsonTab').innerHTML = Array.from(Array(totalTabs).keys())
@@ -48,6 +45,13 @@ module.exports = function xmlToJson() {
   const inputElems = [];
   const outputEditors = [];
   const outputElems = [];
+  const transformInputBtns = document.getElementsByClassName(
+    'xml-to-json-xml-editor-transform-btn'
+  );
+  const prettyInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-pretty-btn');
+  const prettyOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-pretty-btn');
+  const compactInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-compact-btn');
+  const foldOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-fold-btn');
   const wrapInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-wrap-btn');
   const copyInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-copy-btn');
   const clearInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-clear-btn');
@@ -93,48 +97,79 @@ module.exports = function xmlToJson() {
   clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);
   clearBtnHandler.initClearBtnHandler(getActiveTabId, clearOutputBtns, outputEditors);
 
-  transformBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    try {
-      const xml = inputEditors[activeTabId - 1].getValue();
-      if (!xml.length) {
-        return;
+  for (const btn of transformInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        const xml = inputEditors[activeTabId - 1].getValue();
+        if (!xml.length) {
+          return;
+        }
+        const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
+        const json = JSON.stringify(JSON.parse(result), null, 2);
+        outputEditors[activeTabId - 1].setValue(json, -1);
+      } catch (e) {
+        popError(xmlToJsonMessage, e.message);
       }
-      const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
-      const json = JSON.stringify(JSON.parse(result), null, 2);
-      outputEditors[activeTabId - 1].setValue(json, -1);
-    } catch (e) {
-      popError(xmlToJsonMessage, e.message);
-    }
-  });
+    });
+  }
 
-  formatXmlBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    try {
-      clearContent(xmlToJsonMessage);
-      const input = inputEditors[activeTabId - 1].getValue();
-      if (!input.length) {
-        return;
+  for (const btn of prettyInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(xmlToJsonMessage);
+        const input = inputEditors[activeTabId - 1].getValue();
+        if (!input.length) {
+          return;
+        }
+        inputEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
+      } catch (e) {
+        popError(xmlToJsonMessage, e.message);
       }
-      inputEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
-    } catch (e) {
-      popError(xmlToJsonMessage, e.message);
-    }
-  });
+    });
+  }
 
-  compactXmlInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    try {
-      clearContent(xmlToJsonMessage);
-      const input = inputEditors[activeTabId - 1].getValue();
-      if (!input.length) {
-        return;
+  for (const btn of compactInputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(xmlToJsonMessage);
+        const input = inputEditors[activeTabId - 1].getValue();
+        if (!input.length) {
+          return;
+        }
+        inputEditors[activeTabId - 1].setValue(compactXml(input), -1);
+      } catch (e) {
+        popError(xmlToJsonMessage, e.message);
       }
-      inputEditors[activeTabId - 1].setValue(compactXml(input), -1);
-    } catch (e) {
-      popError(xmlToJsonMessage, e.message);
-    }
-  });
+    });
+  }
+
+  for (const btn of prettyOutputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(xmlToJsonMessage);
+        const input = outputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, 2);
+          outputEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(xmlToJsonMessage, e.message);
+      }
+    });
+  }
+
+  for (const btn of foldOutputBtns) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      if (outputEditors[activeTabId - 1].getValue().length) {
+        outputEditors[activeTabId - 1].getSession().foldAll(1);
+      }
+    });
+  }
 
   increaseFontInputBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();

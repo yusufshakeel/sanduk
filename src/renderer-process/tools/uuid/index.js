@@ -13,7 +13,7 @@ function renderHistory(history, historyContainer) {
   historyContainer.innerHTML = history
     .map(
       v =>
-        `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy border border-1 p-1" data-value="${v}" style="cursor: pointer"><i class="far fa-clipboard"></i></span></p>`
+        `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy border border-1 p-1" data-value="${v}" style="cursor: pointer"><i title="Copy" class="bi-clipboard"></i></span></p>`
     )
     .reverse()
     .join('');
@@ -23,8 +23,8 @@ function renderHistory(history, historyContainer) {
     el.addEventListener('click', () => {
       inProgressHtmlAnimate(
         el,
-        '<i class="far fa-clipboard"></i>',
-        '<i class="fas fa-clipboard-check"></i>',
+        '<i title="Copy" class="bi-clipboard"></i>',
+        '<i title="Copy" class="bi-clipboard-check-fill"></i>',
         200
       );
       clipboard.writeText(el.dataset.value);

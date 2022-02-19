@@ -17,7 +17,7 @@ module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
         data-filepath="">Untitled</span>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link py-0 editor-input-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no">Wrap</a>
+          <a class="nav-link py-0 editor-input-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
         </li>
       </ul>
     </div>

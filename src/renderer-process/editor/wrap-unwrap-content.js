@@ -5,8 +5,8 @@ const { CONTENT_WRAPPED_NO, CONTENT_WRAPPED_YES } = require('../constants/editor
 module.exports = function wrapUnwrapContent({
   wrapBtn,
   editor,
-  wrapInnerHtml = 'Wrap',
-  unWrapInnerHtml = 'Unwrap'
+  wrapInnerHtml = '<i title="Wrap" class="bi-body-text"></i>',
+  unWrapInnerHtml = '<i title="Unwrap" class="bi-text-paragraph"></i>'
 }) {
   if (editor.getValue().length) {
     const isWrapped = wrapBtn.dataset.wrap === CONTENT_WRAPPED_YES;
