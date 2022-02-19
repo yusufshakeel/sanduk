@@ -13,7 +13,7 @@ function renderHistory(history, historyContainer) {
   historyContainer.innerHTML = history
     .map(
       v =>
-        `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy border border-1 p-1" data-value="${v}" style="cursor: pointer"><i title="Copy" class="bi-clipboard"></i></span></p>`
+        `<p class="font-monospace p-1">${v} <span class="sanduk-click-to-copy" data-value="${v}" style="cursor: pointer"><i title="Copy" class="bi-clipboard"></i></span></p>`
     )
     .reverse()
     .join('');
