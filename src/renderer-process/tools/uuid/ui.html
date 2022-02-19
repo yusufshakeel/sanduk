@@ -16,10 +16,10 @@
   <div class="tab-pane show active" id="uuid-tab-1-content" role="tabpanel" aria-labelledby="tab-1">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 p-0">
           <div class="form-group input-group-lg">
             <label for="uuid-v4-output" class="form-label">Generated UUID v4</label>
-            <input class="form-control text-center font-monospace" spellcheck="false" id="uuid-v4-output">
+            <input class="form-control text-center font-monospace" spellcheck="false" id="uuid-v4-output" readonly>
           </div>
 
           <div class="btn-group my-3" role="group" aria-label="Basic example">
@@ -29,7 +29,7 @@
           </div>
         </div>
 
-        <div class="col-12">
+        <div class="col-12 p-0">
           <label for="uuid-v4-history" class="form-label">History</label>
           <div id="uuid-v4-history"></div>
         </div>
@@ -39,7 +39,7 @@
   <div class="tab-pane" id="uuid-tab-2-content" role="tabpanel" aria-labelledby="tab-2">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 p-0">
           <div class="form-group input-group-lg">
             <label for="uuid-v5-name" class="form-label">String</label>
             <textarea
@@ -56,7 +56,7 @@
 
           <div class="form-group input-group-lg">
             <label for="uuid-v5-output" class="form-label">Generated UUID v5</label>
-            <input class="form-control text-center font-monospace" spellcheck="false" id="uuid-v5-output">
+            <input class="form-control text-center font-monospace" spellcheck="false" id="uuid-v5-output" readonly>
           </div>
 
           <div class="btn-group my-3" role="group" aria-label="Basic example">
@@ -64,11 +64,11 @@
             <button type="button" id="copy-uuid-v5-btn" class="btn btn-outline-primary">Copy</button>
             <button type="button" id="clear-uuid-v5-btn" class="btn btn-outline-primary">Clear</button>
           </div>
+        </div>
 
-          <div class="col-12">
-            <label for="uuid-v5-history" class="form-label">History</label>
-            <div id="uuid-v5-history"></div>
-          </div>
+        <div class="col-12 p-0">
+          <label for="uuid-v5-history" class="form-label">History</label>
+          <div id="uuid-v5-history"></div>
         </div>
       </div>
     </div>
