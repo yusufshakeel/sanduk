@@ -6,6 +6,7 @@ const immutabilityHelper = require('immutability-helper');
 const markdown = require('markdown-it')();
 const sanitizeHtml = require('sanitize-html');
 const { theme: aceTheme, mode: aceMode } = require('../../constants/ace-editor-constants');
+const fontSize = require('../../editor/font-size');
 
 module.exports = function markdownTool() {
   document.getElementById('v-pills-markdown').innerHTML = fs.readFileSync(
@@ -13,10 +14,19 @@ module.exports = function markdownTool() {
     'utf8'
   );
 
+  const gitHubMarkdownCss = fs.readFileSync(
+    path.resolve(__dirname, 'github-markdown.min.css'),
+    'utf8'
+  );
+
+  const increaseFontInputBtn = document.getElementById('increase-font-input-markdown-btn');
+  const decreaseFontInputBtn = document.getElementById('decrease-font-input-markdown-btn');
+  const resetFontInputBtn = document.getElementById('reset-font-input-markdown-btn');
   const autoLoadBtn = document.getElementById('auto-load-markdown-btn');
   const markdownOutput = document.getElementById('markdown-iframe-output');
   const generateBtn = document.getElementById('generate-markdown-btn');
   const inputFooter = document.getElementById('markdown-editor-footer');
+  const markdownInputElem = document.getElementById('markdown-editor');
 
   let markdownInputEditor;
   let isAutoLoading = false;
@@ -46,11 +56,15 @@ module.exports = function markdownTool() {
       }
     });
     const enrichedHtml = `
+      <style>${gitHubMarkdownCss}</style>
       <style>
-      pre { border: 1px solid #999; padding: 5px; font-family: monospace; }
-      table th, table td { border: 1px solid #999; padding: 5px; margin: 0; }
+      /*pre { border: 1px solid #999; padding: 5px; font-family: monospace; }*/
+      /*table th, table td { border: 1px solid #999; padding: 5px; margin: 0; }*/
+      .markdown-body {
+        box-sizing: border-box;
+      }
       </style>
-      ${sanitizedHtml}`;
+      <article class="markdown-body">${sanitizedHtml}</article>`;
     markdownOutput.contentDocument.write(enrichedHtml);
     markdownOutput.contentDocument.close();
   };
@@ -64,10 +78,10 @@ module.exports = function markdownTool() {
   autoLoadBtn.addEventListener('click', () => {
     if (isAutoLoading) {
       isAutoLoading = false;
-      autoLoadBtn.innerHTML = 'Auto Off';
+      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-off"></i>';
     } else {
       isAutoLoading = true;
-      autoLoadBtn.innerHTML = 'Auto On';
+      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-on"></i>';
     }
     renderMarkdown();
   });
@@ -75,8 +89,20 @@ module.exports = function markdownTool() {
   generateBtn.addEventListener('click', () => {
     if (isAutoLoading) {
       isAutoLoading = false;
-      autoLoadBtn.innerHTML = 'Auto Off';
+      autoLoadBtn.innerHTML = 'Auto <i class="fas fa-toggle-off"></i>';
     }
     renderMarkdown();
+  });
+
+  increaseFontInputBtn.addEventListener('click', () => {
+    fontSize.increaseFontSize(markdownInputElem);
+  });
+
+  decreaseFontInputBtn.addEventListener('click', () => {
+    fontSize.decreaseFontSize(markdownInputElem);
+  });
+
+  resetFontInputBtn.addEventListener('click', () => {
+    fontSize.resetFontSize(markdownInputElem);
   });
 };

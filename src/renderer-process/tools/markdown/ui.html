@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-1">
   <div class="container-fluid">
     <span class="pe-3">Markdown</span>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#markdown-navbar"
@@ -11,7 +11,16 @@
           <a class="nav-link" href="#" id="generate-markdown-btn">Generate</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" id="auto-load-markdown-btn">Auto Off</a>
+          <a class="nav-link" href="#" id="auto-load-markdown-btn">Auto <i class="fas fa-toggle-off"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="increase-font-input-markdown-btn"><i class="fas fa-search-plus"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="decrease-font-input-markdown-btn"><i class="fas fa-search-minus"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="reset-font-input-markdown-btn"><i class="fas fa-font"></i></a>
         </li>
       </ul>
     </div>
@@ -20,22 +29,22 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6">
+    <div class="col-6 p-0">
       <!-- markdown editor -->
       <pre class="form-control"
            id="markdown-editor"
-           style="height: calc(100vh - 200px); font-size: 16px; margin-bottom: 0"></pre>
+           style="height: calc(100vh - 150px); font-size: 16px; margin-bottom: 0"></pre>
       <div id="markdown-editor-footer" class="bg-light p-1 font-monospace">Ln: 1 Col: 1</div>
     </div>
 
-    <div class="col-6">
-      <iframe
-        id="markdown-iframe-output"
-        style="border: 1px solid #eee;
-          overflow: scroll;
-          padding: 5px;
-          width: 100%;
-          height: calc(100vh - 200px);"></iframe>
+    <div class="col-6 p-0">
+      <iframe id="markdown-iframe-output"
+           class="github-markdown-body"
+           style="border: 1px solid #eee;
+           overflow: scroll;
+           padding: 5px;
+           width: 100%;
+           height: calc(100vh - 150px);"></iframe>
     </div>
   </div>
 </div>
