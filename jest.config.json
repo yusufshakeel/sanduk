@@ -15,6 +15,7 @@
     "!**/src/main-process/file-management.js",
     "!**/src/main-process/main.js",
     "!**/src/renderer-process/app.js",
+    "!**/src/renderer-process/constants/ui-contants.js",
     "!**/src/renderer-process/tools/**",
     "!**/src/static/**",
     "!**/test/**"

@@ -48,7 +48,7 @@ function getHtmlCopyNavItem({ prefix, dataId }) {
 
 function getHtmlClearNavItem({ prefix, dataId }) {
   return `<li class="nav-item">
-  <a class="nav-link py-0 pe-0 ${prefix}-clear-btn" data-id="${dataId}" href="#"><i title="Erase" class="bi-eraser"></i></a>
+  <a class="nav-link py-0 ${prefix}-clear-btn" data-id="${dataId}" href="#"><i title="Erase" class="bi-eraser"></i></a>
 </li>`;
 }
 

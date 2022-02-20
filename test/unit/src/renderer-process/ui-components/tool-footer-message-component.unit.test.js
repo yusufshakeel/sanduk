@@ -1,18 +1,19 @@
 'use strict';
 
-const editorComponent = require('../../../../../src/renderer-process/ui-components/editor-component');
+const toolFooterMessageComponent = require('../../../../../src/renderer-process/ui-components/tool-footer-message-component');
 
-describe('Testing editor component', () => {
+describe('Testing tool footer message component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   const prefix = 'some-prefix';
-  const id = 1;
 
   describe('Testing get html element id', () => {
     test('Should be able to get html element id', () => {
-      expect(editorComponent.getHtmlElementId({ prefix, id })).toBe('some-prefix-editor-1');
+      expect(toolFooterMessageComponent.getHtmlElementId({ prefix })).toBe(
+        'some-prefix-footer-message'
+      );
     });
   });
 
@@ -22,19 +23,19 @@ describe('Testing editor component', () => {
         getElementById: jest.fn(() => ({ id: 1 }))
       };
       expect(
-        editorComponent.getHtmlElement({ prefix, id, documentDOM: fakeDocument })
+        toolFooterMessageComponent.getHtmlElement({ prefix, documentDOM: fakeDocument })
       ).toStrictEqual({
         id: 1
       });
       expect(fakeDocument.getElementById).toHaveBeenCalledTimes(1);
-      expect(fakeDocument.getElementById).toHaveBeenCalledWith('some-prefix-editor-1');
+      expect(fakeDocument.getElementById).toHaveBeenCalledWith('some-prefix-footer-message');
     });
   });
 
   describe('Testing get html', () => {
     test('Should be able to get html', () => {
-      const html = editorComponent.getHtml({ prefix, id });
-      expect(html).toMatch(/id="some-prefix-editor-1"/);
+      const html = toolFooterMessageComponent.getHtml({ prefix });
+      expect(html).toMatch(/id="some-prefix-footer-message"/);
     });
   });
 });
