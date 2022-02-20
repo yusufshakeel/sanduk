@@ -3,7 +3,7 @@
 function getHtml({ prefix }) {
   return `<li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle sanduk-dropdown-toggle-without-arrow" href="#" id="${prefix}-file-menu-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="bi-folder2"></i>
+      <i title="File" class="bi-folder2"></i>
     </a>
     <ul class="dropdown-menu" aria-labelledby="${prefix}-file-menu-dropdown">
       <li><a class="dropdown-item" href="#" id="${prefix}-file-menu-dropdown-open-btn"><i class="bi-folder"></i> Open...</a></li>
