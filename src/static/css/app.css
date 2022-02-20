@@ -22,6 +22,6 @@ i[class*="bi-"] {
     color: #333;
 }
 
-.my-dropdown-toggle-without-arrow::after {
+.sanduk-dropdown-toggle-without-arrow::after {
     content: none !important;
 }

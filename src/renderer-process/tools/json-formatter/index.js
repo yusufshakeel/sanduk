@@ -10,12 +10,18 @@ const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
-const tabHtmlTemplate = require('./templates/tab-html-template');
-const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
+const { SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-contants');
+const tabsTemplate = require('./templates/tabs-template');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
-
+const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
+const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
+const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
+const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
+const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
+const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
+const editorComponent = require('../../ui-components/editor-component');
 const {
   IPC_EVENT_OPEN_FILE_DIALOG_JSON,
   IPC_EVENT_OPEN_FILE_DIALOG_JSON_FILE_PATH,
@@ -23,58 +29,68 @@ const {
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH
 } = require('../../../main-process/constants/ipc-event-constants');
 
+const ui = require('./ui');
+
 module.exports = function jsonFormatterTool() {
-  document.getElementById('v-pills-json-formatter').innerHTML = fs.readFileSync(
-    path.resolve(__dirname, 'ui.html'),
-    'utf8'
-  );
-
-  const openFileBtn = document.getElementById('json-formatter-file-menu-dropdown-open-btn');
-  const saveFileBtn = document.getElementById('json-formatter-file-menu-dropdown-save-btn');
-  const closeFileBtn = document.getElementById('json-formatter-file-menu-dropdown-close-btn');
-  const increaseFontInputBtn = document.getElementById('increase-font-input-json-formatter-btn');
-  const decreaseFontInputBtn = document.getElementById('decrease-font-input-json-formatter-btn');
-  const resetFontInputBtn = document.getElementById('reset-font-input-json-formatter-btn');
-  const jsonInputMessage = document.getElementById('json-formatter-input-message');
-
+  const prefix = 'sanduk-json-formatter';
+  const toolName = 'JSON Formatter';
   const totalTabs = 7;
-  document.getElementById('jsonFormatterTab').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
-    .join('');
-  document.getElementById('jsonFormatterTabContent').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
-    .join('');
+  const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
+  document.getElementById(SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID).innerHTML = ui({
+    toolName,
+    prefix
+  });
+  document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
+  document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const inputFooters = [];
-  const inputEditors = [];
-  const inputElems = [];
-  const validateInputBtns = document.getElementsByClassName('json-formatter-editor-validate-btn');
-  const prettyInputBtns = document.getElementsByClassName('json-formatter-editor-pretty-btn');
-  const compactInputBtns = document.getElementsByClassName('json-formatter-editor-compact-btn');
-  const foldInputBtns = document.getElementsByClassName('json-formatter-editor-fold-btn');
-  const wrapInputBtns = document.getElementsByClassName('json-formatter-editor-wrap-btn');
-  const copyInputBtns = document.getElementsByClassName('json-formatter-editor-copy-btn');
-  const clearInputBtns = document.getElementsByClassName('json-formatter-editor-clear-btn');
-  const fileNameElems = [];
+  const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
+    fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
+
+  const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
+    fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
+
+  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
+
+  const tabPaneNavItemElements = tabPaneNavItemComponent.getHtmlElements({
+    prefix,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.FOLD,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.VALIDATE,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP
+    ]
+  });
+
+  const editorLineColumnPositionFooterElements = [];
+  const editors = [];
+  const editorElements = [];
+
+  const fileNameElements = [];
   const filePaths = {};
 
+  // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
-    inputFooters.push(document.getElementById(`json-formatter-input-editor-${id}-footer`));
-    fileNameElems.push(document.getElementById(`json-formatter-editor-filename-${id}`));
+    editorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix, id })
+    );
+    fileNameElements.push(tabPaneFilenameComponent.getHtmlElement({ prefix, id }));
 
-    let inputEditor = window.ace.edit(`json-formatter-input-editor-${id}`);
+    const editor = window.ace.edit(editorComponent.getHtmlElementId({ prefix, id }));
     setupEditor({
-      editor: inputEditor,
-      rowColumnPositionElement: inputFooters[id - 1],
+      editor: editor,
+      rowColumnPositionElement: editorLineColumnPositionFooterElements[id - 1],
       mode: aceMode.json
     });
-    inputEditors.push(inputEditor);
+    editors.push(editor);
 
-    inputElems.push(document.getElementById(`json-formatter-input-editor-${id}`));
+    editorElements.push(editorComponent.getHtmlElement({ prefix, id }));
   }
 
   const getActiveTabId = () =>
-    activeTabElement.getActiveTabIdByClassName('sanduk-json-formatter-tab active', 'tabid');
+    activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
   const isValidJSON = (json, element) => {
     try {
@@ -86,90 +102,104 @@ module.exports = function jsonFormatterTool() {
     return false;
   };
 
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyInputBtns, inputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.wrapNavItemElements,
+    editors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.copyNavItemElements,
+    editors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.clearNavItemElements,
+    editors
+  );
 
-  for (const btn of validateInputBtns) {
+  for (const btn of tabPaneNavItemElements.validateNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
-      const input = inputEditors[activeTabId - 1].getValue();
-      if (input.length && isValidJSON(input, jsonInputMessage)) {
-        popSuccess(jsonInputMessage, 'Valid JSON');
+      clearContent(footerMessageElement);
+      const input = editors[activeTabId - 1].getValue();
+      if (input.length && isValidJSON(input, footerMessageElement)) {
+        popSuccess(footerMessageElement, 'Valid JSON');
       }
     });
   }
 
-  for (const btn of prettyInputBtns) {
+  for (const btn of tabPaneNavItemElements.prettyNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(jsonInputMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, 2);
-          inputEditors[activeTabId - 1].setValue(json, -1);
+          editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(jsonInputMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of compactInputBtns) {
+  for (const btn of tabPaneNavItemElements.compactNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(jsonInputMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input));
-          inputEditors[activeTabId - 1].setValue(json, -1);
+          editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(jsonInputMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of foldInputBtns) {
+  for (const btn of tabPaneNavItemElements.foldNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
-      if (inputEditors[activeTabId - 1].getValue().length) {
-        inputEditors[activeTabId - 1].getSession().foldAll(1);
+      clearContent(footerMessageElement);
+      if (editors[activeTabId - 1].getValue().length) {
+        editors[activeTabId - 1].getSession().foldAll(1);
       }
     });
   }
 
-  increaseFontInputBtn.addEventListener('click', () => {
+  increaseFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
+    fontSize.increaseFontSize(editorElements[activeTabId - 1]);
   });
 
-  decreaseFontInputBtn.addEventListener('click', () => {
+  decreaseFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
+    fontSize.decreaseFontSize(editorElements[activeTabId - 1]);
   });
 
-  resetFontInputBtn.addEventListener('click', () => {
+  resetFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(inputElems[activeTabId - 1]);
+    fontSize.resetFontSize(editorElements[activeTabId - 1]);
   });
 
-  closeFileBtn.addEventListener('click', () => {
+  closeFileBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
     if (filePaths[activeTabId - 1]?.length) {
       filePaths[activeTabId - 1] = '';
-      inputEditors[activeTabId - 1].setValue('');
-      fileNameElems[activeTabId - 1].innerText = 'Untitled';
+      editors[activeTabId - 1].setValue('');
+      fileNameElements[activeTabId - 1].innerText = 'Untitled';
     }
   });
 
-  openFileBtn.addEventListener('click', () => {
+  openFileBtnElement.addEventListener('click', () => {
     ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_JSON);
   });
 
-  saveFileBtn.addEventListener('click', () => {
+  saveFileBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
     const filepath = filePaths[activeTabId - 1];
     if (filepath?.length) {
@@ -182,14 +212,13 @@ module.exports = function jsonFormatterTool() {
   const writeToFile = filePath => {
     const activeTabId = getActiveTabId();
     try {
-      fileNameElems[activeTabId - 1].innerText = 'Saving...';
-      const data = inputEditors[activeTabId - 1].getValue();
+      fileNameElements[activeTabId - 1].innerText = 'Saving...';
+      const data = editors[activeTabId - 1].getValue();
       fs.writeFileSync(filePath, data, 'utf8');
     } catch (e) {
-      popError(jsonInputMessage, e.message);
+      popError(footerMessageElement, e.message);
     } finally {
-      fileNameElems[activeTabId - 1].innerText = path.basename(filePath).substr(0, 20);
-      fileNameElems[activeTabId - 1].setAttribute('data-filepath', filePath);
+      fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
     }
   };
 
@@ -205,17 +234,25 @@ module.exports = function jsonFormatterTool() {
       const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
       if (matchingFilepath) {
         popError(
-          jsonInputMessage,
+          footerMessageElement,
           `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`
         );
         return;
       }
+      if (editors[activeTabId - 1].getValue().length) {
+        popError(
+          footerMessageElement,
+          `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          7000
+        );
+        return;
+      }
       filePaths[activeTabId - 1] = openedFilePath;
-      fileNameElems[activeTabId - 1].innerText = path.basename(openedFilePath).substr(0, 20);
+      fileNameElements[activeTabId - 1].innerText = path.basename(openedFilePath).substring(0, 20);
       const json = fs.readFileSync(args.filePath).toString();
-      inputEditors[activeTabId - 1].getSession().setValue(json, -1);
+      editors[activeTabId - 1].getSession().setValue(json, -1);
     } catch (e) {
-      popError(jsonInputMessage, e.message);
+      popError(footerMessageElement, e.message);
     }
   });
 };
