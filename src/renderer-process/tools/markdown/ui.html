@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-1">
+  <div class="container-fluid">
+    <span class="pe-3">Markdown</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#markdown-navbar"
+            aria-controls="markdown-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="markdown-navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="increase-font-input-markdown-btn"><i title="Increase font size" class="bi-zoom-in"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="decrease-font-input-markdown-btn"><i title="Decrease font size" class="bi-zoom-out"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="reset-font-input-markdown-btn"><i title="Reset font size" class="bi-arrow-counterclockwise"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="markdown-toggle-wrap-input-btn" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="view-editor-only-markdown-btn"><i title="Editor only" class="bi-pencil-square"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="view-editor-and-preview-markdown-btn"><i title="Editor and Preview" class="bi-layout-split"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="view-preview-only-markdown-btn"><i title="Preview only" class="bi-image"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6 p-0"
+         id="sanduk-markdown-editor-column"
+         data-viewEditorOnly="col-12 p-0"
+         data-viewEditorAndPreview="col-6 p-0"
+         data-viewPreviewOnly="d-none">
+      <!-- markdown editor -->
+      <pre class="form-control"
+           id="markdown-editor"
+           style="height: calc(100vh - 150px); font-size: 16px; margin-bottom: 0"></pre>
+      <div id="markdown-editor-footer" class="bg-light p-1 font-monospace">1:1</div>
+    </div>
+
+    <div class="col-6 p-0"
+         id="sanduk-markdown-output-column"
+         data-viewEditorOnly="d-none"
+         data-viewEditorAndPreview="col-6 p-0"
+         data-viewPreviewOnly="col-12 p-0">
+      <iframe id="markdown-iframe-output"
+           class="github-markdown-body"
+           style="border: 1px solid #eee;
+           overflow: scroll;
+           padding: 5px;
+           width: 100%;
+           height: calc(100vh - 150px);"></iframe>
+    </div>
+  </div>
+</div>

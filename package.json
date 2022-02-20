@@ -1,19 +1,24 @@
 {
   "name": "sanduk",
-  "version": "0.8.1",
+  "version": "0.10.0",
   "description": "Helper app for development.",
   "main": "src/main-process/main.js",
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
-    "pre-commit": "npm run lint && npm run test:all",
-    "pre-build": "rm -rf dist",
-    "build:all-platform": "npm run pre-build && npx electron-builder -mwl",
-    "build:for-mac": "npm run pre-build && npx electron-builder -m",
-    "lint": "npx eslint -c .eslintrc.json src",
+    "precommit": "npm run lint && npm run search-circular-dependencies && npm run test:all",
+    "prebuild": "rm -rf dist",
+    "build:all-platform": "npm run prebuild && npx electron-builder -mwl",
+    "build:for-mac": "npm run prebuild && npx electron-builder -m",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "npx eslint -c .eslintrc.json src",
+    "lint:test": "npx eslint -c .eslintrc.json test/unit",
     "lint:fix": "npx eslint --fix -c .eslintrc.json src test/unit",
+    "lint:fix:test": "npx eslint --fix -c .eslintrc.json test/unit",
+    "lint:fix:src": "npx eslint --fix -c .eslintrc.json src",
     "test:all": "npm run bootstrap && npm run test:unit",
     "test:unit": "npm run bootstrap && jest -c jest.config.json",
+    "search-circular-dependencies": "npx madge -c src",
     "bootstrap": "mkdirp output"
   },
   "repository": {
@@ -51,6 +56,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.0.6",
+    "madge": "^5.0.1",
     "nodemon": "^2.0.9",
     "prettier": "^2.3.2",
     "spectron": "^15.0.0"

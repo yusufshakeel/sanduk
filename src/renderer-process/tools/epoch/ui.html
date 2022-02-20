@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top mb-3">
+  <div class="container-fluid">
+    <span class="pe-3">Epoch</span>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 p-0">
+      <div class="form-group input-group-lg">
+        <label for="epoch-input" class="form-label">Enter epoch time</label>
+        <input class="form-control" id="epoch-input" type="number" min="0" step="1">
+        <div id="epoch-message"></div>
+      </div>
+
+      <div class="btn-group my-3" role="group" aria-label="Basic example">
+        <button type="button" id="compute-btn" class="btn btn-outline-primary">Compute</button>
+        <button type="button" id="clear-btn" class="btn btn-outline-primary">Clear</button>
+      </div>
+
+      <div class="form-group my-2 input-group-lg">
+        <label for="time-in-utc" class="form-label">Time in UTC/GMT</label>
+        <input class="form-control" id="time-in-utc" readonly>
+      </div>
+
+      <div class="form-group my-2 input-group-lg">
+        <label for="time-in-locale" class="form-label">Time in locale</label>
+        <input class="form-control" id="time-in-locale" readonly>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 p-0">
+      <div id="time-table">
+        <table class="table">
+          <tbody>
+          <tr>
+            <td style="width: 35%" class="text-right">Locale</td>
+            <td style="width: 50%" id="current-time-locale"></td>
+            <td style="width: 15%"></td>
+          </tr>
+          <tr>
+            <td class="text-right">UTC/GMT</td>
+            <td id="current-time-utc"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="text-right">Epoch</td>
+            <td id="current-time-epoch"></td>
+            <td>
+              <span id="copy-current-time-epoch-btn" style="cursor: pointer;">
+                <i title="Copy" class="bi-clipboard"></i>
+              </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

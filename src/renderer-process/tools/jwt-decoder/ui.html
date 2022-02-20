@@ -1,0 +1,66 @@
+<style>
+    textarea#jwt-decoder-input {
+        resize: vertical;
+        font-size: 1em;
+        height: 20vh;
+    }
+
+    #jwt-decoder-decoded-header,
+    #jwt-decoder-decoded-payload {
+        overflow-y: scroll;
+        -webkit-user-select: text;
+        height: 20vh;
+        padding: 5px 5px 10px 5px;
+        margin: 0;
+        font-size: 1em;
+    }
+</style>
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top mb-3">
+  <div class="container-fluid">
+    <span class="pe-3">JSON Web Token Decoder</span>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 p-0">
+      <div class="form-group">
+        <label for="jwt-decoder-input" class="form-label">JWT</label>
+        <pre class="form-control"
+             id="jwt-decoder-input"
+             style="height: 30vh; font-size: 16px; margin-bottom: 0"></pre>
+      </div>
+      <div id="jwt-decoder-input-message"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 p-0">
+      <div class="btn-group my-3" role="group" aria-label="Basic example">
+        <button type="button" id="jwt-decoder-decode-btn" class="btn btn-outline-primary">Decode</button>
+        <button type="button" id="jwt-deocder-clear-btn" class="btn btn-outline-primary">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6 p-0">
+      <div class="form-group">
+        <label for="jwt-decoder-decoded-header" class="form-label">Header</label>
+        <pre class="form-control"
+             id="jwt-decoder-decoded-header"
+             style="height: 40vh; font-size: 16px; margin-bottom: 0"></pre>
+      </div>
+    </div>
+
+    <div class="col-md-12 col-lg-6 p-0">
+      <div class="form-group">
+        <label for="jwt-decoder-decoded-payload" class="form-label">Payload</label>
+        <pre class="form-control"
+             id="jwt-decoder-decoded-payload"
+             style="height: 40vh; font-size: 16px; margin-bottom: 0"></pre>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,25 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <title>sanduk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/halfmoon.min.css">
-  <link rel="stylesheet" href="plugin/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
 </head>
-<body class="dark-mode">
-<!-- Page wrapper with .with-navbar class -->
-<div class="page-wrapper with-navbar with-sidebar">
-  <!-- Navbar (immediate child of the page wrapper) -->
-  <nav class="navbar" id="navbar"></nav>
-
-  <!-- Sidebar (immediate child of the page wrapper) -->
-  <div class="sidebar" id="sidebar"></div>
-
-  <!-- Content wrapper -->
-  <div class="content-wrapper" id="content-wrapper"></div>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col px-0">
+      <div class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills me-3-dont-use" id="v-pills-tab" role="tablist"
+             aria-orientation="vertical">
+          <button class="nav-link" id="v-pills-base64-encoder-decoder-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-base64-encoder-decoder" type="button" role="tab"
+                  aria-controls="v-pills-base64-encoder-decoder" aria-selected="true">Base64 Encoder Decoder
+          </button>
+          <button class="nav-link" id="v-pills-epoch-tab" data-bs-toggle="pill" data-bs-target="#v-pills-epoch"
+                  type="button" role="tab" aria-controls="v-pills-epoch" aria-selected="false">Epoch
+          </button>
+          <button class="nav-link" id="v-pills-json-formatter-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-json-formatter" type="button" role="tab"
+                  aria-controls="v-pills-json-formatter" aria-selected="false">JSON Formatter
+          </button>
+          <button class="nav-link" id="v-pills-jwt-decoder-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-jwt-decoder" type="button" role="tab" aria-controls="v-pills-jwt-decoder"
+                  aria-selected="false">JWT Decoder
+          </button>
+          <button class="nav-link" id="v-pills-markdown-tab" data-bs-toggle="pill" data-bs-target="#v-pills-markdown"
+                  type="button" role="tab" aria-controls="v-pills-markdown" aria-selected="false">Markdown
+          </button>
+          <button class="nav-link" id="v-pills-uuid-tab" data-bs-toggle="pill" data-bs-target="#v-pills-uuid"
+                  type="button" role="tab" aria-controls="v-pills-uuid" aria-selected="false">UUID
+          </button>
+          <button class="nav-link" id="v-pills-xml-formatter-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-xml-formatter" type="button" role="tab" aria-controls="v-pills-xml-formatter"
+                  aria-selected="false">XML Formatter
+          </button>
+          <button class="nav-link" id="v-pills-xml-to-json-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-xml-to-json" type="button" role="tab" aria-controls="v-pills-xml-to-json"
+                  aria-selected="false">XML to JSON
+          </button>
+          <button class="nav-link" id="v-pills-editor-tab" data-bs-toggle="pill"
+                  data-bs-target="#v-pills-editor" type="button" role="tab" aria-controls="v-pills-editor"
+                  aria-selected="false">Editor
+          </button>
+        </div>
+        <div class="tab-content mt-1=dont-use" id="v-pills-tabContent">
+          <div class="tab-pane show active" id="v-pills-welcome" role="tabpanel" aria-labelledby="v-pills-welcome-tab">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col m-5 p-5 text-center">
+                <span class="mx-auto" style="width: 128px;
+                  background-image: url(../../resources/app-icons/stable/png/128.png);
+                  height: 128px;
+                  display: block;
+                  background-position: center;
+                  background-repeat: no-repeat;"></span>
+                  <h1 class="display-6">sanduk</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="v-pills-base64-encoder-decoder" role="tabpanel"
+               aria-labelledby="v-pills-base64-encoder-decoder-tab">base64 encoder decoder
+          </div>
+          <div class="tab-pane" id="v-pills-epoch" role="tabpanel" aria-labelledby="v-pills-epoch-tab">epoch</div>
+          <div class="tab-pane" id="v-pills-json-formatter" role="tabpanel"
+               aria-labelledby="v-pills-json-formatter-tab">json formatter
+          </div>
+          <div class="tab-pane" id="v-pills-jwt-decoder" role="tabpanel" aria-labelledby="v-pills-jwt-decoder-tab">jwt
+            decoder
+          </div>
+          <div class="tab-pane" id="v-pills-markdown" role="tabpanel" aria-labelledby="v-pills-markdown-tab">markdown
+          </div>
+          <div class="tab-pane" id="v-pills-uuid" role="tabpanel" aria-labelledby="v-pills-uuid-tab">uuid</div>
+          <div class="tab-pane" id="v-pills-xml-formatter" role="tabpanel" aria-labelledby="v-pills-xml-formatter-tab">
+            xml formatter
+          </div>
+          <div class="tab-pane" id="v-pills-xml-to-json" role="tabpanel" aria-labelledby="v-pills-xml-to-json-tab">xml
+            to json
+          </div>
+          <div class="tab-pane" id="v-pills-editor" role="tabpanel" aria-labelledby="v-pills-editor-tab">editor</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- Requires halfmoon.js for the dropdowns -->
-<script type="text/javascript" src="js/halfmoon.min.js"></script>
+<script type="text/javascript" src="bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="./plugin/ace/ace.js"></script>
 <script type="text/javascript" src="../renderer-process/app.js"></script>
 </body>

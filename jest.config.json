@@ -10,15 +10,19 @@
     "!**/dist/**",
     "!**/node_modules/**",
     "!**/resources/**",
-    "!**/src/clicked-tool-handler.js/**",
-    "!**/src/main-process/**",
-    "!**/src/renderer-process/**",
+    "!**/src/main-process/constants/**",
+    "!**/src/main-process/application-menu.js",
+    "!**/src/main-process/file-management.js",
+    "!**/src/main-process/main.js",
+    "!**/src/renderer-process/app.js",
+    "!**/src/renderer-process/constants/ui-contants.js",
+    "!**/src/renderer-process/tools/**",
     "!**/src/static/**",
     "!**/test/**"
   ],
   "coverageThreshold": {
     "global": {
-      "branches": 100,
+      "statements": 100,
       "functions": 100,
       "lines": 100
     }
