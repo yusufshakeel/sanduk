@@ -164,9 +164,16 @@ module.exports = function jsonFormatterTool() {
   for (const btn of tabPaneNavItemElements.foldNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
-      clearContent(footerMessageElement);
-      if (editors[activeTabId - 1].getValue().length) {
-        editors[activeTabId - 1].getSession().foldAll(1);
+      try {
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, 2);
+          editors[activeTabId - 1].setValue(json, -1);
+          editors[activeTabId - 1].getSession().foldAll(1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
       }
     });
   }
