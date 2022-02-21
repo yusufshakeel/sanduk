@@ -8,61 +8,97 @@ const TAB_PANE_NAV_ITEMS = {
   PRETTY: 'PRETTY',
   SORT_ASCENDING: 'SORT_ASCENDING',
   SORT_DESCENDING: 'SORT_DESCENDING',
+  TRANSFORM: 'TRANSFORM',
   VALIDATE: 'VALIDATE',
   WRAP: 'WRAP'
 };
 
+const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
+  CLEAR: { key: 'clearNavItemElements', className: `${prefix}-clear-btn` },
+  COMPACT: { key: 'compactNavItemElements', className: `${prefix}-compact-btn` },
+  COPY: { key: 'copyNavItemElements', className: `${prefix}-copy-btn` },
+  FOLD: { key: 'foldNavItemElements', className: `${prefix}-fold-btn` },
+  PRETTY: { key: 'prettyNavItemElements', className: `${prefix}-pretty-btn` },
+  SORT_ASCENDING: {
+    key: 'sortAscendingNavItemElements',
+    className: `${prefix}-sort-ascending-btn`
+  },
+  SORT_DESCENDING: {
+    key: 'sortDescendingNavItemElements',
+    className: `${prefix}-sort-descending-btn`
+  },
+  TRANSFORM: { key: 'transformNavItemElements', className: `${prefix}-transform-btn` },
+  VALIDATE: { key: 'validateNavItemElements', className: `${prefix}-validate-btn` },
+  WRAP: { key: 'wrapNavItemElements', className: `${prefix}-wrap-btn` }
+});
+
 function getHtmlValidateNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).VALIDATE.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-validate-btn" data-id="${dataId}" href="#"><i title="Validate" class="bi-check2-square"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Validate" class="bi-check2-square"></i></a>
 </li>`;
 }
 
 function getHtmlPrettyNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).PRETTY.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-pretty-btn" data-id="${dataId}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
 </li>`;
 }
 
 function getHtmlCompactNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).COMPACT.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-compact-btn" data-id="${dataId}" href="#"><i title="Compact" class="bi-justify-left"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Compact" class="bi-justify-left"></i></a>
 </li>`;
 }
 
 function getHtmlFoldNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).FOLD.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-fold-btn" data-id="${dataId}" href="#"><i title="Fold" class="bi-arrows-collapse"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Fold" class="bi-arrows-collapse"></i></a>
 </li>`;
 }
 
 function getHtmlWrapNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).WRAP.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-wrap-btn" data-id="${dataId}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
 </li>`;
 }
 
 function getHtmlCopyNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).COPY.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-copy-btn" data-id="${dataId}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
 </li>`;
 }
 
 function getHtmlClearNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).CLEAR.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-clear-btn" data-id="${dataId}" href="#"><i title="Erase" class="bi-eraser"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Erase" class="bi-eraser"></i></a>
 </li>`;
 }
 
 function getHtmlSortAscendingNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).SORT_ASCENDING.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-sort-ascending-btn" data-id="${dataId}" href="#"><i title="Ascending sort" class="bi-sort-alpha-down"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Ascending sort" class="bi-sort-alpha-down"></i></a>
 </li>`;
 }
 
 function getHtmlSortDescendingNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).SORT_DESCENDING.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${prefix}-sort-descending-btn" data-id="${dataId}" href="#"><i title="Descending sort" class="bi-sort-alpha-down-alt"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Descending sort" class="bi-sort-alpha-down-alt"></i></a>
+</li>`;
+}
+
+function getHtmlTransformNavItem({ prefix, dataId, title = 'Transform' }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).TRANSFORM.className;
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="${title}" class="bi-wrench-adjustable"></i></a>
 </li>`;
 }
 
@@ -76,57 +112,10 @@ function getHtmlElements({
   specificNavItemsToPick = Object.values(TAB_PANE_NAV_ITEMS),
   documentDOM = document
 }) {
-  const validateNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.VALIDATE)
-    ? documentDOM.getElementsByClassName(`${prefix}-validate-btn`)
-    : undefined;
-
-  const prettyNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.PRETTY)
-    ? documentDOM.getElementsByClassName(`${prefix}-pretty-btn`)
-    : undefined;
-
-  const compactNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.COMPACT)
-    ? documentDOM.getElementsByClassName(`${prefix}-compact-btn`)
-    : undefined;
-
-  const foldNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.FOLD)
-    ? documentDOM.getElementsByClassName(`${prefix}-fold-btn`)
-    : undefined;
-
-  const wrapNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.WRAP)
-    ? documentDOM.getElementsByClassName(`${prefix}-wrap-btn`)
-    : undefined;
-
-  const copyNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.COPY)
-    ? documentDOM.getElementsByClassName(`${prefix}-copy-btn`)
-    : undefined;
-
-  const clearNavItemElements = specificNavItemsToPick.includes(TAB_PANE_NAV_ITEMS.CLEAR)
-    ? documentDOM.getElementsByClassName(`${prefix}-clear-btn`)
-    : undefined;
-
-  const sortAscendingNavItemElements = specificNavItemsToPick.includes(
-    TAB_PANE_NAV_ITEMS.SORT_ASCENDING
-  )
-    ? documentDOM.getElementsByClassName(`${prefix}-sort-ascending-btn`)
-    : undefined;
-
-  const sortDescendingNavItemElements = specificNavItemsToPick.includes(
-    TAB_PANE_NAV_ITEMS.SORT_ASCENDING
-  )
-    ? documentDOM.getElementsByClassName(`${prefix}-sort-descending-btn`)
-    : undefined;
-
-  return {
-    validateNavItemElements,
-    prettyNavItemElements,
-    compactNavItemElements,
-    foldNavItemElements,
-    wrapNavItemElements,
-    copyNavItemElements,
-    clearNavItemElements,
-    sortAscendingNavItemElements,
-    sortDescendingNavItemElements
-  };
+  return specificNavItemsToPick.reduce((result, navItem) => {
+    const v = tabPaneNavItemToClassNameMapper({ prefix })[navItem];
+    return { ...result, [v.key]: documentDOM.getElementsByClassName(v.className) };
+  }, {});
 }
 
 module.exports = {
@@ -140,5 +129,6 @@ module.exports = {
   getHtmlCopyNavItem,
   getHtmlClearNavItem,
   getHtmlSortAscendingNavItem,
-  getHtmlSortDescendingNavItem
+  getHtmlSortDescendingNavItem,
+  getHtmlTransformNavItem
 };

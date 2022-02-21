@@ -30,7 +30,8 @@ describe('Testing tab pane navItem component', () => {
           copyNavItemElements: [{ id: 1 }],
           clearNavItemElements: [{ id: 1 }],
           sortAscendingNavItemElements: [{ id: 1 }],
-          sortDescendingNavItemElements: [{ id: 1 }]
+          sortDescendingNavItemElements: [{ id: 1 }],
+          transformNavItemElements: [{ id: 1 }]
         });
       });
     });
@@ -43,15 +44,7 @@ describe('Testing tab pane navItem component', () => {
           documentDOM: fakeDocument
         });
         expect(result).toStrictEqual({
-          validateNavItemElements: [{ id: 1 }],
-          prettyNavItemElements: undefined,
-          compactNavItemElements: undefined,
-          foldNavItemElements: undefined,
-          wrapNavItemElements: undefined,
-          copyNavItemElements: undefined,
-          clearNavItemElements: undefined,
-          sortAscendingNavItemElements: undefined,
-          sortDescendingNavItemElements: undefined
+          validateNavItemElements: [{ id: 1 }]
         });
       });
     });
@@ -126,6 +119,28 @@ describe('Testing tab pane navItem component', () => {
       const html = tabPaneNavItemComponent.getHtmlSortAscendingNavItem({ prefix, dataId });
       expect(html).toMatch(/class="nav-link py-0 some-prefix-sort-ascending-btn"/);
       expect(html).toMatch(/title="Ascending sort"/);
+    });
+  });
+
+  describe('Testing getHtmlTransformNavItem', () => {
+    describe('With default title', () => {
+      test('Should be able to get html', () => {
+        const html = tabPaneNavItemComponent.getHtmlTransformNavItem({ prefix, dataId });
+        expect(html).toMatch(/class="nav-link py-0 some-prefix-transform-btn"/);
+        expect(html).toMatch(/title="Transform"/);
+      });
+    });
+
+    describe('With custom title', () => {
+      test('Should be able to get html', () => {
+        const html = tabPaneNavItemComponent.getHtmlTransformNavItem({
+          prefix,
+          dataId,
+          title: 'Custom title'
+        });
+        expect(html).toMatch(/class="nav-link py-0 some-prefix-transform-btn"/);
+        expect(html).toMatch(/title="Custom title"/);
+      });
     });
   });
 });
