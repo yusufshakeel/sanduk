@@ -6,6 +6,8 @@ const TAB_PANE_NAV_ITEMS = {
   COPY: 'COPY',
   FOLD: 'FOLD',
   PRETTY: 'PRETTY',
+  SORT_ASCENDING: 'SORT_ASCENDING',
+  SORT_DESCENDING: 'SORT_DESCENDING',
   VALIDATE: 'VALIDATE',
   WRAP: 'WRAP'
 };
@@ -52,6 +54,18 @@ function getHtmlClearNavItem({ prefix, dataId }) {
 </li>`;
 }
 
+function getHtmlSortAscendingNavItem({ prefix, dataId }) {
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${prefix}-sort-ascending-btn" data-id="${dataId}" href="#"><i title="Ascending sort" class="bi-sort-alpha-down"></i></a>
+</li>`;
+}
+
+function getHtmlSortDescendingNavItem({ prefix, dataId }) {
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${prefix}-sort-descending-btn" data-id="${dataId}" href="#"><i title="Descending sort" class="bi-sort-alpha-down-alt"></i></a>
+</li>`;
+}
+
 /**
  * @param prefix {string}
  * @param specificNavItemsToPick {string[]}
@@ -90,6 +104,18 @@ function getHtmlElements({
     ? documentDOM.getElementsByClassName(`${prefix}-clear-btn`)
     : undefined;
 
+  const sortAscendingNavItemElements = specificNavItemsToPick.includes(
+    TAB_PANE_NAV_ITEMS.SORT_ASCENDING
+  )
+    ? documentDOM.getElementsByClassName(`${prefix}-sort-ascending-btn`)
+    : undefined;
+
+  const sortDescendingNavItemElements = specificNavItemsToPick.includes(
+    TAB_PANE_NAV_ITEMS.SORT_ASCENDING
+  )
+    ? documentDOM.getElementsByClassName(`${prefix}-sort-descending-btn`)
+    : undefined;
+
   return {
     validateNavItemElements,
     prettyNavItemElements,
@@ -97,7 +123,9 @@ function getHtmlElements({
     foldNavItemElements,
     wrapNavItemElements,
     copyNavItemElements,
-    clearNavItemElements
+    clearNavItemElements,
+    sortAscendingNavItemElements,
+    sortDescendingNavItemElements
   };
 }
 
@@ -110,5 +138,7 @@ module.exports = {
   getHtmlFoldNavItem,
   getHtmlWrapNavItem,
   getHtmlCopyNavItem,
-  getHtmlClearNavItem
+  getHtmlClearNavItem,
+  getHtmlSortAscendingNavItem,
+  getHtmlSortDescendingNavItem
 };

@@ -28,7 +28,9 @@ describe('Testing tab pane navItem component', () => {
           foldNavItemElements: [{ id: 1 }],
           wrapNavItemElements: [{ id: 1 }],
           copyNavItemElements: [{ id: 1 }],
-          clearNavItemElements: [{ id: 1 }]
+          clearNavItemElements: [{ id: 1 }],
+          sortAscendingNavItemElements: [{ id: 1 }],
+          sortDescendingNavItemElements: [{ id: 1 }]
         });
       });
     });
@@ -47,7 +49,9 @@ describe('Testing tab pane navItem component', () => {
           foldNavItemElements: undefined,
           wrapNavItemElements: undefined,
           copyNavItemElements: undefined,
-          clearNavItemElements: undefined
+          clearNavItemElements: undefined,
+          sortAscendingNavItemElements: undefined,
+          sortDescendingNavItemElements: undefined
         });
       });
     });
@@ -106,6 +110,22 @@ describe('Testing tab pane navItem component', () => {
       const html = tabPaneNavItemComponent.getHtmlClearNavItem({ prefix, dataId });
       expect(html).toMatch(/class="nav-link py-0 some-prefix-clear-btn"/);
       expect(html).toMatch(/title="Erase"/);
+    });
+  });
+
+  describe('Testing getHtmlSortDescendingNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlSortDescendingNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-sort-descending-btn"/);
+      expect(html).toMatch(/title="Descending sort"/);
+    });
+  });
+
+  describe('Testing getHtmlSortAscendingNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlSortAscendingNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-sort-ascending-btn"/);
+      expect(html).toMatch(/title="Ascending sort"/);
     });
   });
 });
