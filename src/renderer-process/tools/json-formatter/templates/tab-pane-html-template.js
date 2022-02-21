@@ -18,6 +18,8 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
         ${tabPaneNavItemComponent.getHtmlPrettyNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlCompactNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlFoldNavItem({ prefix, dataId: id })}
+        ${tabPaneNavItemComponent.getHtmlSortAscendingNavItem({ prefix, dataId: id })}
+        ${tabPaneNavItemComponent.getHtmlSortDescendingNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlWrapNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlCopyNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlClearNavItem({ prefix, dataId: id })}

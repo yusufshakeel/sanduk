@@ -22,6 +22,7 @@ const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-c
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
+const fn = require('../../functions');
 const {
   IPC_EVENT_OPEN_FILE_DIALOG_JSON,
   IPC_EVENT_OPEN_FILE_DIALOG_JSON_FILE_PATH,
@@ -35,6 +36,7 @@ module.exports = function jsonFormatterTool() {
   const prefix = 'sanduk-json-formatter';
   const toolName = 'JSON Formatter';
   const totalTabs = 7;
+  const totalSpaces = 2;
   const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
   document.getElementById(SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID).innerHTML = ui({
     toolName,
@@ -58,6 +60,8 @@ module.exports = function jsonFormatterTool() {
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.FOLD,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.SORT_ASCENDING,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.SORT_DESCENDING,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.VALIDATE,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP
@@ -92,16 +96,6 @@ module.exports = function jsonFormatterTool() {
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
-  const isValidJSON = (json, element) => {
-    try {
-      JSON.parse(json);
-      return true;
-    } catch (e) {
-      popError(element, e.message);
-    }
-    return false;
-  };
-
   wrapBtnHandler.initWrapBtnHandler(
     getActiveTabId,
     tabPaneNavItemElements.wrapNavItemElements,
@@ -123,8 +117,10 @@ module.exports = function jsonFormatterTool() {
       const activeTabId = getActiveTabId();
       clearContent(footerMessageElement);
       const input = editors[activeTabId - 1].getValue();
-      if (input.length && isValidJSON(input, footerMessageElement)) {
-        popSuccess(footerMessageElement, 'Valid JSON');
+      if (input.length) {
+        fn.jsonParser(input).isValidJSON
+          ? popSuccess(footerMessageElement, 'Valid JSON')
+          : popError(footerMessageElement, 'Invalid JSON');
       }
     });
   }
@@ -136,7 +132,7 @@ module.exports = function jsonFormatterTool() {
         clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
-          const json = JSON.stringify(JSON.parse(input), null, 2);
+          const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
@@ -168,9 +164,49 @@ module.exports = function jsonFormatterTool() {
         clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
-          const json = JSON.stringify(JSON.parse(input), null, 2);
+          const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
           editors[activeTabId - 1].setValue(json, -1);
           editors[activeTabId - 1].getSession().foldAll(1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  for (const btn of tabPaneNavItemElements.sortAscendingNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(
+            fn.sortObject({ data: JSON.parse(input) }),
+            null,
+            totalSpaces
+          );
+          editors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  for (const btn of tabPaneNavItemElements.sortDescendingNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(
+            fn.sortObject({ data: JSON.parse(input), descendingSort: true }),
+            null,
+            totalSpaces
+          );
+          editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
         popError(footerMessageElement, e.message);
