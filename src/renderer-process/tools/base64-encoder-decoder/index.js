@@ -1,159 +1,195 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const base64 = require('base-64');
 const utf8 = require('utf8');
+const {
+  SANDUK_UI_WORK_AREA_BASE64_ENCODE_DECODE_TAB_PANE_ID
+} = require('../../constants/ui-contants');
+const tabsTemplate = require('./templates/tabs-template');
 const popError = require('../../helpers/pop-error');
-const popInfo = require('../../helpers/pop-info');
 const clearContent = require('../../helpers/clear-content');
-const tabHtmlTemplate = require('./templates/tab-html-template');
-const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
-const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
 const activeTabElement = require('../../helpers/active-tab-element');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const setupEditor = require('../../editor/setup-editor');
 const fontSize = require('../../editor/font-size');
+const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
+const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
+const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
+const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
+const editorComponent = require('../../ui-components/editor-component');
+const { mode: aceMode } = require('../../constants/ace-editor-constants');
+
+const ui = require('./ui');
 
 module.exports = function base64EncoderDecoder() {
-  document.getElementById('v-pills-base64-encoder-decoder').innerHTML = fs.readFileSync(
-    path.resolve(__dirname, 'ui.html'),
-    'utf8'
-  );
-
-  const increaseFontInputBtn = document.getElementById(
-    'increase-font-input-base64-encoder-decoder-btn'
-  );
-  const decreaseFontInputBtn = document.getElementById(
-    'decrease-font-input-base64-encoder-decoder-btn'
-  );
-  const resetFontInputBtn = document.getElementById('reset-font-input-base64-encoder-decoder-btn');
-  const base64EncodeDecodeMessage = document.getElementById('base64-encoder-decoder-message');
-
+  const prefix = 'sanduk-base64-encoder-decoder';
+  const prefixForEncoder = 'sanduk-base64-encoder-decoder-encoder';
+  const prefixForDecoder = 'sanduk-base64-encoder-decoder-decoder';
+  const toolName = 'Base64 Encoder Decoder';
   const totalTabs = 7;
-  document.getElementById('base64EncoderDecoderTab').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
-    .join('');
-  document.getElementById('base64EncoderDecoderTabContent').innerHTML = Array.from(
-    Array(totalTabs).keys()
-  )
-    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
-    .join('');
+  const tabsHtml = tabsTemplate({
+    prefix,
+    prefixForEncoder,
+    prefixForDecoder,
+    totalNumberOfTabs: totalTabs
+  });
+  document.getElementById(SANDUK_UI_WORK_AREA_BASE64_ENCODE_DECODE_TAB_PANE_ID).innerHTML = ui({
+    toolName,
+    prefix
+  });
+  document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
+  document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const inputFooters = [];
-  const outputFooters = [];
-  const inputEditors = [];
-  const inputElems = [];
-  const outputEditors = [];
-  const outputElems = [];
-  const encodeBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-plaintext-input-editor-encode-btn'
-  );
-  const decodeBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-encoded-output-editor-decode-btn'
-  );
-  const plainTextWrapBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-plaintext-input-editor-wrap-btn'
-  );
-  const encodedTextWrapBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-encoded-output-editor-wrap-btn'
-  );
-  const plainTextCopyBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-plaintext-input-editor-copy-btn'
-  );
-  const encodedTextCopyBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-encoded-output-editor-copy-btn'
-  );
-  const plainTextClearBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-plaintext-input-editor-clear-btn'
-  );
-  const encodedTextClearBtns = document.getElementsByClassName(
-    'base64-encoder-decoder-encoded-output-editor-clear-btn'
-  );
+  const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
+    fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
 
+  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
+
+  const tabPaneNavItemElementsForEncoder = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForEncoder,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.TRANSFORM
+    ]
+  });
+  const tabPaneNavItemElementsForDecoder = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForDecoder,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.TRANSFORM
+    ]
+  });
+
+  const encoderEditorLineColumnPositionFooterElements = [];
+  const encoderEditors = [];
+  const encoderEditorElements = [];
+
+  const decoderEditorLineColumnPositionFooterElements = [];
+  const decoderEditors = [];
+  const decoderEditorElements = [];
+
+  // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
-    inputFooters.push(
-      document.getElementById(`base64-encoder-decoder-plaintext-input-editor-${id}-footer`)
+    encoderEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForEncoder, id })
     );
-    outputFooters.push(
-      document.getElementById(`base64-encoder-decoder-encoded-output-editor-${id}-footer`)
+    decoderEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForDecoder, id })
     );
 
-    let inputEditor = window.ace.edit(`base64-encoder-decoder-plaintext-input-editor-${id}`);
-    setupEditor({ editor: inputEditor, rowColumnPositionElement: inputFooters[id - 1] });
-    inputEditors.push(inputEditor);
+    const encoderEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForEncoder, id })
+    );
+    setupEditor({
+      editor: encoderEditor,
+      rowColumnPositionElement: encoderEditorLineColumnPositionFooterElements[id - 1],
+      mode: aceMode.text
+    });
+    encoderEditors.push(encoderEditor);
 
-    let outputEditor = window.ace.edit(`base64-encoder-decoder-encoded-output-editor-${id}`);
-    setupEditor({ editor: outputEditor, rowColumnPositionElement: outputFooters[id - 1] });
-    outputEditors.push(outputEditor);
+    const decoderEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForDecoder, id })
+    );
+    setupEditor({
+      editor: decoderEditor,
+      rowColumnPositionElement: decoderEditorLineColumnPositionFooterElements[id - 1],
+      mode: aceMode.text
+    });
+    decoderEditors.push(decoderEditor);
 
-    inputElems.push(document.getElementById(`base64-encoder-decoder-plaintext-input-editor-${id}`));
-    outputElems.push(document.getElementById(`base64-encoder-decoder-encoded-output-editor-${id}`));
+    encoderEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForEncoder, id }));
+    decoderEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForDecoder, id }));
   }
 
   const getActiveTabId = () =>
-    activeTabElement.getActiveTabIdByClassName('sanduk-base64-encoder-decoder-tab active', 'tabid');
+    activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, plainTextWrapBtns, inputEditors);
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, encodedTextWrapBtns, outputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, plainTextCopyBtns, inputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, encodedTextCopyBtns, outputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, plainTextClearBtns, inputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, encodedTextClearBtns, outputEditors);
+  // Encoder - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForEncoder.wrapNavItemElements,
+    encoderEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForEncoder.copyNavItemElements,
+    encoderEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForEncoder.clearNavItemElements,
+    encoderEditors
+  );
 
-  for (const btn of encodeBtns) {
+  // Decoder - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDecoder.wrapNavItemElements,
+    decoderEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDecoder.copyNavItemElements,
+    decoderEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDecoder.clearNavItemElements,
+    decoderEditors
+  );
+
+  // Encode buttons
+  for (const btn of tabPaneNavItemElementsForEncoder.transformNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(base64EncodeDecodeMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
+        clearContent(footerMessageElement);
+        const input = encoderEditors[activeTabId - 1].getValue();
         if (input.length) {
-          inProgressTextAnimate(encodeBtns[activeTabId - 1], 'Encode', 'Encoding!', 200);
-          outputEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
-        } else {
-          popInfo(base64EncodeDecodeMessage, 'Nothing to encode', 1000);
+          decoderEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
         }
       } catch (e) {
-        popError(base64EncodeDecodeMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of decodeBtns) {
+  // Decoder buttons
+  for (const btn of tabPaneNavItemElementsForDecoder.transformNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(base64EncodeDecodeMessage);
-        const input = outputEditors[activeTabId - 1].getValue();
+        clearContent(footerMessageElement);
+        const input = decoderEditors[activeTabId - 1].getValue();
         if (input.length) {
-          inProgressTextAnimate(decodeBtns[activeTabId - 1], 'Decode', 'Decoding!', 200);
-          inputEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
-        } else {
-          popInfo(base64EncodeDecodeMessage, 'Nothing to decode', 1000);
+          encoderEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
         }
       } catch (e) {
-        popError(base64EncodeDecodeMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  increaseFontInputBtn.addEventListener('click', () => {
+  // font size adjustments
+  increaseFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
-    fontSize.increaseFontSize(outputElems[activeTabId - 1]);
+    fontSize.increaseFontSize(encoderEditorElements[activeTabId - 1]);
+    fontSize.increaseFontSize(decoderEditorElements[activeTabId - 1]);
   });
-
-  decreaseFontInputBtn.addEventListener('click', () => {
+  decreaseFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
-    fontSize.decreaseFontSize(outputElems[activeTabId - 1]);
+    fontSize.decreaseFontSize(encoderEditorElements[activeTabId - 1]);
+    fontSize.decreaseFontSize(decoderEditorElements[activeTabId - 1]);
   });
-
-  resetFontInputBtn.addEventListener('click', () => {
+  resetFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(inputElems[activeTabId - 1]);
-    fontSize.resetFontSize(outputElems[activeTabId - 1]);
+    fontSize.resetFontSize(encoderEditorElements[activeTabId - 1]);
+    fontSize.resetFontSize(decoderEditorElements[activeTabId - 1]);
   });
 };

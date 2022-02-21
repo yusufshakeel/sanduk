@@ -1,61 +1,86 @@
 'use strict';
 
-const {
-  ACE_EDITOR_DEFAULT_FONT_SIZE_IN_PIXELS
-} = require('../../../constants/ace-editor-constants');
+const tabPaneNavItemComponent = require('../../../ui-components/tab-pane-nav-item-component');
+const tabPaneFilenameComponent = require('../../../ui-components/tab-pane-filename-component');
+const editorComponent = require('../../../ui-components/editor-component');
+const EditorFooterBuilder = require('../../../ui-components/builders/editor-footer-builder');
 
-module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
+module.exports = function tabPaneHtmlTemplate({
+  prefix,
+  prefixForEncoder,
+  prefixForDecoder,
+  id,
+  addActiveClass = false
+}) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
-  const defaultFontSize = `${ACE_EDITOR_DEFAULT_FONT_SIZE_IN_PIXELS}px`;
+  const editorHeight = 'calc(100vh - 250px)';
+  const encoderEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForEncoder, id })
+    .withRowColumnPosition()
+    .build();
+  const decoderEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForDecoder, id })
+    .withRowColumnPosition()
+    .build();
+  const encoderFilenameOption = {
+    prefix: prefixForEncoder,
+    dataId: id,
+    filename: 'Plain Text'
+  };
+  const encoderBtnGenericOption = {
+    prefix: prefixForEncoder,
+    dataId: id
+  };
+  const encoderEncodeBtnOption = {
+    prefix: prefixForEncoder,
+    dataId: id,
+    title: 'Encode'
+  };
+  const decoderFilenameOption = {
+    prefix: prefixForDecoder,
+    dataId: id,
+    filename: 'Encoded Text'
+  };
+  const decoderBtnGenericOption = {
+    prefix: prefixForDecoder,
+    dataId: id
+  };
+  const decoderDecodeBtnOption = {
+    prefix: prefixForDecoder,
+    dataId: id,
+    title: 'Decode'
+  };
 
-  return `<div class="tab-pane ${showActiveClassName}" id="base64-encoder-decoder-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
+  return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-lg-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
-            <span class="pe-3">Plain text</span>
+            ${tabPaneFilenameComponent.getHtml(encoderFilenameOption)}
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-encode-btn" data-id="${id}" href="#">Encode</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-plaintext-input-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 pe-0 base64-encoder-decoder-plaintext-input-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
-              </li>
+              ${tabPaneNavItemComponent.getHtmlTransformNavItem(encoderEncodeBtnOption)}
+              ${tabPaneNavItemComponent.getHtmlWrapNavItem(encoderBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCopyNavItem(encoderBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlClearNavItem(encoderBtnGenericOption)}
             </ul>
           </div>
         </nav>
-        <pre class="form-control" id="base64-encoder-decoder-plaintext-input-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-plaintext-input-editor-${id}-footer">1:1</span></div>
+        ${editorComponent.getHtml({ prefix: prefixForEncoder, id, height: editorHeight })}
+        ${encoderEditorFooterHtml}
       </div>
       <div class="col-md-12 col-lg-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
-            <span class="pe-3">Encoded text</span>
+            ${tabPaneFilenameComponent.getHtml(decoderFilenameOption)}
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-decode-btn" data-id="${id}" href="#">Decode</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 base64-encoder-decoder-encoded-output-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 pe-0 base64-encoder-decoder-encoded-output-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
-              </li>
+              ${tabPaneNavItemComponent.getHtmlTransformNavItem(decoderDecodeBtnOption)}
+              ${tabPaneNavItemComponent.getHtmlWrapNavItem(decoderBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCopyNavItem(decoderBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlClearNavItem(decoderBtnGenericOption)}
             </ul>
           </div>
         </nav>
-        <pre class="form-control" id="base64-encoder-decoder-encoded-output-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="base64-encoder-decoder-encoded-output-editor-${id}-footer">1:1</span></div>
+        ${editorComponent.getHtml({ prefix: prefixForDecoder, id, height: editorHeight })}
+        ${decoderEditorFooterHtml}
       </div>
     </div>
   </div>
