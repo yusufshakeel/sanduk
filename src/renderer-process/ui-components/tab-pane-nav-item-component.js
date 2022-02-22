@@ -35,70 +35,70 @@ const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
 function getHtmlValidateNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).VALIDATE.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Validate" class="bi-check2-square"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Validate" class="bi-check2-square"></i></a>
 </li>`;
 }
 
 function getHtmlPrettyNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).PRETTY.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Pretty" class="bi-emoji-smile"></i></a>
 </li>`;
 }
 
 function getHtmlCompactNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).COMPACT.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Compact" class="bi-justify-left"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Compact" class="bi-justify-left"></i></a>
 </li>`;
 }
 
 function getHtmlFoldNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).FOLD.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Fold" class="bi-arrows-collapse"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Fold" class="bi-arrows-collapse"></i></a>
 </li>`;
 }
 
 function getHtmlWrapNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).WRAP.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
 </li>`;
 }
 
 function getHtmlCopyNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).COPY.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Copy" class="bi-clipboard"></i></a>
 </li>`;
 }
 
 function getHtmlClearNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).CLEAR.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Erase" class="bi-eraser"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Erase" class="bi-eraser"></i></a>
 </li>`;
 }
 
 function getHtmlSortAscendingNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).SORT_ASCENDING.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Ascending sort" class="bi-sort-alpha-down"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Ascending sort" class="bi-sort-alpha-down"></i></a>
 </li>`;
 }
 
 function getHtmlSortDescendingNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).SORT_DESCENDING.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="Descending sort" class="bi-sort-alpha-down-alt"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Descending sort" class="bi-sort-alpha-down-alt"></i></a>
 </li>`;
 }
 
 function getHtmlTransformNavItem({ prefix, dataId, title = 'Transform' }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).TRANSFORM.className;
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}" href="#"><i title="${title}" class="bi-wrench-adjustable"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="${title}" class="bi-wrench-adjustable"></i></a>
 </li>`;
 }
 
