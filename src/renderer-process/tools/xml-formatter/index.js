@@ -15,7 +15,7 @@ const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fontSize = require('../../editor/font-size');
 const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-contants');
-const ui = require('../json-formatter/ui');
+const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
@@ -187,9 +187,8 @@ module.exports = function xmlFormatterTool() {
     } catch (e) {
       popError(footerMessageElement, e.message);
     } finally {
-      const filename = path.basename(filePath).substring(0, 20);
-      fileNameElements[activeTabId - 1].innerText = filename;
-      filePaths[activeTabId - 1] = filename;
+      fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
+      filePaths[activeTabId - 1] = filePath;
     }
   };
 
@@ -220,8 +219,8 @@ module.exports = function xmlFormatterTool() {
       }
       filePaths[activeTabId - 1] = openedFilePath;
       fileNameElements[activeTabId - 1].innerText = path.basename(openedFilePath).substring(0, 20);
-      const json = fs.readFileSync(args.filePath).toString();
-      editors[activeTabId - 1].getSession().setValue(json, -1);
+      const xml = fs.readFileSync(args.filePath).toString();
+      editors[activeTabId - 1].getSession().setValue(xml, -1);
     } catch (e) {
       popError(footerMessageElement, e.message);
     }

@@ -261,9 +261,8 @@ module.exports = function jsonFormatterTool() {
     } catch (e) {
       popError(footerMessageElement, e.message);
     } finally {
-      const filename = path.basename(filePath).substring(0, 20);
-      fileNameElements[activeTabId - 1].innerText = filename;
-      filePaths[activeTabId - 1] = filename;
+      fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
+      filePaths[activeTabId - 1] = filePath;
     }
   };
 
