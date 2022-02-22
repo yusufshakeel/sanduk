@@ -1,70 +1,91 @@
 'use strict';
 
-const {
-  ACE_EDITOR_DEFAULT_FONT_SIZE_IN_PIXELS
-} = require('../../../constants/ace-editor-constants');
+const tabPaneNavItemComponent = require('../../../ui-components/tab-pane-nav-item-component');
+const tabPaneFilenameComponent = require('../../../ui-components/tab-pane-filename-component');
+const editorComponent = require('../../../ui-components/editor-component');
+const EditorFooterBuilder = require('../../../ui-components/builders/editor-footer-builder');
 
-module.exports = function tabPaneHtmlTemplate(id, addActiveClass = false) {
+module.exports = function tabPaneHtmlTemplate({
+  prefix,
+  prefixForXmlEditor,
+  prefixForJsonEditor,
+  id,
+  addActiveClass = false
+}) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
-  const defaultFontSize = `${ACE_EDITOR_DEFAULT_FONT_SIZE_IN_PIXELS}px`;
+  const editorHeight = 'calc(100vh - 250px)';
+  const xmlEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForXmlEditor, id })
+    .withRowColumnPosition()
+    .build();
+  const jsonEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForJsonEditor, id })
+    .withRowColumnPosition()
+    .build();
+  const xmlFilenameOption = {
+    prefix: prefixForXmlEditor,
+    dataId: id,
+    filename: 'XML'
+  };
+  const xmlBtnGenericOption = {
+    prefix: prefixForXmlEditor,
+    dataId: id
+  };
+  const xmlToJsonBtnOption = {
+    prefix: prefixForXmlEditor,
+    dataId: id,
+    title: 'Transform to JSON'
+  };
+  const jsonFilenameOption = {
+    prefix: prefixForJsonEditor,
+    dataId: id,
+    filename: 'JSON'
+  };
+  const jsonBtnGenericOption = {
+    prefix: prefixForJsonEditor,
+    dataId: id
+  };
+  const jsonToXmlBtnOption = {
+    prefix: prefixForJsonEditor,
+    dataId: id,
+    title: 'Transform to XML'
+  };
 
-  return `<div class="tab-pane ${showActiveClassName}" id="xml-to-json-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
+  return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-lg-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
-            <span class="pe-3">XML</span>
+            ${tabPaneFilenameComponent.getHtml(xmlFilenameOption)}
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-transform-btn" data-id="${id}" href="#"><i title="Transform" class="bi-wrench-adjustable"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-pretty-btn" data-id="${id}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-compact-btn" data-id="${id}" href="#"><i title="Compact" class="bi-justify-left"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-xml-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 pe-0 xml-to-json-xml-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
-              </li>
+              ${tabPaneNavItemComponent.getHtmlTransformNavItem(xmlToJsonBtnOption)}
+              ${tabPaneNavItemComponent.getHtmlPrettyNavItem(xmlBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCompactNavItem(xmlBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlWrapNavItem(xmlBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCopyNavItem(xmlBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlClearNavItem(xmlBtnGenericOption)}
             </ul>
           </div>
         </nav>
-        <pre class="form-control" id="xml-to-json-input-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="xml-to-json-input-editor-${id}-footer">1:1</span></div>
+        ${editorComponent.getHtml({ prefix: prefixForXmlEditor, id, height: editorHeight })}
+        ${xmlEditorFooterHtml}
       </div>
       <div class="col-md-12 col-lg-6 px-0">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="container-fluid">
-            <span class="pe-3">JSON</span>
+            ${tabPaneFilenameComponent.getHtml(jsonFilenameOption)}
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-pretty-btn" data-id="${id}" href="#"><i title="Pretty" class="bi-emoji-smile"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-fold-btn" data-id="${id}" href="#"><i title="Fold" class="bi-arrows-collapse"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-wrap-btn" data-id="${id}" href="#" data-wrap="no"><i title="Wrap" class="bi-body-text"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 xml-to-json-json-editor-copy-btn" data-id="${id}" href="#"><i title="Copy" class="bi-clipboard"></i></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link py-0 pe-0 xml-to-json-json-editor-clear-btn" data-id="${id}" href="#"><i title="Erase" class="bi-eraser"></i></a>
-              </li>
+              ${tabPaneNavItemComponent.getHtmlTransformNavItem(jsonToXmlBtnOption)}
+              ${tabPaneNavItemComponent.getHtmlPrettyNavItem(jsonBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCompactNavItem(jsonBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlFoldNavItem(jsonBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlWrapNavItem(jsonBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlCopyNavItem(jsonBtnGenericOption)}
+              ${tabPaneNavItemComponent.getHtmlClearNavItem(jsonBtnGenericOption)}
             </ul>
           </div>
         </nav>
-        <pre class="form-control" id="xml-to-json-output-editor-${id}" style="height: calc(100vh - 250px); font-size: ${defaultFontSize}; margin-bottom: 0"></pre>
-        <div class="bg-light p-1 font-monospace"><span id="xml-to-json-output-editor-${id}-footer">1:1</span></div>
+        ${editorComponent.getHtml({ prefix: prefixForJsonEditor, id, height: editorHeight })}
+        ${jsonEditorFooterHtml}
       </div>
     </div>
   </div>
