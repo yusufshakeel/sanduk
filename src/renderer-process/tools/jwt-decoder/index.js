@@ -1,52 +1,233 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const jwtDecode = require('jwt-decode');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
 const setupEditor = require('../../editor/setup-editor');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
+const ui = require('./ui');
+const tabsTemplate = require('./templates/tabs-template');
+const { SANDUK_UI_WORK_AREA_JWT_DECODER_TAB_PANE_ID } = require('../../constants/ui-contants');
+const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
+const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
+const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
+const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
+const editorComponent = require('../../ui-components/editor-component');
+const activeTabElement = require('../../helpers/active-tab-element');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
+const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
+const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
+const fontSize = require('../../editor/font-size');
 
 module.exports = function jwtDecoder() {
-  document.getElementById('v-pills-jwt-decoder').innerHTML = fs.readFileSync(
-    path.resolve(__dirname, 'ui.html'),
-    'utf8'
-  );
+  const prefix = 'sanduk-jwt-decoder';
+  const prefixForInput = 'sanduk-jwt-decoder-input';
+  const prefixForOutput = 'sanduk-jwt-decoder-output';
+  const toolName = 'JSON Web Token';
+  const totalTabs = 7;
+  const totalSpaces = 2;
+  const tabsHtml = tabsTemplate({
+    prefix,
+    prefixForInput,
+    prefixForOutput,
+    totalNumberOfTabs: totalTabs
+  });
+  document.getElementById(SANDUK_UI_WORK_AREA_JWT_DECODER_TAB_PANE_ID).innerHTML = ui({
+    toolName,
+    prefix
+  });
+  document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
+  document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const jwtInputMessage = document.getElementById('jwt-decoder-input-message');
-  const decodeJWTBtn = document.getElementById('jwt-decoder-decode-btn');
-  const clearJWTBtn = document.getElementById('jwt-deocder-clear-btn');
+  const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
+    fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
 
-  let jwtInputEditor = window.ace.edit('jwt-decoder-input');
-  setupEditor({ editor: jwtInputEditor, useWrapMode: true });
+  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
-  let decodedHeaderEditor = window.ace.edit('jwt-decoder-decoded-header');
-  setupEditor({ editor: decodedHeaderEditor, mode: aceMode.json });
-
-  let decodedPayloadEditor = window.ace.edit('jwt-decoder-decoded-payload');
-  setupEditor({ editor: decodedPayloadEditor, mode: aceMode.json });
-
-  decodeJWTBtn.addEventListener('click', () => {
-    try {
-      clearContent(jwtInputMessage);
-      const input = jwtInputEditor.getValue().trim();
-      if (!input.length) {
-        return;
-      }
-      const decodedHeader = jwtDecode(input, { header: true });
-      const decodedJWT = jwtDecode(input);
-      decodedHeaderEditor.setValue(JSON.stringify(decodedHeader, null, 2), -1);
-      decodedPayloadEditor.setValue(JSON.stringify(decodedJWT, null, 2), -1);
-    } catch (e) {
-      popError(jwtInputMessage, e.message);
-    }
+  const tabPaneNavItemElementsForInputEditor = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForInput,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.TRANSFORM
+    ]
+  });
+  const tabPaneNavItemElementsForOutputEditor = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForOutput,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.FOLD,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP
+    ]
   });
 
-  clearJWTBtn.addEventListener('click', () => {
-    clearContent(jwtInputMessage);
-    jwtInputEditor.setValue('');
-    decodedHeaderEditor.setValue('');
-    decodedPayloadEditor.setValue('');
+  const inputEditorLineColumnPositionFooterElements = [];
+  const inputEditors = [];
+  const inputEditorElements = [];
+
+  const outputEditorLineColumnPositionFooterElements = [];
+  const outputEditors = [];
+  const outputEditorElements = [];
+
+  // Initialising the editors
+  for (let id = 1; id <= totalTabs; id++) {
+    inputEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForInput, id })
+    );
+    outputEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForOutput, id })
+    );
+
+    const inputEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForInput, id })
+    );
+    setupEditor({
+      editor: inputEditor,
+      rowColumnPositionElement: inputEditorLineColumnPositionFooterElements[id - 1],
+      mode: aceMode.text
+    });
+    inputEditors.push(inputEditor);
+
+    const outputEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForOutput, id })
+    );
+    setupEditor({
+      editor: outputEditor,
+      rowColumnPositionElement: outputEditorLineColumnPositionFooterElements[id - 1],
+      mode: aceMode.json
+    });
+    outputEditors.push(outputEditor);
+
+    inputEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForInput, id }));
+    outputEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForOutput, id }));
+  }
+
+  const getActiveTabId = () =>
+    activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Input - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForInputEditor.wrapNavItemElements,
+    inputEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForInputEditor.copyNavItemElements,
+    inputEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForInputEditor.clearNavItemElements,
+    inputEditors
+  );
+
+  // Output - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForOutputEditor.wrapNavItemElements,
+    outputEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForOutputEditor.copyNavItemElements,
+    outputEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForOutputEditor.clearNavItemElements,
+    outputEditors
+  );
+
+  // Decoder buttons
+  for (const btn of tabPaneNavItemElementsForInputEditor.transformNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = inputEditors[activeTabId - 1].getValue().trim();
+        if (input.length) {
+          const decodedHeader = jwtDecode(input, { header: true });
+          const decodedJWT = jwtDecode(input);
+          const result = { header: decodedHeader, payload: decodedJWT };
+          outputEditors[activeTabId - 1].setValue(JSON.stringify(result, null, totalSpaces), -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, 'Invalid JWT');
+      }
+    });
+  }
+
+  // Pretty JSON output
+  for (const btn of tabPaneNavItemElementsForOutputEditor.prettyNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = outputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
+          outputEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  // Compact JSON output
+  for (const btn of tabPaneNavItemElementsForOutputEditor.compactNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = outputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input));
+          outputEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  // Fold JSON output
+  for (const btn of tabPaneNavItemElementsForOutputEditor.foldNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = outputEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
+          outputEditors[activeTabId - 1].setValue(json, -1);
+          outputEditors[activeTabId - 1].getSession().foldAll(1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  // font size adjustments
+  increaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.increaseFontSize(inputEditorElements[activeTabId - 1]);
+    fontSize.increaseFontSize(outputEditorElements[activeTabId - 1]);
+  });
+  decreaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.decreaseFontSize(inputEditorElements[activeTabId - 1]);
+    fontSize.decreaseFontSize(outputEditorElements[activeTabId - 1]);
+  });
+  resetFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.resetFontSize(inputEditorElements[activeTabId - 1]);
+    fontSize.resetFontSize(outputEditorElements[activeTabId - 1]);
   });
 };
