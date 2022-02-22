@@ -1,5 +1,6 @@
 'use strict';
 
+const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const xmlFormatter = require('xml-formatter');
@@ -8,113 +9,220 @@ const clearContent = require('../../helpers/clear-content');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const activeTabElement = require('../../helpers/active-tab-element');
 const setupEditor = require('../../editor/setup-editor');
-const tabHtmlTemplate = require('./templates/tab-html-template');
-const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
+const tabsTemplate = require('./templates/tabs-template');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fontSize = require('../../editor/font-size');
+const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-contants');
+const ui = require('./ui');
+const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
+const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
+const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
+const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
+const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
+const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
+const editorComponent = require('../../ui-components/editor-component');
+const {
+  IPC_EVENT_OPEN_FILE_DIALOG_XML,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH,
+  IPC_EVENT_OPEN_FILE_DIALOG_XML_FILE_PATH
+} = require('../../../main-process/constants/ipc-event-constants');
 
 const xmlFormatterOption = {
   indentation: '  '
 };
 
 module.exports = function xmlFormatterTool() {
-  document.getElementById('v-pills-xml-formatter').innerHTML = fs.readFileSync(
-    path.resolve(__dirname, 'ui.html'),
-    'utf8'
-  );
-
-  const increaseFontInputBtn = document.getElementById('increase-font-input-xml-formatter-btn');
-  const decreaseFontInputBtn = document.getElementById('decrease-font-input-xml-formatter-btn');
-  const resetFontInputBtn = document.getElementById('reset-font-input-xml-formatter-btn');
-  const xmlInputMessage = document.getElementById('xml-formatter-input-message');
-
+  const prefix = 'sanduk-xml-formatter';
+  const toolName = 'XML Formatter';
   const totalTabs = 7;
-  document.getElementById('xmlFormatterTab').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
-    .join('');
-  document.getElementById('xmlFormatterTabContent').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
-    .join('');
+  const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
+  document.getElementById(SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID).innerHTML = ui({
+    toolName,
+    prefix
+  });
+  document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
+  document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const inputFooters = [];
-  const inputEditors = [];
-  const inputElems = [];
-  const prettyInputBtns = document.getElementsByClassName('xml-formatter-format-input-btn');
-  const compactInputBtns = document.getElementsByClassName('xml-formatter-compact-input-btn');
-  const wrapInputBtns = document.getElementsByClassName('xml-formatter-toggle-wrap-input-btn');
-  const copyInputBtns = document.getElementsByClassName('xml-formatter-editor-copy-btn');
-  const clearInputBtns = document.getElementsByClassName('xml-formatter-editor-clear-btn');
+  const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
+    fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
 
+  const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
+    fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
+
+  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
+
+  const tabPaneNavItemElements = tabPaneNavItemComponent.getHtmlElements({
+    prefix,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP
+    ]
+  });
+
+  const editorLineColumnPositionFooterElements = [];
+  const editors = [];
+  const editorElements = [];
+
+  const fileNameElements = [];
+  const filePaths = {};
+
+  // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
-    inputFooters.push(document.getElementById(`xml-formatter-input-editor-${id}-footer`));
+    editorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix, id })
+    );
+    fileNameElements.push(tabPaneFilenameComponent.getHtmlElement({ prefix, id }));
 
-    let inputEditor = window.ace.edit(`xml-formatter-input-editor-${id}`);
+    const editor = window.ace.edit(editorComponent.getHtmlElementId({ prefix, id }));
     setupEditor({
-      editor: inputEditor,
-      rowColumnPositionElement: inputFooters[id - 1],
+      editor: editor,
+      rowColumnPositionElement: editorLineColumnPositionFooterElements[id - 1],
       mode: aceMode.xml
     });
-    inputEditors.push(inputEditor);
+    editors.push(editor);
 
-    inputElems.push(document.getElementById(`xml-formatter-input-editor-${id}`));
+    editorElements.push(editorComponent.getHtmlElement({ prefix, id }));
   }
 
   const getActiveTabId = () =>
-    activeTabElement.getActiveTabIdByClassName('sanduk-xml-formatter-tab active', 'tabid');
+    activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyInputBtns, inputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.wrapNavItemElements,
+    editors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.copyNavItemElements,
+    editors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElements.clearNavItemElements,
+    editors
+  );
 
-  for (const btn of prettyInputBtns) {
+  increaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.increaseFontSize(editorElements[activeTabId - 1]);
+  });
+  decreaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.decreaseFontSize(editorElements[activeTabId - 1]);
+  });
+  resetFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.resetFontSize(editorElements[activeTabId - 1]);
+  });
+
+  for (const btn of tabPaneNavItemElements.prettyNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(xmlInputMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
-        if (!input.length) {
-          return;
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
+        if (input.length) {
+          editors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
         }
-        inputEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
       } catch (e) {
-        popError(xmlInputMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of compactInputBtns) {
+  for (const btn of tabPaneNavItemElements.compactNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(xmlInputMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
-        if (!input.length) {
-          return;
+        clearContent(footerMessageElement);
+        const input = editors[activeTabId - 1].getValue();
+        if (input.length) {
+          editors[activeTabId - 1].setValue(
+            xmlFormatter(input, { indentation: '', lineSeparator: '' }),
+            -1
+          );
         }
-        inputEditors[activeTabId - 1].setValue(
-          xmlFormatter(input, { indentation: '', lineSeparator: '' }),
-          -1
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  closeFileBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    if (filePaths[activeTabId - 1]?.length) {
+      filePaths[activeTabId - 1] = '';
+      editors[activeTabId - 1].setValue('');
+      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+    }
+  });
+
+  openFileBtnElement.addEventListener('click', () => {
+    ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_XML);
+  });
+
+  saveFileBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    const filepath = filePaths[activeTabId - 1];
+    if (filepath?.length) {
+      writeToFile(filepath);
+    } else {
+      ipcRenderer.send(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML);
+    }
+  });
+
+  const writeToFile = filePath => {
+    const activeTabId = getActiveTabId();
+    try {
+      fileNameElements[activeTabId - 1].innerText = 'Saving...';
+      const data = editors[activeTabId - 1].getValue();
+      fs.writeFileSync(filePath, data, 'utf8');
+    } catch (e) {
+      popError(footerMessageElement, e.message);
+    } finally {
+      fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
+      filePaths[activeTabId - 1] = filePath;
+    }
+  };
+
+  ipcRenderer.on(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
+    writeToFile(args.filePath);
+  });
+
+  ipcRenderer.on(IPC_EVENT_OPEN_FILE_DIALOG_XML_FILE_PATH, async (e, args) => {
+    try {
+      const activeTabId = getActiveTabId();
+      const openedFilePath = args.filePath;
+
+      const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
+      if (matchingFilepath) {
+        popError(
+          footerMessageElement,
+          `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`
         );
-      } catch (e) {
-        popError(xmlInputMessage, e.message);
+        return;
       }
-    });
-  }
-
-  increaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
-  });
-
-  decreaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
-  });
-
-  resetFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(inputElems[activeTabId - 1]);
+      if (editors[activeTabId - 1].getValue().length) {
+        popError(
+          footerMessageElement,
+          `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          7000
+        );
+        return;
+      }
+      filePaths[activeTabId - 1] = openedFilePath;
+      fileNameElements[activeTabId - 1].innerText = path.basename(openedFilePath).substring(0, 20);
+      const xml = fs.readFileSync(args.filePath).toString();
+      editors[activeTabId - 1].getSession().setValue(xml, -1);
+    } catch (e) {
+      popError(footerMessageElement, e.message);
+    }
   });
 };

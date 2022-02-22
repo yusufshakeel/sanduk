@@ -1,86 +1,117 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const xmlFormatter = require('xml-formatter');
 const xmljs = require('xml-js');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const popError = require('../../helpers/pop-error');
 const clearContent = require('../../helpers/clear-content');
 const activeTabElement = require('../../helpers/active-tab-element');
-const tabHtmlTemplate = require('./templates/tab-html-template');
-const tabPaneHtmlTemplate = require('./templates/tab-pane-html-template');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
+const tabsTemplate = require('./templates/tabs-template');
+const { SANDUK_UI_WORK_AREA_XML_TO_JSON_TAB_PANE_ID } = require('../../constants/ui-contants');
+const ui = require('./ui');
+const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
+const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
+const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
+const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
+const editorComponent = require('../../ui-components/editor-component');
 
 const xmlFormatterOption = {
   indentation: '  '
 };
 
 module.exports = function xmlToJson() {
-  document.getElementById('v-pills-xml-to-json').innerHTML = fs.readFileSync(
-    path.resolve(__dirname, 'ui.html'),
-    'utf8'
-  );
-
-  const increaseFontInputBtn = document.getElementById('increase-font-xml-to-json-btn');
-  const decreaseFontInputBtn = document.getElementById('decrease-font-xml-to-json-btn');
-  const resetFontInputBtn = document.getElementById('reset-font-xml-to-json-btn');
-  const xmlToJsonMessage = document.getElementById('xml-to-json-message');
-
+  const prefix = 'sanduk-xml-to-json';
+  const prefixForXmlEditor = 'sanduk-xml-to-json-xml';
+  const prefixForJsonEditor = 'sanduk-xml-to-json-json';
+  const toolName = 'XML to JSON';
   const totalTabs = 7;
-  document.getElementById('xmlToJsonTab').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabHtmlTemplate(id + 1, index === 0))
-    .join('');
-  document.getElementById('xmlToJsonTabContent').innerHTML = Array.from(Array(totalTabs).keys())
-    .map((id, index) => tabPaneHtmlTemplate(id + 1, index === 0))
-    .join('');
+  const totalSpaces = 2;
+  const tabsHtml = tabsTemplate({
+    prefix,
+    prefixForXmlEditor,
+    prefixForJsonEditor,
+    totalNumberOfTabs: totalTabs
+  });
+  document.getElementById(SANDUK_UI_WORK_AREA_XML_TO_JSON_TAB_PANE_ID).innerHTML = ui({
+    toolName,
+    prefix
+  });
+  document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
+  document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const inputFooters = [];
-  const outputFooters = [];
-  const inputEditors = [];
-  const inputElems = [];
-  const outputEditors = [];
-  const outputElems = [];
-  const transformInputBtns = document.getElementsByClassName(
-    'xml-to-json-xml-editor-transform-btn'
-  );
-  const prettyInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-pretty-btn');
-  const prettyOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-pretty-btn');
-  const compactInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-compact-btn');
-  const foldOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-fold-btn');
-  const wrapInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-wrap-btn');
-  const copyInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-copy-btn');
-  const clearInputBtns = document.getElementsByClassName('xml-to-json-xml-editor-clear-btn');
-  const wrapOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-wrap-btn');
-  const copyOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-copy-btn');
-  const clearOutputBtns = document.getElementsByClassName('xml-to-json-json-editor-clear-btn');
+  const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
+    fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
 
+  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
+
+  const tabPaneNavItemElementsForXmlEditor = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForXmlEditor,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.TRANSFORM
+    ]
+  });
+  const tabPaneNavItemElementsForJsonEditor = tabPaneNavItemComponent.getHtmlElements({
+    prefix: prefixForJsonEditor,
+    specificNavItemsToPick: [
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COPY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.WRAP,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.PRETTY,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.FOLD,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.COMPACT,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.TRANSFORM
+    ]
+  });
+
+  const xmlEditorLineColumnPositionFooterElements = [];
+  const xmlEditors = [];
+  const xmlEditorElements = [];
+
+  const jsonEditorLineColumnPositionFooterElements = [];
+  const jsonEditors = [];
+  const jsonEditorElements = [];
+
+  // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
-    inputFooters.push(document.getElementById(`xml-to-json-input-editor-${id}-footer`));
-    outputFooters.push(document.getElementById(`xml-to-json-output-editor-${id}-footer`));
+    xmlEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForXmlEditor, id })
+    );
+    jsonEditorLineColumnPositionFooterElements.push(
+      editorFooterLineColumnPositionComponent.getHtmlElement({ prefix: prefixForJsonEditor, id })
+    );
 
-    let inputEditor = window.ace.edit(`xml-to-json-input-editor-${id}`);
+    const xmlEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForXmlEditor, id })
+    );
     setupEditor({
-      editor: inputEditor,
-      rowColumnPositionElement: inputFooters[id - 1],
+      editor: xmlEditor,
+      rowColumnPositionElement: xmlEditorLineColumnPositionFooterElements[id - 1],
       mode: aceMode.xml
     });
-    inputEditors.push(inputEditor);
+    xmlEditors.push(xmlEditor);
 
-    let outputEditor = window.ace.edit(`xml-to-json-output-editor-${id}`);
+    const jsonEditor = window.ace.edit(
+      editorComponent.getHtmlElementId({ prefix: prefixForJsonEditor, id })
+    );
     setupEditor({
-      editor: outputEditor,
-      rowColumnPositionElement: outputFooters[id - 1],
+      editor: jsonEditor,
+      rowColumnPositionElement: jsonEditorLineColumnPositionFooterElements[id - 1],
       mode: aceMode.json
     });
-    outputEditors.push(outputEditor);
+    jsonEditors.push(jsonEditor);
 
-    inputElems.push(document.getElementById(`xml-to-json-input-editor-${id}`));
-    outputElems.push(document.getElementById(`xml-to-json-output-editor-${id}`));
+    xmlEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForXmlEditor, id }));
+    jsonEditorElements.push(editorComponent.getHtmlElement({ prefix: prefixForJsonEditor, id }));
   }
 
   const compactXml = input => {
@@ -88,104 +119,173 @@ module.exports = function xmlToJson() {
   };
 
   const getActiveTabId = () =>
-    activeTabElement.getActiveTabIdByClassName('sanduk-xml-to-json-tab active', 'tabid');
+    activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapInputBtns, inputEditors);
-  wrapBtnHandler.initWrapBtnHandler(getActiveTabId, wrapOutputBtns, outputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyInputBtns, inputEditors);
-  copyBtnHandler.initCopyBtnHandler(getActiveTabId, copyOutputBtns, outputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, clearInputBtns, inputEditors);
-  clearBtnHandler.initClearBtnHandler(getActiveTabId, clearOutputBtns, outputEditors);
+  // Xml - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForXmlEditor.wrapNavItemElements,
+    xmlEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForXmlEditor.copyNavItemElements,
+    xmlEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForXmlEditor.clearNavItemElements,
+    xmlEditors
+  );
 
-  for (const btn of transformInputBtns) {
+  // Json - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForJsonEditor.wrapNavItemElements,
+    jsonEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForJsonEditor.copyNavItemElements,
+    jsonEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForJsonEditor.clearNavItemElements,
+    jsonEditors
+  );
+
+  // font size adjustments
+  increaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.increaseFontSize(xmlEditorElements[activeTabId - 1]);
+    fontSize.increaseFontSize(jsonEditorElements[activeTabId - 1]);
+  });
+  decreaseFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.decreaseFontSize(xmlEditorElements[activeTabId - 1]);
+    fontSize.decreaseFontSize(jsonEditorElements[activeTabId - 1]);
+  });
+  resetFontSizeBtnElement.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
+    fontSize.resetFontSize(xmlEditorElements[activeTabId - 1]);
+    fontSize.resetFontSize(jsonEditorElements[activeTabId - 1]);
+  });
+
+  // Xml to json
+  for (const btn of tabPaneNavItemElementsForXmlEditor.transformNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        const xml = inputEditors[activeTabId - 1].getValue();
+        const xml = xmlEditors[activeTabId - 1].getValue();
         if (!xml.length) {
           return;
         }
         const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
-        const json = JSON.stringify(JSON.parse(result), null, 2);
-        outputEditors[activeTabId - 1].setValue(json, -1);
+        const json = JSON.stringify(JSON.parse(result), null, totalSpaces);
+        jsonEditors[activeTabId - 1].setValue(json, -1);
       } catch (e) {
-        popError(xmlToJsonMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of prettyInputBtns) {
+  // Xml pretty
+  for (const btn of tabPaneNavItemElementsForXmlEditor.prettyNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(xmlToJsonMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
-        if (!input.length) {
-          return;
-        }
-        inputEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
-      } catch (e) {
-        popError(xmlToJsonMessage, e.message);
-      }
-    });
-  }
-
-  for (const btn of compactInputBtns) {
-    btn.addEventListener('click', () => {
-      const activeTabId = getActiveTabId();
-      try {
-        clearContent(xmlToJsonMessage);
-        const input = inputEditors[activeTabId - 1].getValue();
-        if (!input.length) {
-          return;
-        }
-        inputEditors[activeTabId - 1].setValue(compactXml(input), -1);
-      } catch (e) {
-        popError(xmlToJsonMessage, e.message);
-      }
-    });
-  }
-
-  for (const btn of prettyOutputBtns) {
-    btn.addEventListener('click', () => {
-      const activeTabId = getActiveTabId();
-      try {
-        clearContent(xmlToJsonMessage);
-        const input = outputEditors[activeTabId - 1].getValue();
+        clearContent(footerMessageElement);
+        const input = xmlEditors[activeTabId - 1].getValue();
         if (input.length) {
-          const json = JSON.stringify(JSON.parse(input), null, 2);
-          outputEditors[activeTabId - 1].setValue(json, -1);
+          xmlEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
         }
       } catch (e) {
-        popError(xmlToJsonMessage, e.message);
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  for (const btn of foldOutputBtns) {
+  // Xml compact
+  for (const btn of tabPaneNavItemElementsForXmlEditor.compactNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
-      if (outputEditors[activeTabId - 1].getValue().length) {
-        outputEditors[activeTabId - 1].getSession().foldAll(1);
+      try {
+        clearContent(footerMessageElement);
+        const input = xmlEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          xmlEditors[activeTabId - 1].setValue(compactXml(input), -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
       }
     });
   }
 
-  increaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.increaseFontSize(inputElems[activeTabId - 1]);
-    fontSize.increaseFontSize(outputElems[activeTabId - 1]);
-  });
+  // Json pretty
+  for (const btn of tabPaneNavItemElementsForJsonEditor.prettyNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = jsonEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
+          jsonEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
 
-  decreaseFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.decreaseFontSize(inputElems[activeTabId - 1]);
-    fontSize.decreaseFontSize(outputElems[activeTabId - 1]);
-  });
+  // Json fold
+  for (const btn of tabPaneNavItemElementsForJsonEditor.foldNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      const input = jsonEditors[activeTabId - 1].getValue();
+      if (input.length) {
+        const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
+        jsonEditors[activeTabId - 1].setValue(json, -1);
+        jsonEditors[activeTabId - 1].getSession().foldAll(1);
+      }
+    });
+  }
 
-  resetFontInputBtn.addEventListener('click', () => {
-    const activeTabId = getActiveTabId();
-    fontSize.resetFontSize(inputElems[activeTabId - 1]);
-    fontSize.resetFontSize(outputElems[activeTabId - 1]);
-  });
+  // Json compact
+  for (const btn of tabPaneNavItemElementsForJsonEditor.compactNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        clearContent(footerMessageElement);
+        const input = jsonEditors[activeTabId - 1].getValue();
+        if (input.length) {
+          const json = JSON.stringify(JSON.parse(input));
+          jsonEditors[activeTabId - 1].setValue(json, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
+
+  // Json to Xml
+  for (const btn of tabPaneNavItemElementsForJsonEditor.transformNavItemElements) {
+    btn.addEventListener('click', () => {
+      const activeTabId = getActiveTabId();
+      try {
+        const json = jsonEditors[activeTabId - 1].getValue();
+        if (json.length) {
+          const xml = xmljs.json2xml(json, {
+            compact: true,
+            ignoreComment: true,
+            spaces: totalSpaces
+          });
+          xmlEditors[activeTabId - 1].setValue(xml, -1);
+        }
+      } catch (e) {
+        popError(footerMessageElement, e.message);
+      }
+    });
+  }
 };
