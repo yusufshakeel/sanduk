@@ -22,7 +22,7 @@ module.exports = function tabPaneHtmlTemplate({
     .build();
   const encoderFilenameOption = {
     prefix: prefixForEncoder,
-    dataId: id,
+    id,
     filename: 'Plain Text'
   };
   const encoderBtnGenericOption = {
@@ -36,7 +36,7 @@ module.exports = function tabPaneHtmlTemplate({
   };
   const decoderFilenameOption = {
     prefix: prefixForDecoder,
-    dataId: id,
+    id,
     filename: 'Encoded Text'
   };
   const decoderBtnGenericOption = {

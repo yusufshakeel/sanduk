@@ -31,7 +31,8 @@ describe('Testing tab pane navItem component', () => {
           clearNavItemElements: [{ id: 1 }],
           sortAscendingNavItemElements: [{ id: 1 }],
           sortDescendingNavItemElements: [{ id: 1 }],
-          transformNavItemElements: [{ id: 1 }]
+          transformNavItemElements: [{ id: 1 }],
+          closeNavItemElements: [{ id: 1 }]
         });
       });
     });
@@ -141,6 +142,14 @@ describe('Testing tab pane navItem component', () => {
         expect(html).toMatch(/class="nav-link py-0 some-prefix-transform-btn"/);
         expect(html).toMatch(/title="Custom title"/);
       });
+    });
+  });
+
+  describe('Testing getHtmlCloseNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlCloseNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-close-btn"/);
+      expect(html).toMatch(/title="Close"/);
     });
   });
 });

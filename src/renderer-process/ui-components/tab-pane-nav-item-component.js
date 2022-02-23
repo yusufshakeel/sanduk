@@ -2,6 +2,7 @@
 
 const TAB_PANE_NAV_ITEMS = {
   CLEAR: 'CLEAR',
+  CLOSE: 'CLOSE',
   COMPACT: 'COMPACT',
   COPY: 'COPY',
   FOLD: 'FOLD',
@@ -15,6 +16,7 @@ const TAB_PANE_NAV_ITEMS = {
 
 const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
   CLEAR: { key: 'clearNavItemElements', className: `${prefix}-clear-btn` },
+  CLOSE: { key: 'closeNavItemElements', className: `${prefix}-close-btn` },
   COMPACT: { key: 'compactNavItemElements', className: `${prefix}-compact-btn` },
   COPY: { key: 'copyNavItemElements', className: `${prefix}-copy-btn` },
   FOLD: { key: 'foldNavItemElements', className: `${prefix}-fold-btn` },
@@ -102,6 +104,13 @@ function getHtmlTransformNavItem({ prefix, dataId, title = 'Transform' }) {
 </li>`;
 }
 
+function getHtmlCloseNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).CLOSE.className;
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Close" class="bi-x-lg"></i></a>
+</li>`;
+}
+
 /**
  * @param prefix {string}
  * @param specificNavItemsToPick {string[]}
@@ -130,5 +139,6 @@ module.exports = {
   getHtmlClearNavItem,
   getHtmlSortAscendingNavItem,
   getHtmlSortDescendingNavItem,
-  getHtmlTransformNavItem
+  getHtmlTransformNavItem,
+  getHtmlCloseNavItem
 };
