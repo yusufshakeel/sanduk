@@ -144,4 +144,12 @@ describe('Testing tab pane navItem component', () => {
       });
     });
   });
+
+  describe('Testing getHtmlCloseNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlCloseNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-close-btn"/);
+      expect(html).toMatch(/title="Close"/);
+    });
+  });
 });
