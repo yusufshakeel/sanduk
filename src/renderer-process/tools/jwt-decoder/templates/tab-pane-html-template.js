@@ -22,7 +22,7 @@ module.exports = function tabPaneHtmlTemplate({
     .build();
   const inputFilenameOption = {
     prefix: prefixForInput,
-    dataId: id,
+    id,
     filename: 'JWT'
   };
   const inputBtnGenericOption = {
@@ -36,7 +36,7 @@ module.exports = function tabPaneHtmlTemplate({
   };
   const outputFilenameOption = {
     prefix: prefixForOutput,
-    dataId: id,
+    id,
     filename: 'Decoded'
   };
   const outputBtnGenericOption = {

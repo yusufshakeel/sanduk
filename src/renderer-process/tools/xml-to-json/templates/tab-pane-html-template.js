@@ -22,7 +22,7 @@ module.exports = function tabPaneHtmlTemplate({
     .build();
   const xmlFilenameOption = {
     prefix: prefixForXmlEditor,
-    dataId: id,
+    id,
     filename: 'XML'
   };
   const xmlBtnGenericOption = {
@@ -36,7 +36,7 @@ module.exports = function tabPaneHtmlTemplate({
   };
   const jsonFilenameOption = {
     prefix: prefixForJsonEditor,
-    dataId: id,
+    id,
     filename: 'JSON'
   };
   const jsonBtnGenericOption = {
