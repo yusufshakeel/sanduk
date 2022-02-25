@@ -5,6 +5,7 @@ module.exports = {
   SANDUK_UI_WORK_AREA_ID: 'v-pills-tabContent',
   SANDUK_UI_WORK_AREA_WELCOME_TAB_PANE_ID: 'v-pills-welcome',
   SANDUK_UI_WORK_AREA_BASE64_ENCODE_DECODE_TAB_PANE_ID: 'v-pills-base64-encoder-decoder',
+  SANDUK_UI_WORK_AREA_CSV_TO_JSON_TAB_PANE_ID: 'v-pills-csv-to-json',
   SANDUK_UI_WORK_AREA_EPOCH_TAB_PANE_ID: 'v-pills-epoch',
   SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID: 'v-pills-json-formatter',
   SANDUK_UI_WORK_AREA_JWT_DECODER_TAB_PANE_ID: 'v-pills-jwt-decoder',
