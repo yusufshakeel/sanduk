@@ -19,7 +19,6 @@ body {
 
 i[class*="bi-"] {
     font-size: 20px;
-    color: #333;
 }
 
 .sanduk-dropdown-toggle-without-arrow::after {
