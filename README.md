@@ -1,13 +1,13 @@
 # sanduk
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yusufshakeel/sanduk)
-[![npm version](https://img.shields.io/badge/npm-0.17.0-blue.svg)](https://www.npmjs.com/package/sanduk)
+[![npm version](https://img.shields.io/badge/npm-0.17.1-blue.svg)](https://www.npmjs.com/package/sanduk)
 
 Helper app for development.
 
 Sanduk (Sandooq) in English means "Box".
 
-![sanduk image - macOS](./resources/sanduk-macos-light-mode.png?v=2022-02-23)
+![sanduk image - macOS](./resources/sanduk-light-mode-ui.png)
 
 ## In 3 steps
 
