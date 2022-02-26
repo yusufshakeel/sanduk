@@ -26,7 +26,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
       </ul>
     </div>
   </nav>
-  ${editorComponent.getHtml({ prefix, id, height: 'calc(100vh - 250px)' })}
+  ${editorComponent.getHtml({ prefix, id, height: 'calc(100vh - 190px)' })}
   ${editorFooterHtml}
 </div>`;
 };
