@@ -60,6 +60,7 @@ module.exports = function editorTool() {
 
   const fileNameElements = [];
   const filePaths = {};
+  const openedFileChanged = {};
 
   // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
@@ -111,20 +112,25 @@ module.exports = function editorTool() {
     fontSize.resetFontSize(editorElements[activeTabId - 1]);
   });
 
-  closeFileBtnElement.addEventListener('click', () => {
+  // CLOSE FILE
+  const closeFileListener = () => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length) {
+    if (openedFileChanged[activeTabId - 1]) {
+      popError({ message: 'File has unsaved changes!' });
+    } else if (filePaths[activeTabId - 1]?.length) {
       filePaths[activeTabId - 1] = '';
       editors[activeTabId - 1].setValue('');
       fileNameElements[activeTabId - 1].innerText = 'Untitled';
     }
-  });
+  };
+  closeFileBtnElement.addEventListener('click', closeFileListener);
 
-  openFileBtnElement.addEventListener('click', () => {
-    ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_EDITOR);
-  });
+  // OPEN FILE
+  const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_EDITOR);
+  openFileBtnElement.addEventListener('click', openFileListener);
 
-  saveFileBtnElement.addEventListener('click', () => {
+  // SAVE FILE
+  const saveFileListener = () => {
     const activeTabId = getActiveTabId();
     const filepath = filePaths[activeTabId - 1];
     if (filepath?.length) {
@@ -132,6 +138,40 @@ module.exports = function editorTool() {
     } else {
       ipcRenderer.send(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_EDITOR);
     }
+  };
+  saveFileBtnElement.addEventListener('click', saveFileListener);
+
+  // FILE CHANGES
+  const fileChangedListener = event => {
+    const activeTabId = getActiveTabId();
+    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+      openedFileChanged[activeTabId - 1] = true;
+      fileNameElements[activeTabId - 1].innerText =
+        path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
+    }
+  };
+
+  // setting shortcut
+  editors.forEach(editor => {
+    editor.commands.addCommand({
+      name: 'save',
+      bindKey: { win: 'Ctrl-S', mac: 'Cmd-S' },
+      exec: () => saveFileListener()
+    });
+
+    editor.commands.addCommand({
+      name: 'open',
+      bindKey: { win: 'Ctrl-O', mac: 'Cmd-O' },
+      exec: () => openFileListener()
+    });
+
+    editor.commands.addCommand({
+      name: 'close',
+      bindKey: { win: 'Ctrl-F4', mac: 'Cmd-W' },
+      exec: () => closeFileListener()
+    });
+
+    editor.commands.on('afterExec', fileChangedListener);
   });
 
   const writeToFile = filePath => {
@@ -143,6 +183,7 @@ module.exports = function editorTool() {
     } catch (e) {
       popError({ message: e.message });
     } finally {
+      openedFileChanged[activeTabId - 1] = false;
       fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
       filePaths[activeTabId - 1] = filePath;
     }
