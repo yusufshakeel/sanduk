@@ -7,7 +7,6 @@ const {
 } = require('../../constants/ui-contants');
 const tabsTemplate = require('./templates/tabs-template');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const activeTabElement = require('../../helpers/active-tab-element');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
@@ -15,7 +14,6 @@ const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const setupEditor = require('../../editor/setup-editor');
 const fontSize = require('../../editor/font-size');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
@@ -44,8 +42,6 @@ module.exports = function base64EncoderDecoder() {
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const tabPaneNavItemElementsForEncoder = tabPaneNavItemComponent.getHtmlElements({
     prefix: prefixForEncoder,
@@ -149,13 +145,12 @@ module.exports = function base64EncoderDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = encoderEditors[activeTabId - 1].getValue();
         if (input.length) {
           decoderEditors[activeTabId - 1].setValue(base64.encode(utf8.encode(input)), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -165,13 +160,12 @@ module.exports = function base64EncoderDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = decoderEditors[activeTabId - 1].getValue();
         if (input.length) {
           encoderEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }

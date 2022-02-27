@@ -4,7 +4,6 @@ const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-
 const toolNavbarComponent = require('../../ui-components/tool-navbar-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const tabComponent = require('../../ui-components/tab-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const toolNavbarNavItemComponent = require('../../ui-components/tool-navbar-nav-item-component');
 
 module.exports = function ui({ toolName, prefix }) {
@@ -35,7 +34,6 @@ module.exports = function ui({ toolName, prefix }) {
     navbarCollapseHtml
   });
   const tabs = tabComponent.getHtml({ prefix });
-  const footer = toolFooterMessageComponent.getHtml({ prefix });
 
-  return [navBar, tabs, footer].join('');
+  return [navBar, tabs].join('');
 };

@@ -4,7 +4,6 @@ const xmlFormatter = require('xml-formatter');
 const xmljs = require('xml-js');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const activeTabElement = require('../../helpers/active-tab-element');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
@@ -15,7 +14,6 @@ const tabsTemplate = require('./templates/tabs-template');
 const { SANDUK_UI_WORK_AREA_XML_TO_JSON_TAB_PANE_ID } = require('../../constants/ui-contants');
 const ui = require('./ui');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
@@ -46,8 +44,6 @@ module.exports = function xmlToJson() {
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const tabPaneNavItemElementsForXmlEditor = tabPaneNavItemComponent.getHtmlElements({
     prefix: prefixForXmlEditor,
@@ -178,14 +174,13 @@ module.exports = function xmlToJson() {
       const activeTabId = getActiveTabId();
       try {
         const xml = xmlEditors[activeTabId - 1].getValue();
-        if (!xml.length) {
-          return;
+        if (xml.length) {
+          const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
+          const json = JSON.stringify(JSON.parse(result), null, totalSpaces);
+          jsonEditors[activeTabId - 1].setValue(json, -1);
         }
-        const result = xmljs.xml2json(compactXml(xml), { compact: true, spaces: 0 });
-        const json = JSON.stringify(JSON.parse(result), null, totalSpaces);
-        jsonEditors[activeTabId - 1].setValue(json, -1);
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -195,13 +190,12 @@ module.exports = function xmlToJson() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = xmlEditors[activeTabId - 1].getValue();
         if (input.length) {
           xmlEditors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -211,13 +205,12 @@ module.exports = function xmlToJson() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = xmlEditors[activeTabId - 1].getValue();
         if (input.length) {
           xmlEditors[activeTabId - 1].setValue(compactXml(input), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -227,14 +220,13 @@ module.exports = function xmlToJson() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = jsonEditors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
           jsonEditors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -257,14 +249,13 @@ module.exports = function xmlToJson() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = jsonEditors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input));
           jsonEditors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -284,7 +275,7 @@ module.exports = function xmlToJson() {
           xmlEditors[activeTabId - 1].setValue(xml, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }

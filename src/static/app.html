@@ -97,6 +97,27 @@
     </div>
   </div>
 </div>
+
+<!-- toasts -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 10">
+  <div class="d-none" id="sanduk-pop-message-container">
+    <div class="card">
+      <div class="card-header">
+        <span id="sanduk-pop-message-header-title"></span>
+        <span class='float-end' id="sanduk-pop-message-header-close-btn"><i class="bi-x-lg"></i></span>
+      </div>
+      <div class="card-body" id="sanduk-pop-message-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>// close pop message
+document.getElementById('sanduk-pop-message-header-close-btn').addEventListener('click', () => {
+  const element = document.getElementById('sanduk-pop-message-container');
+  element.classList.remove('show');
+  element.classList.add('d-none');
+});</script>
+
 <script type="text/javascript" src="bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="./plugin/ace/ace.js"></script>
 <script type="text/javascript" src="../renderer-process/app.js"></script>
