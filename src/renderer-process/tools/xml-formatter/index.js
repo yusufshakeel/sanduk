@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const xmlFormatter = require('xml-formatter');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const activeTabElement = require('../../helpers/active-tab-element');
 const setupEditor = require('../../editor/setup-editor');
@@ -18,7 +17,6 @@ const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constan
 const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
@@ -51,8 +49,6 @@ module.exports = function xmlFormatterTool() {
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const tabPaneNavItemElements = tabPaneNavItemComponent.getHtmlElements({
     prefix,
@@ -126,13 +122,12 @@ module.exports = function xmlFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           editors[activeTabId - 1].setValue(xmlFormatter(input, xmlFormatterOption), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -141,7 +136,6 @@ module.exports = function xmlFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           editors[activeTabId - 1].setValue(
@@ -150,7 +144,7 @@ module.exports = function xmlFormatterTool() {
           );
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -185,7 +179,7 @@ module.exports = function xmlFormatterTool() {
       const data = editors[activeTabId - 1].getValue();
       fs.writeFileSync(filePath, data, 'utf8');
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError({ message: e.message });
     } finally {
       fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
       filePaths[activeTabId - 1] = filePath;
@@ -203,16 +197,14 @@ module.exports = function xmlFormatterTool() {
 
       const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
       if (matchingFilepath) {
-        popError(
-          footerMessageElement,
-          `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`
-        );
+        popError({ message: `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}` });
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
         popError(
-          footerMessageElement,
-          `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          {
+            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
+          },
           7000
         );
         return;
@@ -222,7 +214,7 @@ module.exports = function xmlFormatterTool() {
       const xml = fs.readFileSync(args.filePath).toString();
       editors[activeTabId - 1].getSession().setValue(xml, -1);
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError({ message: e.message });
     }
   });
 };

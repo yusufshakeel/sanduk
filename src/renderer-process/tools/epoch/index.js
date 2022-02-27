@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const { clipboard } = require('electron');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
 module.exports = function epoch() {
@@ -14,7 +13,6 @@ module.exports = function epoch() {
   );
 
   const epochInput = document.getElementById('epoch-input');
-  const epochMessage = document.getElementById('epoch-message');
   const timeInLocale = document.getElementById('time-in-locale');
   const timeInUTC = document.getElementById('time-in-utc');
   const computeBtn = document.getElementById('compute-btn');
@@ -34,7 +32,7 @@ module.exports = function epoch() {
 
   function validateEpoch(epoch) {
     if (!Number.isInteger(epoch)) {
-      popError(epochMessage, 'Epoch should be an integer value.');
+      popError({ message: 'Epoch should be an integer value.' });
       return false;
     }
     return epoch;
@@ -54,7 +52,6 @@ module.exports = function epoch() {
   });
 
   clearBtn.addEventListener('click', () => {
-    clearContent(epochMessage);
     epochInput.value = '';
     timeInLocale.value = ' ';
     timeInUTC.value = ' ';

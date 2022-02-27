@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const popError = require('../../helpers/pop-error');
 const popSuccess = require('../../helpers/pop-success');
-const clearContent = require('../../helpers/clear-content');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
@@ -17,7 +16,6 @@ const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
@@ -50,8 +48,6 @@ module.exports = function jsonFormatterTool() {
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const tabPaneNavItemElements = tabPaneNavItemComponent.getHtmlElements({
     prefix,
@@ -115,12 +111,11 @@ module.exports = function jsonFormatterTool() {
   for (const btn of tabPaneNavItemElements.validateNavItemElements) {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
-      clearContent(footerMessageElement);
       const input = editors[activeTabId - 1].getValue();
       if (input.length) {
         fn.jsonParser(input).isValidJSON
-          ? popSuccess(footerMessageElement, 'Valid JSON')
-          : popError(footerMessageElement, 'Invalid JSON');
+          ? popSuccess({ message: 'Valid JSON', timeout: 3000 })
+          : popError({ message: 'Invalid JSON' });
       }
     });
   }
@@ -129,14 +124,13 @@ module.exports = function jsonFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError(e.message);
       }
     });
   }
@@ -145,14 +139,13 @@ module.exports = function jsonFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input));
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError(e.message);
       }
     });
   }
@@ -161,7 +154,6 @@ module.exports = function jsonFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
@@ -169,7 +161,7 @@ module.exports = function jsonFormatterTool() {
           editors[activeTabId - 1].getSession().foldAll(1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError(e.message);
       }
     });
   }
@@ -178,7 +170,6 @@ module.exports = function jsonFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(
@@ -189,7 +180,7 @@ module.exports = function jsonFormatterTool() {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError(e.message);
       }
     });
   }
@@ -198,7 +189,6 @@ module.exports = function jsonFormatterTool() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = editors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(
@@ -209,7 +199,7 @@ module.exports = function jsonFormatterTool() {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError(e.message);
       }
     });
   }
@@ -259,7 +249,7 @@ module.exports = function jsonFormatterTool() {
       const data = editors[activeTabId - 1].getValue();
       fs.writeFileSync(filePath, data, 'utf8');
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError(e.message);
     } finally {
       fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
       filePaths[activeTabId - 1] = filePath;
@@ -277,15 +267,11 @@ module.exports = function jsonFormatterTool() {
 
       const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
       if (matchingFilepath) {
-        popError(
-          footerMessageElement,
-          `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`
-        );
+        popError(`File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`);
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
         popError(
-          footerMessageElement,
           `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
           7000
         );
@@ -296,7 +282,7 @@ module.exports = function jsonFormatterTool() {
       const json = fs.readFileSync(args.filePath).toString();
       editors[activeTabId - 1].getSession().setValue(json, -1);
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError(e.message);
     }
   });
 };

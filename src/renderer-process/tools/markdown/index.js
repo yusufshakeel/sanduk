@@ -31,7 +31,6 @@ const {
 } = require('../../../main-process/constants/ipc-event-constants');
 const popError = require('../../helpers/pop-error');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
 
 module.exports = function markdownTool() {
@@ -52,8 +51,6 @@ module.exports = function markdownTool() {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
     fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
@@ -246,7 +243,7 @@ module.exports = function markdownTool() {
       const data = markdownEditors[activeTabId - 1].getValue();
       fs.writeFileSync(filePath, data, 'utf8');
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError({ message: e.message });
     } finally {
       fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
       filePaths[activeTabId - 1] = filePath;
@@ -264,16 +261,14 @@ module.exports = function markdownTool() {
 
       const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
       if (matchingFilepath) {
-        popError(
-          footerMessageElement,
-          `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`
-        );
+        popError({ message: `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}` });
         return;
       }
       if (markdownEditors[activeTabId - 1].getValue().length) {
         popError(
-          footerMessageElement,
-          `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          {
+            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
+          },
           7000
         );
         return;
@@ -284,7 +279,7 @@ module.exports = function markdownTool() {
       markdownEditors[activeTabId - 1].getSession().setValue(data, -1);
       renderMarkdown();
     } catch (e) {
-      popError(footerMessageElement, e.message);
+      popError({ message: e.message });
     }
   });
 };

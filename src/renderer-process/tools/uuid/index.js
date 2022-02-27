@@ -5,7 +5,6 @@ const path = require('path');
 const { clipboard } = require('electron');
 const { v4: uuidV4, v5: uuidV5 } = require('uuid');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const inProgressTextAnimate = require('../../helpers/in-progress-text-animate');
 const inProgressHtmlAnimate = require('../../helpers/in-progress-html-animate');
 
@@ -66,7 +65,6 @@ function uuidV4Handler() {
 function uuidV5Handler() {
   const uuidV5Name = document.getElementById('uuid-v5-name');
   const uuidV5Namespace = document.getElementById('uuid-v5-namespace');
-  const uuidV5NamespaceMessage = document.getElementById('uuid-v5-namespace-message');
   const btnGenerateUUIDV5 = document.getElementById('generate-uuid-v5-btn');
   const btnCopyUUIDV5 = document.getElementById('copy-uuid-v5-btn');
   const btnClearUUIDV5 = document.getElementById('clear-uuid-v5-btn');
@@ -78,9 +76,8 @@ function uuidV5Handler() {
 
   btnGenerateUUIDV5.addEventListener('click', () => {
     try {
-      clearContent(uuidV5NamespaceMessage);
       if (!uuidV5Namespace.value.trim().length) {
-        popError(uuidV5NamespaceMessage, 'Namespace required.');
+        popError({ message: 'Namespace required.' });
         return;
       }
       let value = uuidV5(uuidV5Name.value, uuidV5Namespace.value);
@@ -89,7 +86,7 @@ function uuidV5Handler() {
       history.push(value);
       renderHistory(history, historyElem);
     } catch (e) {
-      popError(uuidV5NamespaceMessage, e.message);
+      popError({ message: e.message });
     }
   });
 
@@ -102,7 +99,6 @@ function uuidV5Handler() {
   });
 
   btnClearUUIDV5.addEventListener('click', () => {
-    clearContent(uuidV5NamespaceMessage);
     uuidV5Output.value = '';
     uuidV5Name.value = '';
     uuidV5Namespace.value = '';

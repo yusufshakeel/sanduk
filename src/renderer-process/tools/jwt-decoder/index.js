@@ -2,14 +2,12 @@
 
 const jwtDecode = require('jwt-decode');
 const popError = require('../../helpers/pop-error');
-const clearContent = require('../../helpers/clear-content');
 const setupEditor = require('../../editor/setup-editor');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const ui = require('./ui');
 const tabsTemplate = require('./templates/tabs-template');
 const { SANDUK_UI_WORK_AREA_JWT_DECODER_TAB_PANE_ID } = require('../../constants/ui-contants');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
-const toolFooterMessageComponent = require('../../ui-components/tool-footer-message-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
@@ -41,8 +39,6 @@ module.exports = function jwtDecoder() {
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
-
-  const footerMessageElement = toolFooterMessageComponent.getHtmlElement({ prefix });
 
   const tabPaneNavItemElementsForInputEditor = tabPaneNavItemComponent.getHtmlElements({
     prefix: prefixForInput,
@@ -148,7 +144,6 @@ module.exports = function jwtDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = inputEditors[activeTabId - 1].getValue().trim();
         if (input.length) {
           const decodedHeader = jwtDecode(input, { header: true });
@@ -157,7 +152,7 @@ module.exports = function jwtDecoder() {
           outputEditors[activeTabId - 1].setValue(JSON.stringify(result, null, totalSpaces), -1);
         }
       } catch (e) {
-        popError(footerMessageElement, 'Invalid JWT');
+        popError({ message: 'Invalid JWT' });
       }
     });
   }
@@ -167,14 +162,13 @@ module.exports = function jwtDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = outputEditors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
           outputEditors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -184,14 +178,13 @@ module.exports = function jwtDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = outputEditors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input));
           outputEditors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -201,7 +194,6 @@ module.exports = function jwtDecoder() {
     btn.addEventListener('click', () => {
       const activeTabId = getActiveTabId();
       try {
-        clearContent(footerMessageElement);
         const input = outputEditors[activeTabId - 1].getValue();
         if (input.length) {
           const json = JSON.stringify(JSON.parse(input), null, totalSpaces);
@@ -209,7 +201,7 @@ module.exports = function jwtDecoder() {
           outputEditors[activeTabId - 1].getSession().foldAll(1);
         }
       } catch (e) {
-        popError(footerMessageElement, e.message);
+        popError({ message: e.message });
       }
     });
   }
