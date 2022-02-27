@@ -13,7 +13,7 @@ module.exports = function tabPaneHtmlTemplate({
   addActiveClass = false
 }) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
-  const editorHeight = 'calc(100vh - 190px)';
+  const editorHeight = 'calc(100vh - 195px)';
   const csvEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForCsvEditor, id })
     .withRowColumnPosition()
     .build();

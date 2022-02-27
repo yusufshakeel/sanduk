@@ -14,7 +14,7 @@ module.exports = function tabPaneHtmlTemplate({
   addActiveClass = false
 }) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
-  const editorHeight = 'calc(100vh - 190px)';
+  const editorHeight = 'calc(100vh - 195px)';
   const iframeHeight = 'calc(100vh - 160px)';
   const markdownEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForMarkdown, id })
     .withRowColumnPosition()
