@@ -96,7 +96,12 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
   // Context Menu setup
-  contextMenuHandlerSetup({ eventEmitter, contextMenuEventHandlerId, editors, getActiveTabId });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId,
+    editors,
+    getActiveTabId
+  });
 
   wrapBtnHandler.initWrapBtnHandler(
     getActiveTabId,

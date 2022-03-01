@@ -20,6 +20,6 @@ module.exports = async function tools({ eventEmitter }) {
   jwtDecoder();
   markdown();
   uuid();
-  xmlFormatter();
+  xmlFormatter({ eventEmitter });
   xmlToJson();
 };
