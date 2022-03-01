@@ -4,7 +4,7 @@ const base64 = require('base-64');
 const utf8 = require('utf8');
 const {
   SANDUK_UI_WORK_AREA_BASE64_ENCODE_DECODE_TAB_PANE_ID
-} = require('../../constants/ui-contants');
+} = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const popError = require('../../helpers/pop-error');
 const activeTabElement = require('../../helpers/active-tab-element');
