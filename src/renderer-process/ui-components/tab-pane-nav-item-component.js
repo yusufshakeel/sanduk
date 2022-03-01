@@ -7,9 +7,11 @@ const TAB_PANE_NAV_ITEMS = {
   COPY: 'COPY',
   FOLD: 'FOLD',
   PRETTY: 'PRETTY',
+  REDO: 'REDO',
   SORT_ASCENDING: 'SORT_ASCENDING',
   SORT_DESCENDING: 'SORT_DESCENDING',
   TRANSFORM: 'TRANSFORM',
+  UNDO: 'UNDO',
   VALIDATE: 'VALIDATE',
   WRAP: 'WRAP'
 };
@@ -21,6 +23,7 @@ const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
   COPY: { key: 'copyNavItemElements', className: `${prefix}-copy-btn` },
   FOLD: { key: 'foldNavItemElements', className: `${prefix}-fold-btn` },
   PRETTY: { key: 'prettyNavItemElements', className: `${prefix}-pretty-btn` },
+  REDO: { key: 'redoNavItemElements', className: `${prefix}-redo-btn` },
   SORT_ASCENDING: {
     key: 'sortAscendingNavItemElements',
     className: `${prefix}-sort-ascending-btn`
@@ -30,6 +33,7 @@ const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
     className: `${prefix}-sort-descending-btn`
   },
   TRANSFORM: { key: 'transformNavItemElements', className: `${prefix}-transform-btn` },
+  UNDO: { key: 'undoNavItemElements', className: `${prefix}-undo-btn` },
   VALIDATE: { key: 'validateNavItemElements', className: `${prefix}-validate-btn` },
   WRAP: { key: 'wrapNavItemElements', className: `${prefix}-wrap-btn` }
 });
@@ -111,6 +115,20 @@ function getHtmlCloseNavItem({ prefix, dataId }) {
 </li>`;
 }
 
+function getHtmlUndoNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).UNDO.className;
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Undo" class="bi-arrow-counterclockwise"></i></a>
+</li>`;
+}
+
+function getHtmlRedoNavItem({ prefix, dataId }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).REDO.className;
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Redo" class="bi-arrow-clockwise"></i></a>
+</li>`;
+}
+
 /**
  * @param prefix {string}
  * @param specificNavItemsToPick {string[]}
@@ -140,5 +158,7 @@ module.exports = {
   getHtmlSortAscendingNavItem,
   getHtmlSortDescendingNavItem,
   getHtmlTransformNavItem,
-  getHtmlCloseNavItem
+  getHtmlCloseNavItem,
+  getHtmlUndoNavItem,
+  getHtmlRedoNavItem
 };
