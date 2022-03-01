@@ -13,7 +13,7 @@ const xmlToJson = require('../tools/xml-to-json');
 
 module.exports = async function tools({ eventEmitter }) {
   base64EncoderDecoder({ eventEmitter });
-  csvToJson();
+  csvToJson({ eventEmitter });
   editor();
   epoch();
   jsonFormatter({ eventEmitter });
