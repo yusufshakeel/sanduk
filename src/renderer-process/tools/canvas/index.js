@@ -89,18 +89,15 @@ module.exports = function canvasTool({ eventEmitter }) {
       image.src = lastCanvas.toString();
       image.onload = () => {
         const ctx = canvasContexts[activeTabId - 1];
-        ctx.clearRect(0, 0, CANVAS_HEIGHT_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
+        ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
         ctx.drawImage(image, 0, 0);
       };
     }
   };
   const clearCanvas = () => {
     const activeTabId = getActiveTabId();
-    if (histories[activeTabId - 1].undo.length) {
-      const ctx = canvasContexts[activeTabId - 1];
-      ctx.clearRect(0, 0, CANVAS_HEIGHT_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
-      saveState();
-    }
+    const ctx = canvasContexts[activeTabId - 1];
+    ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
   };
 
   // undo click event handler
