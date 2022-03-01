@@ -76,14 +76,14 @@ module.exports = function messageDialog(browserWindow, electronDialog = dialog) 
 
   const showOpenDialogToSelectCanvasFile = async () => {
     return showOpenDialog({
-      filters: [{ name: 'Canvas', extensions: ['png'] }],
+      filters: [{ name: 'Image', extensions: ['png'] }],
       properties: ['openFile', 'openDirectory']
     });
   };
 
   const showSaveDialogToSaveCanvasFile = async () => {
     return showSaveDialog({
-      filters: [{ name: 'Canvas', extensions: ['png'] }],
+      filters: [{ name: 'Image', extensions: ['png'] }],
       properties: ['openFile', 'openDirectory']
     });
   };

@@ -154,4 +154,20 @@ describe('Testing tab pane navItem component', () => {
       expect(html).toMatch(/title="Close"/);
     });
   });
+
+  describe('Testing getHtmlUndoNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-undo-btn"/);
+      expect(html).toMatch(/title="Undo"/);
+    });
+  });
+
+  describe('Testing getHtmlRedoNavItem', () => {
+    test('Should be able to get html', () => {
+      const html = tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId });
+      expect(html).toMatch(/class="nav-link py-0 some-prefix-redo-btn"/);
+      expect(html).toMatch(/title="Redo"/);
+    });
+  });
 });
