@@ -1,6 +1,7 @@
 'use strict';
 
 const base64EncoderDecoder = require('../tools/base64-encoder-decoder');
+const canvas = require('../tools/canvas');
 const csvToJson = require('../tools/csv-to-json');
 const editor = require('../tools/editor');
 const epoch = require('../tools/epoch');
@@ -13,6 +14,7 @@ const xmlToJson = require('../tools/xml-to-json');
 
 module.exports = async function tools({ eventEmitter }) {
   base64EncoderDecoder({ eventEmitter });
+  canvas({ eventEmitter });
   csvToJson({ eventEmitter });
   editor({ eventEmitter });
   epoch();

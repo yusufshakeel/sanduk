@@ -269,4 +269,36 @@ describe('Testing message dialog', () => {
       );
     });
   });
+
+  describe('Testing showOpenDialogToSelectCanvasFile', () => {
+    test('Should be able to open dialog', async () => {
+      const msgDialog = messageDialog(fakeBrowserWindow, fakeElectronDialog);
+      const result = await msgDialog.showOpenDialogToSelectCanvasFile();
+      expect(result).toStrictEqual({ filePath: '/file/path' });
+      expect(fakeElectronDialog.showOpenDialog).toHaveBeenCalledTimes(1);
+      expect(fakeElectronDialog.showOpenDialog).toHaveBeenCalledWith(
+        { msg: 'fakeBrowserWindow' },
+        {
+          filters: [{ extensions: ['png'], name: 'Image' }],
+          properties: ['openFile', 'openDirectory']
+        }
+      );
+    });
+  });
+
+  describe('Testing showSaveDialogToSaveCanvasFile', () => {
+    test('Should be able to open dialog', async () => {
+      const msgDialog = messageDialog(fakeBrowserWindow, fakeElectronDialog);
+      const result = await msgDialog.showSaveDialogToSaveCanvasFile();
+      expect(result).toStrictEqual({ filePath: '/file/path' });
+      expect(fakeElectronDialog.showSaveDialog).toHaveBeenCalledTimes(1);
+      expect(fakeElectronDialog.showSaveDialog).toHaveBeenCalledWith(
+        { msg: 'fakeBrowserWindow' },
+        {
+          filters: [{ extensions: ['png'], name: 'Image' }],
+          properties: ['openFile', 'openDirectory']
+        }
+      );
+    });
+  });
 });
