@@ -1,6 +1,6 @@
 {
   "name": "sanduk",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "description": "Helper app for development.",
   "main": "src/main-process/main.js",
   "scripts": {
@@ -65,6 +65,7 @@
     "base-64": "^1.0.0",
     "deep-sort-object": "^1.0.2",
     "electron-window-state": "^5.0.3",
+    "eventemitter2": "^6.4.5",
     "fast-csv": "^4.3.6",
     "immutability-helper": "^3.1.1",
     "jwt-decode": "^3.1.2",

@@ -4,7 +4,7 @@ const base64 = require('base-64');
 const utf8 = require('utf8');
 const {
   SANDUK_UI_WORK_AREA_BASE64_ENCODE_DECODE_TAB_PANE_ID
-} = require('../../constants/ui-contants');
+} = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const popError = require('../../helpers/pop-error');
 const activeTabElement = require('../../helpers/active-tab-element');
@@ -18,13 +18,16 @@ const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-c
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
 const ui = require('./ui');
 
-module.exports = function base64EncoderDecoder() {
+module.exports = function base64EncoderDecoder({ eventEmitter }) {
   const prefix = 'sanduk-base64-encoder-decoder';
   const prefixForEncoder = 'sanduk-base64-encoder-decoder-encoder';
   const prefixForDecoder = 'sanduk-base64-encoder-decoder-decoder';
+  const contextMenuEventHandlerIdForEncoder = `${prefixForEncoder}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForDecoder = `${prefixForDecoder}-context-menu-event-handler`;
   const toolName = 'Base64 Encoder Decoder';
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({
@@ -105,6 +108,20 @@ module.exports = function base64EncoderDecoder() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForEncoder,
+    editors: encoderEditors,
+    getActiveTabId
+  });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForDecoder,
+    editors: decoderEditors,
+    getActiveTabId
+  });
 
   // Encoder - Wrap, Copy, Clear
   wrapBtnHandler.initWrapBtnHandler(

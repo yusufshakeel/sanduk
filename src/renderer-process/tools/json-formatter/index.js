@@ -9,7 +9,7 @@ const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
-const { SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-contants');
+const { SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
@@ -27,12 +27,14 @@ const {
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH
 } = require('../../../main-process/constants/ipc-event-constants');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
 const ui = require('./ui');
 
-module.exports = function jsonFormatterTool() {
+module.exports = function jsonFormatterTool({ eventEmitter }) {
   const prefix = 'sanduk-json-formatter';
   const toolName = 'JSON Formatter';
+  const contextMenuEventHandlerId = `${prefix}-context-menu-event-handler`;
   const totalTabs = 7;
   const totalSpaces = 2;
   const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
@@ -92,6 +94,14 @@ module.exports = function jsonFormatterTool() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId,
+    editors,
+    getActiveTabId
+  });
 
   wrapBtnHandler.initWrapBtnHandler(
     getActiveTabId,
@@ -281,6 +291,49 @@ module.exports = function jsonFormatterTool() {
 
     editor.commands.on('afterExec', fileChangedListener);
   });
+
+  // // CONTEXT MENU setup
+  // editors.forEach(editor => {
+  //   editor.container.addEventListener(
+  //     'contextmenu',
+  //     e => {
+  //       const element = document.getElementById(
+  //         CONTEXT_MENU_CUT_COPY_PASTE_SELECT_ALL_HTML_CONTAINER_ID
+  //       );
+  //       element.setAttribute('data-eventData', JSON.stringify({ contextMenuEventHandlerId }));
+  //       showEditorCutCopyPasteSelectAllContextMenu({ htmlEvent: e });
+  //     },
+  //     false
+  //   );
+  // });
+  //
+  // // CUT - context menu event
+  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_CUT, args => {
+  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
+  //     contextMenuHandler.contextMenuCutHandler({ getActiveTabId, editors });
+  //   }
+  // });
+  //
+  // // COPY - context menu event
+  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_COPY, args => {
+  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
+  //     contextMenuHandler.contextMenuCopyHandler({ getActiveTabId, editors });
+  //   }
+  // });
+  //
+  // // PASTE - context menu event
+  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_PASTE, args => {
+  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
+  //     contextMenuHandler.contextMenuPasteHandler({ getActiveTabId, editors });
+  //   }
+  // });
+  //
+  // // SELECT ALL - context menu event
+  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_SELECT_ALL, args => {
+  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
+  //     contextMenuHandler.contextMenuSelectAllHandler({ getActiveTabId, editors });
+  //   }
+  // });
 
   const writeToFile = filePath => {
     const activeTabId = getActiveTabId();

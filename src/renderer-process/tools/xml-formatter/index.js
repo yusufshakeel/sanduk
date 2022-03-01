@@ -13,7 +13,7 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fontSize = require('../../editor/font-size');
-const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-contants');
+const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
@@ -27,14 +27,16 @@ const {
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH,
   IPC_EVENT_OPEN_FILE_DIALOG_XML_FILE_PATH
 } = require('../../../main-process/constants/ipc-event-constants');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
 const xmlFormatterOption = {
   indentation: '  '
 };
 
-module.exports = function xmlFormatterTool() {
+module.exports = function xmlFormatterTool({ eventEmitter }) {
   const prefix = 'sanduk-xml-formatter';
   const toolName = 'XML Formatter';
+  const contextMenuEventHandlerId = `${prefix}-context-menu-event-handler`;
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
   document.getElementById(SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID).innerHTML = ui({
@@ -89,6 +91,14 @@ module.exports = function xmlFormatterTool() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId,
+    editors,
+    getActiveTabId
+  });
 
   wrapBtnHandler.initWrapBtnHandler(
     getActiveTabId,

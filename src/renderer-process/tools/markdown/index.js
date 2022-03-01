@@ -9,7 +9,7 @@ const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const tabsTemplate = require('./templates/tabs-template');
-const { SANDUK_UI_WORK_AREA_MARKDOWN_TAB_PANE_ID } = require('../../constants/ui-contants');
+const { SANDUK_UI_WORK_AREA_MARKDOWN_TAB_PANE_ID } = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const toolNavbarNavItemComponent = require('../../ui-components/tool-navbar-nav-item-component');
@@ -32,11 +32,13 @@ const {
 const popError = require('../../helpers/pop-error');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
-module.exports = function markdownTool() {
+module.exports = function markdownTool({ eventEmitter }) {
   const prefix = 'sanduk-markdown';
   const prefixForMarkdown = 'sanduk-markdown-input';
   const prefixForPreview = 'sanduk-markdown-preview';
+  const contextMenuEventHandlerId = `${prefixForMarkdown}-context-menu-event-handler`;
   const toolName = 'Markdown';
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({
@@ -128,6 +130,14 @@ module.exports = function markdownTool() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId,
+    editors: markdownEditors,
+    getActiveTabId
+  });
 
   // Encoder - Wrap, Copy, Clear
   wrapBtnHandler.initWrapBtnHandler(

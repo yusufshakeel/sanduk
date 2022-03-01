@@ -12,18 +12,21 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const tabsTemplate = require('./templates/tabs-template');
-const { SANDUK_UI_WORK_AREA_CSV_TO_JSON_TAB_PANE_ID } = require('../../constants/ui-contants');
+const { SANDUK_UI_WORK_AREA_CSV_TO_JSON_TAB_PANE_ID } = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
 const fn = require('../../functions');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
-module.exports = function xmlToJson() {
+module.exports = function xmlToJson({ eventEmitter }) {
   const prefix = 'sanduk-csv-to-json';
   const prefixForCsvEditor = 'sanduk-csv-to-json-csv';
   const prefixForJsonEditor = 'sanduk-csv-to-json-json';
+  const contextMenuEventHandlerIdForCsvEditor = `${prefixForCsvEditor}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForJsonEditor = `${prefixForJsonEditor}-context-menu-event-handler`;
   const toolName = 'CSV to JSON';
   const totalTabs = 7;
   const totalSpaces = 2;
@@ -108,6 +111,20 @@ module.exports = function xmlToJson() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForCsvEditor,
+    editors: csvEditors,
+    getActiveTabId
+  });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForJsonEditor,
+    editors: jsonEditors,
+    getActiveTabId
+  });
 
   // Csv - Wrap, Copy, Clear
   wrapBtnHandler.initWrapBtnHandler(

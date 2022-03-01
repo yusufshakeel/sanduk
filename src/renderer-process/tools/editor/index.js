@@ -7,7 +7,7 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const tabsTemplate = require('./templates/tabs-template');
-const { SANDUK_UI_WORK_AREA_EDITOR_TAB_PANE_ID } = require('../../constants/ui-contants');
+const { SANDUK_UI_WORK_AREA_EDITOR_TAB_PANE_ID } = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
@@ -26,10 +26,12 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_EDITOR_FILE_PATH
 } = require('../../../main-process/constants/ipc-event-constants');
 const popError = require('../../helpers/pop-error');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
-module.exports = function editorTool() {
+module.exports = function editorTool({ eventEmitter }) {
   const prefix = 'sanduk-editor';
   const toolName = 'Editor';
+  const contextMenuEventHandlerId = `${prefix}-context-menu-event-handler`;
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({ prefix, totalNumberOfTabs: totalTabs });
   document.getElementById(SANDUK_UI_WORK_AREA_EDITOR_TAB_PANE_ID).innerHTML = ui({
@@ -82,6 +84,14 @@ module.exports = function editorTool() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId,
+    editors,
+    getActiveTabId
+  });
 
   wrapBtnHandler.initWrapBtnHandler(
     getActiveTabId,

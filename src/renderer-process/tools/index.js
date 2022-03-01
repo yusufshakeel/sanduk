@@ -11,15 +11,15 @@ const uuid = require('../tools/uuid');
 const xmlFormatter = require('../tools/xml-formatter');
 const xmlToJson = require('../tools/xml-to-json');
 
-module.exports = async function tools() {
-  base64EncoderDecoder();
-  csvToJson();
-  editor();
+module.exports = async function tools({ eventEmitter }) {
+  base64EncoderDecoder({ eventEmitter });
+  csvToJson({ eventEmitter });
+  editor({ eventEmitter });
   epoch();
-  jsonFormatter();
-  jwtDecoder();
-  markdown();
+  jsonFormatter({ eventEmitter });
+  jwtDecoder({ eventEmitter });
+  markdown({ eventEmitter });
   uuid();
-  xmlFormatter();
-  xmlToJson();
+  xmlFormatter({ eventEmitter });
+  xmlToJson({ eventEmitter });
 };

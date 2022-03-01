@@ -111,12 +111,27 @@
   </div>
 </div>
 
-<script>// close pop message
-document.getElementById('sanduk-pop-message-header-close-btn').addEventListener('click', () => {
-  const element = document.getElementById('sanduk-pop-message-container');
-  element.classList.remove('show');
-  element.classList.add('d-none');
-});</script>
+<!-- context menu -->
+<div id="sanduk-context-menu-container"></div>
+
+<script>
+  document.addEventListener('click', () => {
+    // hide context menu
+    document.addEventListener('click', () => {
+      Array.from(document.getElementsByClassName('sanduk-context-menu')).forEach(element => {
+        element.classList.remove('show');
+        element.classList.add('d-none');
+      });
+    });
+  });
+
+  // close pop message
+  document.getElementById('sanduk-pop-message-header-close-btn').addEventListener('click', () => {
+    const element = document.getElementById('sanduk-pop-message-container');
+    element.classList.remove('show');
+    element.classList.add('d-none');
+  });
+</script>
 
 <script type="text/javascript" src="bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="./plugin/ace/ace.js"></script>
