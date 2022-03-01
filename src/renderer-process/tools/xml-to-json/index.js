@@ -17,15 +17,18 @@ const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-siz
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
 const editorComponent = require('../../ui-components/editor-component');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
 const xmlFormatterOption = {
   indentation: '  '
 };
 
-module.exports = function xmlToJson() {
+module.exports = function xmlToJson({ eventEmitter }) {
   const prefix = 'sanduk-xml-to-json';
   const prefixForXmlEditor = 'sanduk-xml-to-json-xml';
   const prefixForJsonEditor = 'sanduk-xml-to-json-json';
+  const contextMenuEventHandlerIdForXmlEditor = `${prefixForXmlEditor}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForJsonEditor = `${prefixForJsonEditor}-context-menu-event-handler`;
   const toolName = 'XML to JSON';
   const totalTabs = 7;
   const totalSpaces = 2;
@@ -116,6 +119,20 @@ module.exports = function xmlToJson() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForXmlEditor,
+    editors: xmlEditors,
+    getActiveTabId
+  });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForJsonEditor,
+    editors: jsonEditors,
+    getActiveTabId
+  });
 
   // Xml - Wrap, Copy, Clear
   wrapBtnHandler.initWrapBtnHandler(

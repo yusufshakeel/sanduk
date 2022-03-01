@@ -21,5 +21,5 @@ module.exports = async function tools({ eventEmitter }) {
   markdown({ eventEmitter });
   uuid();
   xmlFormatter({ eventEmitter });
-  xmlToJson();
+  xmlToJson({ eventEmitter });
 };
