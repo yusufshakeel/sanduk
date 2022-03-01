@@ -12,7 +12,7 @@ const xmlFormatter = require('../tools/xml-formatter');
 const xmlToJson = require('../tools/xml-to-json');
 
 module.exports = async function tools({ eventEmitter }) {
-  base64EncoderDecoder();
+  base64EncoderDecoder({ eventEmitter });
   csvToJson();
   editor();
   epoch();
