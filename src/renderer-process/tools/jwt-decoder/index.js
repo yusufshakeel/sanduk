@@ -16,11 +16,14 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fontSize = require('../../editor/font-size');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
-module.exports = function jwtDecoder() {
+module.exports = function jwtDecoder({ eventEmitter }) {
   const prefix = 'sanduk-jwt-decoder';
   const prefixForInput = 'sanduk-jwt-decoder-input';
   const prefixForOutput = 'sanduk-jwt-decoder-output';
+  const contextMenuEventHandlerIdForInput = `${prefixForInput}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForOutput = `${prefixForOutput}-context-menu-event-handler`;
   const toolName = 'JSON Web Token';
   const totalTabs = 7;
   const totalSpaces = 2;
@@ -104,6 +107,20 @@ module.exports = function jwtDecoder() {
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForInput,
+    editors: inputEditors,
+    getActiveTabId
+  });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForOutput,
+    editors: outputEditors,
+    getActiveTabId
+  });
 
   // Input - Wrap, Copy, Clear
   wrapBtnHandler.initWrapBtnHandler(
