@@ -56,7 +56,7 @@ describe('Testing context menu handler', () => {
 
   describe('Testing select all handler', () => {
     test('Should be able to call handler', () => {
-      contextMenuSelectAllHandler({ getActiveTabId, editors, electronClipboard });
+      contextMenuSelectAllHandler({ getActiveTabId, editors });
       expect(getActiveTabId).toHaveBeenCalledTimes(1);
       expect(editor.selectAll).toHaveBeenCalledTimes(1);
     });
