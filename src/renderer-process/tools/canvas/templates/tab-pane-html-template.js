@@ -11,6 +11,10 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
     <div class="container-fluid">
       ${tabPaneFilenameComponent.getHtml({ prefix, id, filename: 'Canvas' })}
       <ul class="navbar-nav">
+        <li>
+          <label for="exampleColorInput" class="form-label d-none">Color</label>
+          <input type="color" class="form-control-sm form-control-color ${prefix}-color-picker" id="${prefix}-color-picker-${id}" value="#000000">
+        </li>
         ${tabPaneNavItemComponent.getHtmlClearNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId: id })}

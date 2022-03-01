@@ -42,6 +42,8 @@ module.exports = function canvasTool({ eventEmitter }) {
 
   const canvasses = [];
   const canvasContexts = [];
+  const colorPickerElements = [];
+  const colorsElement = [];
   const isDrawing = {};
   const histories = {};
 
@@ -55,10 +57,20 @@ module.exports = function canvasTool({ eventEmitter }) {
     canvasContexts.push(ctx);
     isDrawing[id - 1] = false;
     histories[id - 1] = { undo: [], redo: [] };
+    const colorPicker = document.getElementById(`${prefix}-color-picker-${id}`);
+    colorPickerElements.push(colorPicker);
+    colorsElement.push(colorPicker.value);
   }
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
+
+  colorPickerElements.forEach(element => {
+    element.addEventListener('change', () => {
+      const activeTabId = getActiveTabId();
+      colorsElement[activeTabId - 1] = element.value;
+    });
+  });
 
   // history
   const saveState = () => {
@@ -149,6 +161,7 @@ module.exports = function canvasTool({ eventEmitter }) {
       return;
     }
     const ctx = canvasContexts[activeTabId - 1];
+    ctx.strokeStyle = colorsElement[activeTabId - 1];
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineTo(event.offsetX, event.offsetY);
