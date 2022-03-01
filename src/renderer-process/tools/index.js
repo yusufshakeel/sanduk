@@ -18,7 +18,7 @@ module.exports = async function tools({ eventEmitter }) {
   epoch();
   jsonFormatter({ eventEmitter });
   jwtDecoder({ eventEmitter });
-  markdown();
+  markdown({ eventEmitter });
   uuid();
   xmlFormatter({ eventEmitter });
   xmlToJson();
