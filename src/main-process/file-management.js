@@ -21,7 +21,12 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN,
   IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN_FILE_PATH,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN,
-  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN_FILE_PATH
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN_FILE_PATH,
+
+  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS,
+  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH
 } = require('./constants/ipc-event-constants');
 
 module.exports = function fileManagement(
@@ -115,6 +120,30 @@ module.exports = function fileManagement(
       const result = await msgDialog.showSaveDialogToSaveMarkdownFile();
       if (result.filePath) {
         event.reply(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN_FILE_PATH, {
+          filePath: result.filePath
+        });
+      }
+    } catch (e) {
+      await msgDialog.showErrorDialog(e);
+    }
+  });
+
+  electronIpcMain.on(IPC_EVENT_OPEN_FILE_DIALOG_CANVAS, async event => {
+    try {
+      const result = await msgDialog.showOpenDialogToSelectCanvasFile();
+      if (result.filePath) {
+        event.reply(IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH, { filePath: result.filePath });
+      }
+    } catch (e) {
+      await msgDialog.showErrorDialog(e);
+    }
+  });
+
+  electronIpcMain.on(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS, async event => {
+    try {
+      const result = await msgDialog.showSaveDialogToSaveCanvasFile();
+      if (result.filePath) {
+        event.reply(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH, {
           filePath: result.filePath
         });
       }

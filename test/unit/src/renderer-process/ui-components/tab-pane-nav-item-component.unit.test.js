@@ -32,7 +32,9 @@ describe('Testing tab pane navItem component', () => {
           sortAscendingNavItemElements: [{ id: 1 }],
           sortDescendingNavItemElements: [{ id: 1 }],
           transformNavItemElements: [{ id: 1 }],
-          closeNavItemElements: [{ id: 1 }]
+          closeNavItemElements: [{ id: 1 }],
+          redoNavItemElements: [{ id: 1 }],
+          undoNavItemElements: [{ id: 1 }]
         });
       });
     });

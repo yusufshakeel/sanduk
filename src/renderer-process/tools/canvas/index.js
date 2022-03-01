@@ -1,5 +1,8 @@
 'use strict';
 
+const { ipcRenderer } = require('electron');
+const fs = require('fs');
+const path = require('path');
 const tabsTemplate = require('./templates/tabs-template');
 const {
   SANDUK_UI_WORK_AREA_CANVAS_TAB_ID,
@@ -16,6 +19,15 @@ const {
   EVENT_TYPE_UNDO_CTRL_Z_OR_CMD_Z_KEYPRESS,
   EVENT_TYPE_REDO_CTRL_Y_OR_CMD_SHIFT_Z_KEYPRESS
 } = require('../../constants/event-constants');
+const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
+const popError = require('../../helpers/pop-error');
+const {
+  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS,
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH,
+  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH
+} = require('../../../main-process/constants/ipc-event-constants');
+const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
 
 module.exports = function canvasTool({ eventEmitter }) {
   const prefix = 'sanduk-canvas';
@@ -31,6 +43,9 @@ module.exports = function canvasTool({ eventEmitter }) {
 
   const canvasSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_CANVAS_TAB_ID);
 
+  const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
+    fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
+
   const tabPaneNavItemElements = tabPaneNavItemComponent.getHtmlElements({
     prefix,
     specificNavItemsToPick: [
@@ -40,15 +55,23 @@ module.exports = function canvasTool({ eventEmitter }) {
     ]
   });
 
+  const fileNameElements = [];
+  const filePaths = {};
+  const openedFileChanged = {};
+
   const canvasses = [];
   const canvasContexts = [];
   const colorPickerElements = [];
+  const brushThicknessElements = [];
+  const brushesThickness = [];
   const colorsElement = [];
   const isDrawing = {};
   const histories = {};
 
   // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
+    fileNameElements.push(tabPaneFilenameComponent.getHtmlElement({ prefix, id }));
+    filePaths[id - 1] = '';
     const canvas = document.getElementById(`${prefix}-canvas-${id}`);
     canvas.height = CANVAS_HEIGHT_IN_PIXELS;
     canvas.width = CANVAS_WIDTH_IN_PIXELS;
@@ -60,6 +83,10 @@ module.exports = function canvasTool({ eventEmitter }) {
     const colorPicker = document.getElementById(`${prefix}-color-picker-${id}`);
     colorPickerElements.push(colorPicker);
     colorsElement.push(colorPicker.value);
+
+    const brushThicknessElement = document.getElementById(`${prefix}-brush-thickness-${id}`);
+    brushThicknessElements.push(brushThicknessElement);
+    brushesThickness.push(brushThicknessElement.value);
   }
 
   const getActiveTabId = () =>
@@ -69,6 +96,13 @@ module.exports = function canvasTool({ eventEmitter }) {
     element.addEventListener('change', () => {
       const activeTabId = getActiveTabId();
       colorsElement[activeTabId - 1] = element.value;
+    });
+  });
+
+  brushThicknessElements.forEach(element => {
+    element.addEventListener('change', () => {
+      const activeTabId = getActiveTabId();
+      brushesThickness[activeTabId - 1] = element.value;
     });
   });
 
@@ -111,6 +145,23 @@ module.exports = function canvasTool({ eventEmitter }) {
     const ctx = canvasContexts[activeTabId - 1];
     ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
   };
+  const closeCanvas = () => {
+    const activeTabId = getActiveTabId();
+    clearCanvas();
+    histories[activeTabId - 1].undo = [];
+    histories[activeTabId - 1].redo = [];
+  };
+  const loadImage = data => {
+    const activeTabId = getActiveTabId();
+    const image = new Image();
+    image.src = `data:image/png;base64,${data}`;
+    image.onload = () => {
+      const ctx = canvasContexts[activeTabId - 1];
+      ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
+      ctx.drawImage(image, 0, 0);
+      saveState();
+    };
+  };
 
   // undo click event handler
   for (const btn of tabPaneNavItemElements.undoNavItemElements) {
@@ -146,6 +197,7 @@ module.exports = function canvasTool({ eventEmitter }) {
     const activeTabId = getActiveTabId();
     isDrawing[activeTabId - 1] = true;
     saveState();
+    fileChangedListener();
     draw(event);
   };
   const stopDrawing = () => {
@@ -162,7 +214,7 @@ module.exports = function canvasTool({ eventEmitter }) {
     }
     const ctx = canvasContexts[activeTabId - 1];
     ctx.strokeStyle = colorsElement[activeTabId - 1];
-    ctx.lineWidth = 2;
+    ctx.lineWidth = brushesThickness[activeTabId - 1];
     ctx.lineCap = 'round';
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
@@ -175,5 +227,92 @@ module.exports = function canvasTool({ eventEmitter }) {
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mousemove', draw);
+  });
+
+  // FILE CHANGES
+  const fileChangedListener = () => {
+    const activeTabId = getActiveTabId();
+    if (filePaths[activeTabId - 1]?.length) {
+      openedFileChanged[activeTabId - 1] = true;
+      fileNameElements[activeTabId - 1].innerText =
+        path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
+    }
+  };
+
+  // CLOSE FILE
+  const closeFileListener = () => {
+    const activeTabId = getActiveTabId();
+    if (openedFileChanged[activeTabId - 1]) {
+      popError({ message: 'File has unsaved changes!' });
+    } else if (filePaths[activeTabId - 1]?.length) {
+      filePaths[activeTabId - 1] = '';
+      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+      closeCanvas();
+    }
+  };
+  closeFileBtnElement.addEventListener('click', closeFileListener);
+
+  // OPEN FILE
+  const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_CANVAS);
+  openFileBtnElement.addEventListener('click', openFileListener);
+
+  // SAVE FILE
+  const saveFileListener = () => {
+    const activeTabId = getActiveTabId();
+    const filepath = filePaths[activeTabId - 1];
+    if (filepath?.length) {
+      writeToFile(filepath);
+    } else {
+      ipcRenderer.send(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS);
+    }
+  };
+  saveFileBtnElement.addEventListener('click', saveFileListener);
+
+  const writeToFile = filePath => {
+    const activeTabId = getActiveTabId();
+    try {
+      fileNameElements[activeTabId - 1].innerText = 'Saving...';
+      const data = canvasses[activeTabId - 1].toDataURL().replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(data, 'base64');
+      fs.writeFileSync(filePath, buffer, 'utf8');
+    } catch (e) {
+      popError({ message: e.message });
+    } finally {
+      openedFileChanged[activeTabId - 1] = false;
+      fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
+      filePaths[activeTabId - 1] = filePath;
+    }
+  };
+
+  ipcRenderer.on(IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH, async (e, args) => {
+    writeToFile(args.filePath);
+  });
+
+  ipcRenderer.on(IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH, async (e, args) => {
+    try {
+      const activeTabId = getActiveTabId();
+      const openedFilePath = args.filePath;
+
+      const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
+      if (matchingFilepath) {
+        popError({ message: `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}` });
+        return;
+      }
+      if (filePaths[activeTabId - 1].length) {
+        popError(
+          {
+            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
+          },
+          7000
+        );
+        return;
+      }
+      filePaths[activeTabId - 1] = openedFilePath;
+      fileNameElements[activeTabId - 1].innerText = path.basename(openedFilePath).substring(0, 20);
+      const data = fs.readFileSync(args.filePath, 'base64');
+      loadImage(data);
+    } catch (e) {
+      popError({ message: e.message });
+    }
   });
 };

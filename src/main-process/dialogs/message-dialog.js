@@ -74,6 +74,20 @@ module.exports = function messageDialog(browserWindow, electronDialog = dialog) 
     });
   };
 
+  const showOpenDialogToSelectCanvasFile = async () => {
+    return showOpenDialog({
+      filters: [{ name: 'Canvas', extensions: ['png'] }],
+      properties: ['openFile', 'openDirectory']
+    });
+  };
+
+  const showSaveDialogToSaveCanvasFile = async () => {
+    return showSaveDialog({
+      filters: [{ name: 'Canvas', extensions: ['png'] }],
+      properties: ['openFile', 'openDirectory']
+    });
+  };
+
   return {
     showOpenDialog,
     showSaveDialog,
@@ -85,6 +99,8 @@ module.exports = function messageDialog(browserWindow, electronDialog = dialog) 
     showOpenDialogToSelectFile,
     showSaveDialogToSaveFile,
     showOpenDialogToSelectMarkdownFile,
-    showSaveDialogToSaveMarkdownFile
+    showSaveDialogToSaveMarkdownFile,
+    showOpenDialogToSelectCanvasFile,
+    showSaveDialogToSaveCanvasFile
   };
 };
