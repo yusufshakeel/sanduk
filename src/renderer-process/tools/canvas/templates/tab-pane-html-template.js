@@ -47,7 +47,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
     </div>
   </nav>
   <div class="text-center p-3" style="overflow: scroll; height: calc(100vh - 170px);">
-    <canvas id="${prefix}-canvas-${id}" tabindex="1" class="shadow-lg"></canvas>
+    <canvas id="${prefix}-canvas-${id}" tabindex="1" class="shadow-lg sanduk-canvas-tool sanduk-canvas-tool-draw"></canvas>
   </div>
 </div>`;
 };

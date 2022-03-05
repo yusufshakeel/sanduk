@@ -28,3 +28,11 @@ i[class*="bi-"] {
 .sanduk-sidebar-menu-item {
     font-size: 0.9em;
 }
+
+.sanduk-canvas-tool.sanduk-canvas-tool-draw {
+    cursor: url(../bootstrap-icons/circle-fill.svg) 7 7, auto;
+}
+
+.sanduk-canvas-tool.sanduk-canvas-tool-erase {
+    cursor: url(../bootstrap-icons/circle.svg) 7 7, auto;
+}
