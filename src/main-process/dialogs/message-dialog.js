@@ -88,6 +88,10 @@ module.exports = function messageDialog(browserWindow, electronDialog = dialog) 
     });
   };
 
+  const showMessageBoxUnsavedChanges = async option => {
+    return electronDialog.showMessageBox(browserWindow, option);
+  };
+
   return {
     showOpenDialog,
     showSaveDialog,
@@ -101,6 +105,7 @@ module.exports = function messageDialog(browserWindow, electronDialog = dialog) 
     showOpenDialogToSelectMarkdownFile,
     showSaveDialogToSaveMarkdownFile,
     showOpenDialogToSelectCanvasFile,
-    showSaveDialogToSaveCanvasFile
+    showSaveDialogToSaveCanvasFile,
+    showMessageBoxUnsavedChanges
   };
 };

@@ -23,7 +23,9 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_EDITOR,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_EDITOR,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_EDITOR_FILE_PATH,
-  IPC_EVENT_OPEN_FILE_DIALOG_EDITOR_FILE_PATH
+  IPC_EVENT_OPEN_FILE_DIALOG_EDITOR_FILE_PATH,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('../../../main-process/constants/ipc-event-constants');
 const popError = require('../../helpers/pop-error');
 const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
@@ -123,17 +125,33 @@ module.exports = function editorTool({ eventEmitter }) {
   });
 
   // CLOSE FILE
+  const closeFile = () => {
+    const activeTabId = getActiveTabId();
+    filePaths[activeTabId - 1] = '';
+    editors[activeTabId - 1].setValue('');
+    fileNameElements[activeTabId - 1].innerText = 'Untitled';
+  };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
-      popError({ message: 'File has unsaved changes!' });
+      ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
+      // popError({ message: 'File has unsaved changes!' });
     } else if (filePaths[activeTabId - 1]?.length) {
-      filePaths[activeTabId - 1] = '';
-      editors[activeTabId - 1].setValue('');
-      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+      closeFile();
     }
   };
   closeFileBtnElement.addEventListener('click', closeFileListener);
+  ipcRenderer.on(
+    IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
+    async (e, args) => {
+      if (args.clicked.saveButton) {
+        saveFileListener();
+        closeFile();
+      } else if (args.clicked.ignoreButton) {
+        closeFile();
+      }
+    }
+  );
 
   // OPEN FILE
   const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_EDITOR);
@@ -154,7 +172,10 @@ module.exports = function editorTool({ eventEmitter }) {
   // FILE CHANGES
   const fileChangedListener = event => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+    if (
+      filePaths[activeTabId - 1]?.length &&
+      ['insertstring', 'indent', 'backspace', 'del'].includes(event.command.name)
+    ) {
       openedFileChanged[activeTabId - 1] = true;
       fileNameElements[activeTabId - 1].innerText =
         path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
