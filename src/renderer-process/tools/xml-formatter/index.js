@@ -252,12 +252,10 @@ module.exports = function xmlFormatterTool({ eventEmitter }) {
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
-        popError(
-          {
-            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
-          },
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;

@@ -7,7 +7,10 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const tabsTemplate = require('./templates/tabs-template');
-const { SANDUK_UI_WORK_AREA_EDITOR_TAB_PANE_ID } = require('../../constants/ui-constants');
+const {
+  SANDUK_UI_WORK_AREA_EDITOR_TAB_PANE_ID,
+  SANDUK_UI_WORK_AREA_EDITOR_TAB_ID
+} = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
@@ -42,6 +45,8 @@ module.exports = function editorTool({ eventEmitter }) {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
+
+  const editorSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_EDITOR_TAB_ID);
 
   const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
     fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
@@ -135,7 +140,6 @@ module.exports = function editorTool({ eventEmitter }) {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
       ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
-      // popError({ message: 'File has unsaved changes!' });
     } else if (filePaths[activeTabId - 1]?.length) {
       closeFile();
     }
@@ -144,11 +148,13 @@ module.exports = function editorTool({ eventEmitter }) {
   ipcRenderer.on(
     IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
     async (e, args) => {
-      if (args.clicked.saveButton) {
-        saveFileListener();
-        closeFile();
-      } else if (args.clicked.ignoreButton) {
-        closeFile();
+      if (Array.from(editorSidebarTabElement.classList).includes('active')) {
+        if (args.clicked.saveButton) {
+          saveFileListener();
+          closeFile();
+        } else if (args.clicked.ignoreButton) {
+          closeFile();
+        }
       }
     }
   );
@@ -235,12 +241,10 @@ module.exports = function editorTool({ eventEmitter }) {
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
-        popError(
-          {
-            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
-          },
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;
