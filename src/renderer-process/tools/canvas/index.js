@@ -61,10 +61,8 @@ module.exports = function canvasTool({ eventEmitter }) {
 
   const canvasses = [];
   const canvasContexts = [];
-  const colorPickerElements = [];
   const brushThicknessElements = [];
-  const brushesThickness = [];
-  const colorsElement = [];
+  const brushColorElements = [];
   const isDrawing = {};
   const histories = {};
 
@@ -80,31 +78,16 @@ module.exports = function canvasTool({ eventEmitter }) {
     canvasContexts.push(ctx);
     isDrawing[id - 1] = false;
     histories[id - 1] = { undo: [], redo: [] };
-    const colorPicker = document.getElementById(`${prefix}-color-picker-${id}`);
-    colorPickerElements.push(colorPicker);
-    colorsElement.push(colorPicker.value);
+
+    const brushColor = document.getElementById(`${prefix}-brush-color-${id}`);
+    brushColorElements.push(brushColor);
 
     const brushThicknessElement = document.getElementById(`${prefix}-brush-thickness-${id}`);
     brushThicknessElements.push(brushThicknessElement);
-    brushesThickness.push(brushThicknessElement.value);
   }
 
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
-
-  colorPickerElements.forEach(element => {
-    element.addEventListener('change', () => {
-      const activeTabId = getActiveTabId();
-      colorsElement[activeTabId - 1] = element.value;
-    });
-  });
-
-  brushThicknessElements.forEach(element => {
-    element.addEventListener('change', () => {
-      const activeTabId = getActiveTabId();
-      brushesThickness[activeTabId - 1] = element.value;
-    });
-  });
 
   // history
   const saveState = () => {
@@ -213,8 +196,8 @@ module.exports = function canvasTool({ eventEmitter }) {
       return;
     }
     const ctx = canvasContexts[activeTabId - 1];
-    ctx.strokeStyle = colorsElement[activeTabId - 1];
-    ctx.lineWidth = brushesThickness[activeTabId - 1];
+    ctx.strokeStyle = brushColorElements[activeTabId - 1].value;
+    ctx.lineWidth = brushThicknessElements[activeTabId - 1].value;
     ctx.lineCap = 'round';
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
