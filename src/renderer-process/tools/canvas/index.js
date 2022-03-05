@@ -99,18 +99,17 @@ module.exports = function canvasTool({ eventEmitter }) {
     const activeTabId = getActiveTabId();
     const canvas = canvasses[activeTabId - 1];
     histories[activeTabId - 1].undo.push(canvas.toDataURL());
-    console.log('save', histories[activeTabId - 1]);
   };
   const undo = () => {
     const activeTabId = getActiveTabId();
     if (histories[activeTabId - 1].undo.length) {
       const lastCanvas = histories[activeTabId - 1].undo.pop();
       histories[activeTabId - 1].redo.push(lastCanvas);
-      console.log('undo', histories[activeTabId - 1]);
       const image = new Image();
       image.src = lastCanvas.toString();
       image.onload = () => {
         const ctx = canvasContexts[activeTabId - 1];
+        ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, CANVAS_HEIGHT_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
         ctx.drawImage(image, 0, 0);
       };
@@ -121,11 +120,11 @@ module.exports = function canvasTool({ eventEmitter }) {
     if (histories[activeTabId - 1].redo.length) {
       const lastCanvas = histories[activeTabId - 1].redo.pop();
       histories[activeTabId - 1].undo.push(lastCanvas);
-      console.log('redo', histories[activeTabId - 1]);
       const image = new Image();
       image.src = lastCanvas.toString();
       image.onload = () => {
         const ctx = canvasContexts[activeTabId - 1];
+        ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
         ctx.drawImage(image, 0, 0);
       };
