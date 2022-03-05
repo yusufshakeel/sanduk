@@ -82,11 +82,10 @@ function getHtmlCopyNavItem({ prefix, dataId }) {
 </li>`;
 }
 
-function getHtmlClearNavItem({ prefix, dataId, classNames = [] }) {
+function getHtmlClearNavItem({ prefix, dataId }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).CLEAR.className;
-  const customClassNames = classNames.join(' ');
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className} ${customClassNames}" data-id="${dataId}"><i title="Erase" class="bi-eraser"></i></a>
+  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Erase" class="bi-eraser"></i></a>
 </li>`;
 }
 
