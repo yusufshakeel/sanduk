@@ -15,7 +15,20 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
         ${tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId: id })}
         <li>
-          <select title="Brush" style="padding: 1px; margin: 2px;"
+          <select title="Brush Color" style="padding: 1px; margin: 2px;"
+            class="${prefix}-brush-color" 
+            id="${prefix}-brush-color-${id}">
+            <option selected value="#000000">Black</option>
+            <option value="#ffffff">White</option>
+            <option value="#ff0000">Red</option>
+            <option value="#00ff00">Green</option>
+            <option value="#0000ff">Blue</option>
+            <option value="#ffe00e">Yellow</option>
+            <option value="#fb22aa">Pink</option>
+          </select>
+        </li>
+        <li>
+          <select title="Brush Size" style="padding: 1px; margin: 2px;"
             class="${prefix}-brush-thickness" 
             id="${prefix}-brush-thickness-${id}">
             <option value="1">1</option>
@@ -30,18 +43,10 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
             <option value="50">50</option>
           </select>
         </li>
-        <li class="nav-item">
-          <input type="color" 
-            title="Color"
-            class="${prefix}-color-picker" 
-            id="${prefix}-color-picker-${id}" 
-            value="#000000" 
-            style="height: 24px; width: 30px; margin: 3px; padding: 0;">
-        </li>
       </ul>
     </div>
   </nav>
-  <div class="text-center p-3" style="overflow: scroll; height: calc(100vh - 170px)">
+  <div class="text-center p-3" style="overflow: scroll; height: calc(100vh - 170px);">
     <canvas id="${prefix}-canvas-${id}" tabindex="1" class="shadow-lg"></canvas>
   </div>
 </div>`;
