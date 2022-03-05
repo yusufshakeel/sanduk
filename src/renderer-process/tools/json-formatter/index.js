@@ -288,7 +288,10 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
   // FILE CHANGES
   const fileChangedListener = event => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+    if (
+      filePaths[activeTabId - 1]?.length &&
+      ['insertstring', 'indent', 'backspace', 'del'].includes(event.command.name)
+    ) {
       openedFileChanged[activeTabId - 1] = true;
       fileNameElements[activeTabId - 1].innerText =
         path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
