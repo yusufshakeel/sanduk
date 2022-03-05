@@ -5,6 +5,7 @@ const TAB_PANE_NAV_ITEMS = {
   CLOSE: 'CLOSE',
   COMPACT: 'COMPACT',
   COPY: 'COPY',
+  EDIT: 'EDIT',
   FOLD: 'FOLD',
   PRETTY: 'PRETTY',
   REDO: 'REDO',
@@ -21,6 +22,7 @@ const tabPaneNavItemToClassNameMapper = ({ prefix }) => ({
   CLOSE: { key: 'closeNavItemElements', className: `${prefix}-close-btn` },
   COMPACT: { key: 'compactNavItemElements', className: `${prefix}-compact-btn` },
   COPY: { key: 'copyNavItemElements', className: `${prefix}-copy-btn` },
+  EDIT: { key: 'editNavItemElements', className: `${prefix}-edit-btn` },
   FOLD: { key: 'foldNavItemElements', className: `${prefix}-fold-btn` },
   PRETTY: { key: 'prettyNavItemElements', className: `${prefix}-pretty-btn` },
   REDO: { key: 'redoNavItemElements', className: `${prefix}-redo-btn` },
@@ -80,10 +82,11 @@ function getHtmlCopyNavItem({ prefix, dataId }) {
 </li>`;
 }
 
-function getHtmlClearNavItem({ prefix, dataId }) {
+function getHtmlClearNavItem({ prefix, dataId, classNames = [] }) {
   const className = tabPaneNavItemToClassNameMapper({ prefix }).CLEAR.className;
+  const customClassNames = classNames.join(' ');
   return `<li class="nav-item">
-  <a class="nav-link py-0 ${className}" data-id="${dataId}"><i title="Erase" class="bi-eraser"></i></a>
+  <a class="nav-link py-0 ${className} ${customClassNames}" data-id="${dataId}"><i title="Erase" class="bi-eraser"></i></a>
 </li>`;
 }
 
@@ -129,6 +132,14 @@ function getHtmlRedoNavItem({ prefix, dataId }) {
 </li>`;
 }
 
+function getHtmlEditNavItem({ prefix, dataId, classNames = [], title = 'Edit' }) {
+  const className = tabPaneNavItemToClassNameMapper({ prefix }).EDIT.className;
+  const customClassNames = classNames.join(' ');
+  return `<li class="nav-item">
+  <a class="nav-link py-0 ${className} ${customClassNames}" data-id="${dataId}"><i title="${title}" class="bi-pen"></i></a>
+</li>`;
+}
+
 /**
  * @param prefix {string}
  * @param specificNavItemsToPick {string[]}
@@ -160,5 +171,6 @@ module.exports = {
   getHtmlTransformNavItem,
   getHtmlCloseNavItem,
   getHtmlUndoNavItem,
-  getHtmlRedoNavItem
+  getHtmlRedoNavItem,
+  getHtmlEditNavItem
 };

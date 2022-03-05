@@ -36,3 +36,7 @@ i[class*="bi-"] {
 .sanduk-canvas-tool.sanduk-canvas-tool-erase {
     cursor: url(../bootstrap-icons/circle.svg) 7 7, auto;
 }
+
+.sanduk-canvas-menu-item-highlighted {
+    background-color: #ffe4e1;
+}

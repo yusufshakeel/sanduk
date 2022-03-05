@@ -6,11 +6,19 @@ const tabPaneFilenameComponent = require('../../../ui-components/tab-pane-filena
 module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = false }) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
 
+  const penNavItemOption = {
+    prefix,
+    dataId: id,
+    classNames: ['sanduk-canvas-menu-item-highlighted'],
+    title: 'Pen'
+  };
+
   return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
       ${tabPaneFilenameComponent.getHtml({ prefix, id })}
       <ul class="navbar-nav">
+        ${tabPaneNavItemComponent.getHtmlEditNavItem(penNavItemOption)}
         ${tabPaneNavItemComponent.getHtmlClearNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId: id })}
