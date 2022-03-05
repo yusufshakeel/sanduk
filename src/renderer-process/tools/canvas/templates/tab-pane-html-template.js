@@ -23,7 +23,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
         ${tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId: id })}
         <li>
-          <select title="Brush Color" style="padding: 1px; margin: 2px;"
+          <select title="Color" style="padding: 1px; margin: 2px;"
             class="${prefix}-brush-color" 
             id="${prefix}-brush-color-${id}">
             <option selected value="#000000">Black</option>
@@ -36,7 +36,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
           </select>
         </li>
         <li>
-          <select title="Brush Size" style="padding: 1px; margin: 2px;"
+          <select title="Size" style="padding: 1px; margin: 2px;"
             class="${prefix}-brush-thickness" 
             id="${prefix}-brush-thickness-${id}">
             <option value="1">1</option>
