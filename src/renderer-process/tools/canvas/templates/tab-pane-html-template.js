@@ -6,16 +6,24 @@ const tabPaneFilenameComponent = require('../../../ui-components/tab-pane-filena
 module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = false }) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
 
+  const penNavItemOption = {
+    prefix,
+    dataId: id,
+    classNames: ['sanduk-canvas-menu-item-highlighted'],
+    title: 'Pen'
+  };
+
   return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
       ${tabPaneFilenameComponent.getHtml({ prefix, id })}
       <ul class="navbar-nav">
+        ${tabPaneNavItemComponent.getHtmlEditNavItem(penNavItemOption)}
         ${tabPaneNavItemComponent.getHtmlClearNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlUndoNavItem({ prefix, dataId: id })}
         ${tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId: id })}
         <li>
-          <select title="Brush Color" style="padding: 1px; margin: 2px;"
+          <select title="Color" style="padding: 1px; margin: 2px;"
             class="${prefix}-brush-color" 
             id="${prefix}-brush-color-${id}">
             <option selected value="#000000">Black</option>
@@ -28,7 +36,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
           </select>
         </li>
         <li>
-          <select title="Brush Size" style="padding: 1px; margin: 2px;"
+          <select title="Size" style="padding: 1px; margin: 2px;"
             class="${prefix}-brush-thickness" 
             id="${prefix}-brush-thickness-${id}">
             <option value="1">1</option>
@@ -47,7 +55,7 @@ module.exports = function tabPaneHtmlTemplate({ prefix, id, addActiveClass = fal
     </div>
   </nav>
   <div class="text-center p-3" style="overflow: scroll; height: calc(100vh - 170px);">
-    <canvas id="${prefix}-canvas-${id}" tabindex="1" class="shadow-lg"></canvas>
+    <canvas id="${prefix}-canvas-${id}" tabindex="1" class="shadow-lg sanduk-canvas-tool sanduk-canvas-tool-draw"></canvas>
   </div>
 </div>`;
 };

@@ -52,6 +52,7 @@ module.exports = function canvasTool({ eventEmitter }) {
     prefix,
     specificNavItemsToPick: [
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.CLEAR,
+      tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.EDIT,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.REDO,
       tabPaneNavItemComponent.TAB_PANE_NAV_ITEMS.UNDO
     ]
@@ -66,6 +67,7 @@ module.exports = function canvasTool({ eventEmitter }) {
   const brushThicknessElements = [];
   const brushColorElements = [];
   const isDrawing = {};
+  const isErasing = {};
   const histories = {};
 
   // Initialising the editors
@@ -79,6 +81,7 @@ module.exports = function canvasTool({ eventEmitter }) {
     canvasses.push(canvas);
     canvasContexts.push(ctx);
     isDrawing[id - 1] = false;
+    isErasing[id - 1] = false;
     histories[id - 1] = { undo: [], redo: [] };
 
     const brushColor = document.getElementById(`${prefix}-brush-color-${id}`);
@@ -106,6 +109,7 @@ module.exports = function canvasTool({ eventEmitter }) {
       image.src = lastCanvas.toString();
       image.onload = () => {
         const ctx = canvasContexts[activeTabId - 1];
+        ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, CANVAS_HEIGHT_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
         ctx.drawImage(image, 0, 0);
       };
@@ -120,6 +124,7 @@ module.exports = function canvasTool({ eventEmitter }) {
       image.src = lastCanvas.toString();
       image.onload = () => {
         const ctx = canvasContexts[activeTabId - 1];
+        ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
         ctx.drawImage(image, 0, 0);
       };
@@ -127,12 +132,34 @@ module.exports = function canvasTool({ eventEmitter }) {
   };
   const clearCanvas = () => {
     const activeTabId = getActiveTabId();
-    const ctx = canvasContexts[activeTabId - 1];
-    ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
+    isErasing[activeTabId - 1] = true;
+
+    const canvas = canvasses[activeTabId - 1];
+    canvas.classList.remove('sanduk-canvas-tool-draw');
+    canvas.classList.add('sanduk-canvas-tool-erase');
+
+    const clearElement = tabPaneNavItemElements.clearNavItemElements[activeTabId - 1];
+    clearElement.classList.add('sanduk-canvas-menu-item-highlighted');
+    const penElement = tabPaneNavItemElements.editNavItemElements[activeTabId - 1];
+    penElement.classList.remove('sanduk-canvas-menu-item-highlighted');
+  };
+  const penCanvas = () => {
+    const activeTabId = getActiveTabId();
+    isErasing[activeTabId - 1] = false;
+
+    const canvas = canvasses[activeTabId - 1];
+    canvas.classList.add('sanduk-canvas-tool-draw');
+    canvas.classList.remove('sanduk-canvas-tool-erase');
+
+    const clearElement = tabPaneNavItemElements.clearNavItemElements[activeTabId - 1];
+    clearElement.classList.remove('sanduk-canvas-menu-item-highlighted');
+    const penElement = tabPaneNavItemElements.editNavItemElements[activeTabId - 1];
+    penElement.classList.add('sanduk-canvas-menu-item-highlighted');
   };
   const closeCanvas = () => {
     const activeTabId = getActiveTabId();
-    clearCanvas();
+    const ctx = canvasContexts[activeTabId - 1];
+    ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
     histories[activeTabId - 1].undo = [];
     histories[activeTabId - 1].redo = [];
   };
@@ -161,6 +188,11 @@ module.exports = function canvasTool({ eventEmitter }) {
   // clear click event handler
   for (const btn of tabPaneNavItemElements.clearNavItemElements) {
     btn.addEventListener('click', clearCanvas);
+  }
+
+  // pen click event handler
+  for (const btn of tabPaneNavItemElements.editNavItemElements) {
+    btn.addEventListener('click', penCanvas);
   }
 
   // undo shortcut key event handler
@@ -198,8 +230,16 @@ module.exports = function canvasTool({ eventEmitter }) {
       return;
     }
     const ctx = canvasContexts[activeTabId - 1];
-    ctx.strokeStyle = brushColorElements[activeTabId - 1].value;
-    ctx.lineWidth = brushThicknessElements[activeTabId - 1].value;
+
+    if (isErasing[activeTabId - 1]) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = 20;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = brushColorElements[activeTabId - 1].value;
+      ctx.lineWidth = brushThicknessElements[activeTabId - 1].value;
+    }
+
     ctx.lineCap = 'round';
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();

@@ -34,7 +34,8 @@ describe('Testing tab pane navItem component', () => {
           transformNavItemElements: [{ id: 1 }],
           closeNavItemElements: [{ id: 1 }],
           redoNavItemElements: [{ id: 1 }],
-          undoNavItemElements: [{ id: 1 }]
+          undoNavItemElements: [{ id: 1 }],
+          editNavItemElements: [{ id: 1 }]
         });
       });
     });
@@ -168,6 +169,29 @@ describe('Testing tab pane navItem component', () => {
       const html = tabPaneNavItemComponent.getHtmlRedoNavItem({ prefix, dataId });
       expect(html).toMatch(/class="nav-link py-0 some-prefix-redo-btn"/);
       expect(html).toMatch(/title="Redo"/);
+    });
+  });
+
+  describe('Testing getHtmlEditNavItem', () => {
+    describe('When using default', () => {
+      test('Should be able to get html', () => {
+        const html = tabPaneNavItemComponent.getHtmlEditNavItem({ prefix, dataId });
+        expect(html).toMatch(/class="nav-link py-0 some-prefix-edit-btn "/);
+        expect(html).toMatch(/title="Edit"/);
+      });
+    });
+
+    describe('When passing all arguments', () => {
+      test('Should be able to get html', () => {
+        const html = tabPaneNavItemComponent.getHtmlEditNavItem({
+          prefix,
+          dataId,
+          classNames: ['className1', 'className2'],
+          title: 'some title'
+        });
+        expect(html).toMatch(/class="nav-link py-0 some-prefix-edit-btn className1 className2"/);
+        expect(html).toMatch(/title="some title"/);
+      });
     });
   });
 });
