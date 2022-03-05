@@ -26,7 +26,10 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_CANVAS,
   IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS,
-  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH,
+
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('./constants/ipc-event-constants');
 
 module.exports = function fileManagement(
@@ -147,6 +150,29 @@ module.exports = function fileManagement(
           filePath: result.filePath
         });
       }
+    } catch (e) {
+      await msgDialog.showErrorDialog(e);
+    }
+  });
+
+  electronIpcMain.on(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES, async event => {
+    try {
+      const buttons = ['Save', 'Ignore changes', 'Cancel'];
+      const result = await msgDialog.showMessageBoxUnsavedChanges({
+        type: 'question',
+        buttons: ['Save', 'Ignore changes', 'Cancel'],
+        message: 'Do you want to save the changes?'
+      });
+      event.reply(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION, {
+        buttons,
+        clickedButtonIndex: result.response,
+        clickedButton: buttons[result.response],
+        clicked: {
+          saveButton: result.response === 0,
+          ignoreButton: result.response === 1,
+          cancelButton: result.response === 2
+        }
+      });
     } catch (e) {
       await msgDialog.showErrorDialog(e);
     }

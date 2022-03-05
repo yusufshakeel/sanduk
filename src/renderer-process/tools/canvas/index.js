@@ -25,7 +25,9 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_CANVAS,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_CANVAS_FILE_PATH,
-  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH
+  IPC_EVENT_OPEN_FILE_DIALOG_CANVAS_FILE_PATH,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('../../../main-process/constants/ipc-event-constants');
 const tabPaneFilenameComponent = require('../../ui-components/tab-pane-filename-component');
 
@@ -223,17 +225,34 @@ module.exports = function canvasTool({ eventEmitter }) {
   };
 
   // CLOSE FILE
+  const closeFile = () => {
+    const activeTabId = getActiveTabId();
+    filePaths[activeTabId - 1] = '';
+    fileNameElements[activeTabId - 1].innerText = 'Untitled';
+    closeCanvas();
+  };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
-      popError({ message: 'File has unsaved changes!' });
+      ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
     } else if (filePaths[activeTabId - 1]?.length) {
-      filePaths[activeTabId - 1] = '';
-      fileNameElements[activeTabId - 1].innerText = 'Untitled';
-      closeCanvas();
+      closeFile();
     }
   };
   closeFileBtnElement.addEventListener('click', closeFileListener);
+  ipcRenderer.on(
+    IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
+    async (e, args) => {
+      if (Array.from(canvasSidebarTabElement.classList).includes('active')) {
+        if (args.clicked.saveButton) {
+          saveFileListener();
+          closeFile();
+        } else if (args.clicked.ignoreButton) {
+          closeFile();
+        }
+      }
+    }
+  );
 
   // OPEN FILE
   const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_CANVAS);
@@ -282,12 +301,10 @@ module.exports = function canvasTool({ eventEmitter }) {
         return;
       }
       if (filePaths[activeTabId - 1].length) {
-        popError(
-          {
-            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
-          },
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;

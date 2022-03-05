@@ -9,7 +9,10 @@ const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const activeTabElement = require('../../helpers/active-tab-element');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
-const { SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-constants');
+const {
+  SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_PANE_ID,
+  SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_ID
+} = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
@@ -25,7 +28,9 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_JSON,
   IPC_EVENT_OPEN_FILE_DIALOG_JSON_FILE_PATH,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON,
-  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH
+  IPC_EVENT_OPEN_SAVE_FILE_DIALOG_JSON_FILE_PATH,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('../../../main-process/constants/ipc-event-constants');
 const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
@@ -44,6 +49,10 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
+
+  const jsonFormatterSidebarTabElement = document.getElementById(
+    SANDUK_UI_WORK_AREA_JSON_FORMATTER_TAB_ID
+  );
 
   const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
     fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
@@ -141,7 +150,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -156,7 +165,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -172,7 +181,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
           editors[activeTabId - 1].getSession().foldAll(1);
         }
       } catch (e) {
-        popError(e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -191,7 +200,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -210,7 +219,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
           editors[activeTabId - 1].setValue(json, -1);
         }
       } catch (e) {
-        popError(e.message);
+        popError({ message: e.message });
       }
     });
   }
@@ -231,17 +240,34 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
   });
 
   // CLOSE FILE
+  const closeFile = () => {
+    const activeTabId = getActiveTabId();
+    filePaths[activeTabId - 1] = '';
+    editors[activeTabId - 1].setValue('');
+    fileNameElements[activeTabId - 1].innerText = 'Untitled';
+  };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
-      popError({ message: 'File has unsaved changes!' });
+      ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
     } else if (filePaths[activeTabId - 1]?.length) {
-      filePaths[activeTabId - 1] = '';
-      editors[activeTabId - 1].setValue('');
-      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+      closeFile();
     }
   };
   closeFileBtnElement.addEventListener('click', closeFileListener);
+  ipcRenderer.on(
+    IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
+    async (e, args) => {
+      if (Array.from(jsonFormatterSidebarTabElement.classList).includes('active')) {
+        if (args.clicked.saveButton) {
+          saveFileListener();
+          closeFile();
+        } else if (args.clicked.ignoreButton) {
+          closeFile();
+        }
+      }
+    }
+  );
 
   // OPEN FILE
   const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_JSON);
@@ -262,7 +288,10 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
   // FILE CHANGES
   const fileChangedListener = event => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+    if (
+      filePaths[activeTabId - 1]?.length &&
+      ['insertstring', 'indent', 'backspace', 'del'].includes(event.command.name)
+    ) {
       openedFileChanged[activeTabId - 1] = true;
       fileNameElements[activeTabId - 1].innerText =
         path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
@@ -292,49 +321,6 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
     editor.commands.on('afterExec', fileChangedListener);
   });
 
-  // // CONTEXT MENU setup
-  // editors.forEach(editor => {
-  //   editor.container.addEventListener(
-  //     'contextmenu',
-  //     e => {
-  //       const element = document.getElementById(
-  //         CONTEXT_MENU_CUT_COPY_PASTE_SELECT_ALL_HTML_CONTAINER_ID
-  //       );
-  //       element.setAttribute('data-eventData', JSON.stringify({ contextMenuEventHandlerId }));
-  //       showEditorCutCopyPasteSelectAllContextMenu({ htmlEvent: e });
-  //     },
-  //     false
-  //   );
-  // });
-  //
-  // // CUT - context menu event
-  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_CUT, args => {
-  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
-  //     contextMenuHandler.contextMenuCutHandler({ getActiveTabId, editors });
-  //   }
-  // });
-  //
-  // // COPY - context menu event
-  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_COPY, args => {
-  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
-  //     contextMenuHandler.contextMenuCopyHandler({ getActiveTabId, editors });
-  //   }
-  // });
-  //
-  // // PASTE - context menu event
-  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_PASTE, args => {
-  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
-  //     contextMenuHandler.contextMenuPasteHandler({ getActiveTabId, editors });
-  //   }
-  // });
-  //
-  // // SELECT ALL - context menu event
-  // eventEmitter.on(CONTEXT_MENU_EVENT_TYPE_SELECT_ALL, args => {
-  //   if (args.eventData.contextMenuEventHandlerId === contextMenuEventHandlerId) {
-  //     contextMenuHandler.contextMenuSelectAllHandler({ getActiveTabId, editors });
-  //   }
-  // });
-
   const writeToFile = filePath => {
     const activeTabId = getActiveTabId();
     try {
@@ -342,7 +328,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
       const data = editors[activeTabId - 1].getValue();
       fs.writeFileSync(filePath, data, 'utf8');
     } catch (e) {
-      popError(e.message);
+      popError({ message: e.message });
     } finally {
       openedFileChanged[activeTabId - 1] = false;
       fileNameElements[activeTabId - 1].innerText = path.basename(filePath).substring(0, 20);
@@ -361,14 +347,14 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
 
       const matchingFilepath = Object.entries(filePaths).find(([, v]) => v === openedFilePath);
       if (matchingFilepath) {
-        popError(`File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}`);
+        popError({ message: `File already opened. Check Tab ${Number(matchingFilepath[0]) + 1}` });
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
-        popError(
-          `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;
@@ -376,7 +362,7 @@ module.exports = function jsonFormatterTool({ eventEmitter }) {
       const json = fs.readFileSync(args.filePath).toString();
       editors[activeTabId - 1].getSession().setValue(json, -1);
     } catch (e) {
-      popError(e.message);
+      popError({ message: e.message });
     }
   });
 };

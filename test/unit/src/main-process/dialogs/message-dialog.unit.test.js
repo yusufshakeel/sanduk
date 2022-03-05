@@ -301,4 +301,28 @@ describe('Testing message dialog', () => {
       );
     });
   });
+
+  describe('Testing showMessageBoxUnsavedChanges', () => {
+    test('Should be able to open dialog', async () => {
+      const fakeElectronDialog = {
+        showMessageBox: jest.fn(async () => ({ response: 0, checkboxChecked: false }))
+      };
+      const msgDialog = messageDialog(fakeBrowserWindow, fakeElectronDialog);
+      const result = await msgDialog.showMessageBoxUnsavedChanges({
+        type: 'question',
+        buttons: ['Save', 'Ignore changes', 'Cancel'],
+        message: 'Do you want to save the changes?'
+      });
+      expect(result).toStrictEqual({ response: 0, checkboxChecked: false });
+      expect(fakeElectronDialog.showMessageBox).toHaveBeenCalledTimes(1);
+      expect(fakeElectronDialog.showMessageBox).toHaveBeenCalledWith(
+        { msg: 'fakeBrowserWindow' },
+        {
+          type: 'question',
+          buttons: ['Save', 'Ignore changes', 'Cancel'],
+          message: 'Do you want to save the changes?'
+        }
+      );
+    });
+  });
 });

@@ -13,7 +13,10 @@ const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 const fontSize = require('../../editor/font-size');
-const { SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID } = require('../../constants/ui-constants');
+const {
+  SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_PANE_ID,
+  SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_ID
+} = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
@@ -25,7 +28,9 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_XML,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_XML_FILE_PATH,
-  IPC_EVENT_OPEN_FILE_DIALOG_XML_FILE_PATH
+  IPC_EVENT_OPEN_FILE_DIALOG_XML_FILE_PATH,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('../../../main-process/constants/ipc-event-constants');
 const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
@@ -45,6 +50,10 @@ module.exports = function xmlFormatterTool({ eventEmitter }) {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
+
+  const xmlFormatterSidebarTabElement = document.getElementById(
+    SANDUK_UI_WORK_AREA_XML_FORMATTER_TAB_ID
+  );
 
   const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
     fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
@@ -161,17 +170,34 @@ module.exports = function xmlFormatterTool({ eventEmitter }) {
   }
 
   // CLOSE FILE
+  const closeFile = () => {
+    const activeTabId = getActiveTabId();
+    filePaths[activeTabId - 1] = '';
+    editors[activeTabId - 1].setValue('');
+    fileNameElements[activeTabId - 1].innerText = 'Untitled';
+  };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
-      popError({ message: 'File has unsaved changes!' });
+      ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
     } else if (filePaths[activeTabId - 1]?.length) {
-      filePaths[activeTabId - 1] = '';
-      editors[activeTabId - 1].setValue('');
-      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+      closeFile();
     }
   };
   closeFileBtnElement.addEventListener('click', closeFileListener);
+  ipcRenderer.on(
+    IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
+    async (e, args) => {
+      if (Array.from(xmlFormatterSidebarTabElement.classList).includes('active')) {
+        if (args.clicked.saveButton) {
+          saveFileListener();
+          closeFile();
+        } else if (args.clicked.ignoreButton) {
+          closeFile();
+        }
+      }
+    }
+  );
 
   // OPEN FILE
   const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_XML);
@@ -192,7 +218,10 @@ module.exports = function xmlFormatterTool({ eventEmitter }) {
   // FILE CHANGES
   const fileChangedListener = event => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+    if (
+      filePaths[activeTabId - 1]?.length &&
+      ['insertstring', 'indent', 'backspace', 'del'].includes(event.command.name)
+    ) {
       openedFileChanged[activeTabId - 1] = true;
       fileNameElements[activeTabId - 1].innerText =
         path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
@@ -252,12 +281,10 @@ module.exports = function xmlFormatterTool({ eventEmitter }) {
         return;
       }
       if (editors[activeTabId - 1].getValue().length) {
-        popError(
-          {
-            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
-          },
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;

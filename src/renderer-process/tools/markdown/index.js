@@ -9,7 +9,10 @@ const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
 const setupEditor = require('../../editor/setup-editor');
 const tabsTemplate = require('./templates/tabs-template');
-const { SANDUK_UI_WORK_AREA_MARKDOWN_TAB_PANE_ID } = require('../../constants/ui-constants');
+const {
+  SANDUK_UI_WORK_AREA_MARKDOWN_TAB_PANE_ID,
+  SANDUK_UI_WORK_AREA_MARKDOWN_TAB_ID
+} = require('../../constants/ui-constants');
 const ui = require('./ui');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const toolNavbarNavItemComponent = require('../../ui-components/tool-navbar-nav-item-component');
@@ -27,7 +30,9 @@ const {
   IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN,
   IPC_EVENT_OPEN_SAVE_FILE_DIALOG_MARKDOWN_FILE_PATH,
-  IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN_FILE_PATH
+  IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN_FILE_PATH,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES,
+  IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION
 } = require('../../../main-process/constants/ipc-event-constants');
 const popError = require('../../helpers/pop-error');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
@@ -53,6 +58,8 @@ module.exports = function markdownTool({ eventEmitter }) {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
+
+  const markdownSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_MARKDOWN_TAB_ID);
 
   const { openFileBtnElement, saveFileBtnElement, closeFileBtnElement } =
     fileMenuDropdownNavItemComponent.getHtmlElement({ prefix });
@@ -225,17 +232,34 @@ module.exports = function markdownTool({ eventEmitter }) {
   }
 
   // CLOSE FILE
+  const closeFile = () => {
+    const activeTabId = getActiveTabId();
+    filePaths[activeTabId - 1] = '';
+    markdownEditors[activeTabId - 1].setValue('');
+    fileNameElements[activeTabId - 1].innerText = 'Untitled';
+  };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
     if (openedFileChanged[activeTabId - 1]) {
-      popError({ message: 'File has unsaved changes!' });
+      ipcRenderer.send(IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES);
     } else if (filePaths[activeTabId - 1]?.length) {
-      filePaths[activeTabId - 1] = '';
-      markdownEditors[activeTabId - 1].setValue('');
-      fileNameElements[activeTabId - 1].innerText = 'Untitled';
+      closeFile();
     }
   };
   closeFileBtnElement.addEventListener('click', closeFileListener);
+  ipcRenderer.on(
+    IPC_EVENT_OPEN_MESSAGE_BOX_UNSAVED_CHANGES_USER_OPTION_SELECTION,
+    async (e, args) => {
+      if (Array.from(markdownSidebarTabElement.classList).includes('active')) {
+        if (args.clicked.saveButton) {
+          saveFileListener();
+          closeFile();
+        } else if (args.clicked.ignoreButton) {
+          closeFile();
+        }
+      }
+    }
+  );
 
   // OPEN FILE
   const openFileListener = () => ipcRenderer.send(IPC_EVENT_OPEN_FILE_DIALOG_MARKDOWN);
@@ -256,7 +280,10 @@ module.exports = function markdownTool({ eventEmitter }) {
   // FILE CHANGES
   const fileChangedListener = event => {
     const activeTabId = getActiveTabId();
-    if (filePaths[activeTabId - 1]?.length && event.command.name === 'insertstring') {
+    if (
+      filePaths[activeTabId - 1]?.length &&
+      ['insertstring', 'indent', 'backspace', 'del'].includes(event.command.name)
+    ) {
       openedFileChanged[activeTabId - 1] = true;
       fileNameElements[activeTabId - 1].innerText =
         path.basename(filePaths[activeTabId - 1]).substring(0, 20) + '*';
@@ -316,12 +343,10 @@ module.exports = function markdownTool({ eventEmitter }) {
         return;
       }
       if (markdownEditors[activeTabId - 1].getValue().length) {
-        popError(
-          {
-            message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`
-          },
-          7000
-        );
+        popError({
+          message: `File already opened in current Tab ${activeTabId}. Try opening file in another tab.`,
+          timeout: 7000
+        });
         return;
       }
       filePaths[activeTabId - 1] = openedFilePath;

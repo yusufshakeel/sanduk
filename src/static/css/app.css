@@ -24,3 +24,7 @@ i[class*="bi-"] {
 .sanduk-dropdown-toggle-without-arrow::after {
     content: none !important;
 }
+
+.sanduk-sidebar-menu-item {
+    font-size: 0.9em;
+}
