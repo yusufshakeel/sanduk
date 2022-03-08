@@ -15,7 +15,7 @@ function applicationMenu() {
     { role: 'editMenu' },
     {
       label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'zoom' }, { role: 'close' }]
+      submenu: [{ role: 'minimize' }, { role: 'zoom' }]
     },
     {
       role: 'help',
