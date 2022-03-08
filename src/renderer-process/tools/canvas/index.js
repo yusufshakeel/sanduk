@@ -17,7 +17,10 @@ const activeTabElement = require('../../helpers/active-tab-element');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const {
   EVENT_TYPE_UNDO_CTRL_Z_OR_CMD_Z_KEYPRESS,
-  EVENT_TYPE_REDO_CTRL_Y_OR_CMD_SHIFT_Z_KEYPRESS
+  EVENT_TYPE_REDO_CTRL_Y_OR_CMD_SHIFT_Z_KEYPRESS,
+  EVENT_TYPE_SAVE_CTRL_S_OR_CMD_S_KEYPRESS,
+  EVENT_TYPE_OPEN_CTRL_O_OR_CMD_O_KEYPRESS,
+  EVENT_TYPE_CLOSE_CTRL_W_OR_CMD_W_KEYPRESS
 } = require('../../constants/event-constants');
 const fileMenuDropdownNavItemComponent = require('../../ui-components/file-menu-dropdown-nav-item-component');
 const popError = require('../../helpers/pop-error');
@@ -206,6 +209,27 @@ module.exports = function canvasTool({ eventEmitter }) {
   eventEmitter.on(EVENT_TYPE_REDO_CTRL_Y_OR_CMD_SHIFT_Z_KEYPRESS, () => {
     if (Array.from(canvasSidebarTabElement.classList).includes('active')) {
       redo();
+    }
+  });
+
+  // save shortcut key event handler
+  eventEmitter.on(EVENT_TYPE_SAVE_CTRL_S_OR_CMD_S_KEYPRESS, () => {
+    if (Array.from(canvasSidebarTabElement.classList).includes('active')) {
+      saveFileListener();
+    }
+  });
+
+  // open shortcut key event handler
+  eventEmitter.on(EVENT_TYPE_OPEN_CTRL_O_OR_CMD_O_KEYPRESS, () => {
+    if (Array.from(canvasSidebarTabElement.classList).includes('active')) {
+      openFileListener();
+    }
+  });
+
+  // close shortcut key event handler
+  eventEmitter.on(EVENT_TYPE_CLOSE_CTRL_W_OR_CMD_W_KEYPRESS, () => {
+    if (Array.from(canvasSidebarTabElement.classList).includes('active')) {
+      closeFileListener();
     }
   });
 
