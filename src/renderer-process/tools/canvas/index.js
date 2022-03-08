@@ -293,6 +293,7 @@ module.exports = function canvasTool({ eventEmitter }) {
     const activeTabId = getActiveTabId();
     filePaths[activeTabId - 1] = '';
     fileNameElements[activeTabId - 1].innerText = 'Untitled';
+    openedFileChanged[activeTabId - 1] = false;
     closeCanvas();
   };
   const closeFileListener = () => {
