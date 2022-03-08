@@ -135,6 +135,7 @@ module.exports = function editorTool({ eventEmitter }) {
     filePaths[activeTabId - 1] = '';
     editors[activeTabId - 1].setValue('');
     fileNameElements[activeTabId - 1].innerText = 'Untitled';
+    openedFileChanged[activeTabId - 1] = false;
   };
   const closeFileListener = () => {
     const activeTabId = getActiveTabId();
