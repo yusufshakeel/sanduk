@@ -106,12 +106,12 @@ module.exports = function tabPaneHtmlTemplate({
       <div id="${prefix}-collapse-destination-${id}" class="accordion-collapse collapse" aria-labelledby="${prefix}-heading-destination-${id}" data-bs-parent="#${prefix}-accordion-${id}">
         <div class="accordion-body p-0">
           <div class="container-fluid" style="padding: 0 12px 0;">
-            <div class="row" style="height: calc(100vh - 250px); overflow-y: scroll; overflow-x: hidden;">
+            <div class="row" style="height: calc(100vh - 230px); overflow-y: scroll; overflow-x: hidden;">
               <div class="col-md-12 col-lg-6 px-0">
-                <pre id="${prefix}-pre-source-${id}" style="word-wrap: break-word; white-space: pre-wrap;"></pre>
+                <pre id="${prefix}-pre-source-${id}" class="sanduk-compare-tool-pre"></pre>
               </div>
               <div class="col-md-12 col-lg-6 px-0">
-                <pre id="${prefix}-pre-destination-${id}" style="word-wrap: break-word; white-space: pre-wrap;"></pre>
+                <pre id="${prefix}-pre-destination-${id}" class="sanduk-compare-tool-pre"></pre>
               </div>
             </div>
           </div>

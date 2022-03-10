@@ -1,10 +1,7 @@
 'use strict';
 
 const { diffLines } = require('../../functions/diff-lines');
-const {
-  SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID
-  // SANDUK_UI_WORK_AREA_COMPARE_TAB_ID
-} = require('../../constants/ui-constants');
+const { SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID } = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const ui = require('./ui');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
@@ -41,8 +38,6 @@ module.exports = function compareTool({ eventEmitter }) {
   });
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
-
-  // const compareSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_COMPARE_TAB_ID);
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });
@@ -209,12 +204,7 @@ module.exports = function compareTool({ eventEmitter }) {
 
     const { formattedSourceLines, formattedDestinationLines } = diffLines({ source, destination });
 
-    const style =
-      '<style>.sanduk-diff-del-op { background-color: #ffc6bf; } .sanduk-diff-ins-op { background-color: #bafbba; }</style>';
-
-    sourcePreElements[activeTabId - 1].innerHTML = `${style}${formattedSourceLines.join('\n')}`;
-    destinationPreElements[activeTabId - 1].innerHTML = `${style}${formattedDestinationLines.join(
-      '\n'
-    )}`;
+    sourcePreElements[activeTabId - 1].innerHTML = formattedSourceLines.join('\n');
+    destinationPreElements[activeTabId - 1].innerHTML = formattedDestinationLines.join('\n');
   });
 };

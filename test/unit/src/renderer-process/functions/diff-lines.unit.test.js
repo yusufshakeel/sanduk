@@ -47,8 +47,14 @@ describe('Testing diff lines', () => {
         const source = `Hello\nWorld`;
         const destination = `Hello\nWorld`;
         expect(diffLines({ source, destination })).toStrictEqual({
-          formattedSourceLines: ['Hello', 'World'],
-          formattedDestinationLines: ['Hello', 'World']
+          formattedSourceLines: [
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>'
+          ],
+          formattedDestinationLines: [
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>'
+          ]
         });
       });
     });
@@ -58,8 +64,16 @@ describe('Testing diff lines', () => {
         const source = `Hello\nWorld\nHello`;
         const destination = `Hello\nWorld`;
         expect(diffLines({ source, destination })).toStrictEqual({
-          formattedSourceLines: ['Hello', 'World', '<span class="sanduk-diff-del-op">Hello</span>'],
-          formattedDestinationLines: ['Hello', 'World', '']
+          formattedSourceLines: [
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
+            '<span class="sanduk-compare-tool-line sanduk-line-changed sanduk-del-op"><span class="sanduk-line-number">3</span> <span class="sanduk-diff-del-op">Hello</span></span>'
+          ],
+          formattedDestinationLines: [
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">3</span> </span>'
+          ]
         });
       });
     });
@@ -69,11 +83,15 @@ describe('Testing diff lines', () => {
         const source = `Hello\nWorld`;
         const destination = `Hello\nWorld\nHello`;
         expect(diffLines({ source, destination })).toStrictEqual({
-          formattedSourceLines: ['Hello', 'World', ''],
+          formattedSourceLines: [
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">3</span> </span>'
+          ],
           formattedDestinationLines: [
-            'Hello',
-            'World',
-            '<span class="sanduk-diff-ins-op">Hello</span>'
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
+            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
+            '<span class="sanduk-compare-tool-line sanduk-line-changed sanduk-ins-op"><span class="sanduk-line-number">3</span> <span class="sanduk-diff-ins-op">Hello</span></span>'
           ]
         });
       });

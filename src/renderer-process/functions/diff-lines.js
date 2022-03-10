@@ -28,8 +28,26 @@ function diffLines({ source, destination }) {
   for (let i = 0; i < sourceLines.length; i++) {
     const diffs = diffFinder.diff_main(sourceLines[i], destinationLines[i]);
     diffFinder.diff_cleanupSemantic(diffs);
-    formattedSourceLines.push(diffFinder.beforeContent(diffs));
-    formattedDestinationLines.push(diffFinder.afterContent(diffs));
+
+    const before = diffFinder.beforeContent(diffs);
+    const after = diffFinder.afterContent(diffs);
+
+    const sourceLineChanged = before.includes('sanduk-diff-del-op')
+      ? 'sanduk-line-changed sanduk-del-op'
+      : '';
+    const destinationLineChanged = after.includes('sanduk-diff-ins-op')
+      ? 'sanduk-line-changed sanduk-ins-op'
+      : '';
+    formattedSourceLines.push(
+      `<span class="sanduk-compare-tool-line ${sourceLineChanged}"><span class="sanduk-line-number">${
+        i + 1
+      }</span> ${before}</span>`
+    );
+    formattedDestinationLines.push(
+      `<span class="sanduk-compare-tool-line ${destinationLineChanged}"><span class="sanduk-line-number">${
+        i + 1
+      }</span> ${after}</span>`
+    );
   }
 
   return { formattedSourceLines, formattedDestinationLines };
