@@ -2,8 +2,8 @@
 
 const { diffLines } = require('../../functions/diff-lines');
 const {
-  SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID,
-  SANDUK_UI_WORK_AREA_COMPARE_TAB_ID
+  SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID
+  // SANDUK_UI_WORK_AREA_COMPARE_TAB_ID
 } = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const ui = require('./ui');
@@ -24,16 +24,14 @@ module.exports = function compareTool() {
   const prefix = 'sanduk-compare';
   const prefixForSourceEditor = 'sanduk-compare-source';
   const prefixForDestinationEditor = 'sanduk-compare-destination';
-  const prefixForPreview = 'sanduk-compare-preview';
-  const contextMenuEventHandlerIdForSourceEditor = `${prefixForSourceEditor}-context-menu-event-handler`;
-  const contextMenuEventHandlerIdForDestinationEditor = `${prefixForDestinationEditor}-context-menu-event-handler`;
+  // const contextMenuEventHandlerIdForSourceEditor = `${prefixForSourceEditor}-context-menu-event-handler`;
+  // const contextMenuEventHandlerIdForDestinationEditor = `${prefixForDestinationEditor}-context-menu-event-handler`;
   const toolName = 'Compare';
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({
     prefix,
     prefixForSourceEditor,
     prefixForDestinationEditor,
-    prefixForPreview,
     totalNumberOfTabs: totalTabs
   });
   document.getElementById(SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID).innerHTML = ui({
@@ -43,7 +41,7 @@ module.exports = function compareTool() {
   document.getElementById(`${prefix}-Tab`).innerHTML = tabsHtml.tabs;
   document.getElementById(`${prefix}-TabContent`).innerHTML = tabsHtml.tabPanes;
 
-  const compareSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_COMPARE_TAB_ID);
+  // const compareSidebarTabElement = document.getElementById(SANDUK_UI_WORK_AREA_COMPARE_TAB_ID);
 
   const { increaseFontSizeBtnElement, decreaseFontSizeBtnElement, resetFontSizeBtnElement } =
     fontSizeAdjustmentNavItemComponent.getHtmlElement({ prefix });

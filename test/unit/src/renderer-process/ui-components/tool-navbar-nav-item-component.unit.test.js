@@ -23,7 +23,8 @@ describe('Testing tool navbar nav item component', () => {
         expect(result).toStrictEqual({
           editNavbarNavItemElements: { id: 1 },
           previewNavbarNavItemElements: { id: 1 },
-          splitViewNavbarNavItemElements: { id: 1 }
+          splitViewNavbarNavItemElements: { id: 1 },
+          transformNavbarNavItemElements: { id: 1 }
         });
       });
     });
@@ -107,6 +108,29 @@ describe('Testing tool navbar nav item component', () => {
         expect(html).toMatch(/class="nav-link"/);
         expect(html).toMatch(/title="Some title"/);
         expect(html).toMatch(/id="some-prefix-navbar-nav-item-splitView-btn"/);
+      });
+    });
+  });
+
+  describe('Testing getHtmlTransformNavbarNavItem', () => {
+    describe('When using default title', () => {
+      test('Should be able to get html', () => {
+        const html = toolNavbarNavItemComponent.getHtmlTransformNavbarNavItem({ prefix });
+        expect(html).toMatch(/class="nav-link"/);
+        expect(html).toMatch(/title="Transform"/);
+        expect(html).toMatch(/id="some-prefix-navbar-nav-item-transform-btn"/);
+      });
+    });
+
+    describe('When using custom title', () => {
+      test('Should be able to get html', () => {
+        const html = toolNavbarNavItemComponent.getHtmlTransformNavbarNavItem({
+          prefix,
+          title: 'Some title'
+        });
+        expect(html).toMatch(/class="nav-link"/);
+        expect(html).toMatch(/title="Some title"/);
+        expect(html).toMatch(/id="some-prefix-navbar-nav-item-transform-btn"/);
       });
     });
   });

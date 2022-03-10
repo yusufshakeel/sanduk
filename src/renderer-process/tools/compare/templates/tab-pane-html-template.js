@@ -3,20 +3,17 @@
 const tabPaneNavItemComponent = require('../../../ui-components/tab-pane-nav-item-component');
 const tabPaneFilenameComponent = require('../../../ui-components/tab-pane-filename-component');
 const editorComponent = require('../../../ui-components/editor-component');
-const iframeComponent = require('../../../ui-components/iframe-component');
 const EditorFooterBuilder = require('../../../ui-components/builders/editor-footer-builder');
 
 module.exports = function tabPaneHtmlTemplate({
   prefix,
   prefixForSourceEditor,
   prefixForDestinationEditor,
-  prefixForPreview,
   id,
   addActiveClass = false
 }) {
   const showActiveClassName = addActiveClass ? 'show active' : '';
   const editorHeight = '300px';
-  const iframeHeight = 'calc(100vh - 250px)';
   const sourceEditorFooterHtml = new EditorFooterBuilder({ prefix: prefixForSourceEditor, id })
     .withRowColumnPosition()
     .build();
@@ -53,12 +50,6 @@ module.exports = function tabPaneHtmlTemplate({
     prefix: prefixForDestinationEditor,
     id,
     height: editorHeight
-  };
-  const previewIframeOption = {
-    prefix: prefixForPreview,
-    id,
-    classNames: ['github-markdown-body'],
-    height: iframeHeight
   };
 
   return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">

@@ -7,7 +7,6 @@ module.exports = function tabsTemplate({
   prefix,
   prefixForSourceEditor,
   prefixForDestinationEditor,
-  prefixForPreview,
   totalNumberOfTabs = 1
 }) {
   const tabs = [];
@@ -27,7 +26,6 @@ module.exports = function tabsTemplate({
         prefix,
         prefixForSourceEditor,
         prefixForDestinationEditor,
-        prefixForPreview,
         id,
         addActiveClass
       })
