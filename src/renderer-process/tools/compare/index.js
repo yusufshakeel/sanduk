@@ -1,6 +1,6 @@
 'use strict';
 
-const DiffFinder = require('../../functions/diff-finder');
+const { diffLines } = require('../../functions/diff-lines');
 const {
   SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID,
   SANDUK_UI_WORK_AREA_COMPARE_TAB_ID
@@ -179,24 +179,20 @@ module.exports = function compareTool() {
     destinationEditors
   );
 
-  const diffFinder = new DiffFinder();
-
   transformBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
 
     const source = sourceEditors[activeTabId - 1].getValue();
     const destination = destinationEditors[activeTabId - 1].getValue();
 
-    const diffs = diffFinder.diff_main(source, destination);
-    diffFinder.diff_cleanupSemantic(diffs);
-
-    const older = diffFinder.beforeContent(diffs);
-    const newer = diffFinder.afterContent(diffs);
+    const { formattedSourceLines, formattedDestinationLines } = diffLines({ source, destination });
 
     const style =
       '<style>.sanduk-diff-del-op { background-color: #ffc6bf; } .sanduk-diff-ins-op { background-color: #bafbba; }</style>';
 
-    sourcePreElements[activeTabId - 1].innerHTML = `${style}${older}`;
-    destinationPreElements[activeTabId - 1].innerHTML = `${style}${newer}`;
+    sourcePreElements[activeTabId - 1].innerHTML = `${style}${formattedSourceLines.join('\n')}`;
+    destinationPreElements[activeTabId - 1].innerHTML = `${style}${formattedDestinationLines.join(
+      '\n'
+    )}`;
   });
 };
