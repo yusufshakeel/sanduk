@@ -64,7 +64,7 @@ i[class*="bi-"] {
 
 .sanduk-compare-tool-pre .sanduk-compare-tool-line {
     display: inline;
-    line-height: 0;
+    font-size: 15px;
 }
 
 /*.sanduk-compare-tool-pre .sanduk-compare-tool-line:before {*/

@@ -4,6 +4,8 @@ const { diffLines } = require('../../functions/diff-lines');
 const { SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID } = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const ui = require('./ui');
+const popInfo = require('../../helpers/pop-info');
+const popError = require('../../helpers/pop-error');
 const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-size-adjustment-nav-item-component');
 const tabPaneNavItemComponent = require('../../ui-components/tab-pane-nav-item-component');
 const editorFooterLineColumnPositionComponent = require('../../ui-components/editor-footer-line-column-position-component');
@@ -190,21 +192,34 @@ module.exports = function compareTool({ eventEmitter }) {
   transformBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
 
-    const sourceAccordionElement = document.getElementById(
-      `${prefix}-collapse-source-${activeTabId}`
-    );
-    sourceAccordionElement.classList.remove('show');
-    const destinationAccordionElement = document.getElementById(
-      `${prefix}-collapse-destination-${activeTabId}`
-    );
-    destinationAccordionElement.classList.add('show');
+    try {
+      const source = sourceEditors[activeTabId - 1].getValue();
+      const destination = destinationEditors[activeTabId - 1].getValue();
 
-    const source = sourceEditors[activeTabId - 1].getValue();
-    const destination = destinationEditors[activeTabId - 1].getValue();
+      if (source.length === 0 && destination.length === 0) {
+        return;
+      } else if (source === destination) {
+        popInfo({ message: 'Identical content' });
+        return;
+      }
 
-    const { formattedSourceLines, formattedDestinationLines } = diffLines({ source, destination });
+      const sourceAccordionElement = document.getElementById(
+        `${prefix}-collapse-source-${activeTabId}`
+      );
+      sourceAccordionElement.classList.remove('show');
+      const destinationAccordionElement = document.getElementById(
+        `${prefix}-collapse-destination-${activeTabId}`
+      );
+      destinationAccordionElement.classList.add('show');
 
-    sourcePreElements[activeTabId - 1].innerHTML = formattedSourceLines.join('\n');
-    destinationPreElements[activeTabId - 1].innerHTML = formattedDestinationLines.join('\n');
+      const { formattedSourceLines, formattedDestinationLines } = diffLines({
+        source,
+        destination
+      });
+      sourcePreElements[activeTabId - 1].innerHTML = formattedSourceLines.join('\n');
+      destinationPreElements[activeTabId - 1].innerHTML = formattedDestinationLines.join('\n');
+    } catch (e) {
+      popError({ message: e.message });
+    }
   });
 };
