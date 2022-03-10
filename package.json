@@ -1,6 +1,6 @@
 {
   "name": "sanduk",
-  "version": "0.26.1",
+  "version": "0.27.0",
   "description": "Helper app for development.",
   "main": "src/main-process/main.js",
   "scripts": {
@@ -64,6 +64,7 @@
   "dependencies": {
     "base-64": "^1.0.0",
     "deep-sort-object": "^1.0.2",
+    "diff-match-patch": "^1.0.5",
     "electron-window-state": "^5.0.3",
     "eventemitter2": "^6.4.5",
     "fast-csv": "^4.3.6",

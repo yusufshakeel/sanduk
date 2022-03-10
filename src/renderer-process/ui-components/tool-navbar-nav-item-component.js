@@ -3,7 +3,8 @@
 const NAVBAR_NAV_ITEMS = {
   EDIT: 'EDIT',
   PREVIEW: 'PREVIEW',
-  SPLIT_VIEW: 'SPLIT_VIEW'
+  SPLIT_VIEW: 'SPLIT_VIEW',
+  TRANSFORM: 'TRANSFORM'
 };
 
 const navbarNavItemToIdMapper = ({ prefix }) => ({
@@ -12,6 +13,10 @@ const navbarNavItemToIdMapper = ({ prefix }) => ({
   SPLIT_VIEW: {
     key: 'splitViewNavbarNavItemElements',
     id: `${prefix}-navbar-nav-item-splitView-btn`
+  },
+  TRANSFORM: {
+    key: 'transformNavbarNavItemElements',
+    id: `${prefix}-navbar-nav-item-transform-btn`
   }
 });
 
@@ -36,6 +41,13 @@ function getHtmlSplitViewNavbarNavItem({ prefix, title = 'Split View' }) {
 </li>`;
 }
 
+function getHtmlTransformNavbarNavItem({ prefix, title = 'Transform' }) {
+  const id = navbarNavItemToIdMapper({ prefix }).TRANSFORM.id;
+  return `<li class="nav-item">
+  <a class="nav-link" id="${id}"><i title="${title}" class="bi-wrench-adjustable"></i></a>
+</li>`;
+}
+
 /**
  * @param prefix {string}
  * @param specificNavItemsToPick {string[]}
@@ -57,5 +69,6 @@ module.exports = {
   getHtmlElements,
   getHtmlSplitViewNavbarNavItem,
   getHtmlPreviewNavbarNavItem,
-  getHtmlEditNavbarNavItem
+  getHtmlEditNavbarNavItem,
+  getHtmlTransformNavbarNavItem
 };

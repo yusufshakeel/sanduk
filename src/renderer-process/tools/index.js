@@ -2,6 +2,7 @@
 
 const base64EncoderDecoder = require('../tools/base64-encoder-decoder');
 const canvas = require('../tools/canvas');
+const compare = require('../tools/compare');
 const csvToJson = require('../tools/csv-to-json');
 const editor = require('../tools/editor');
 const epoch = require('../tools/epoch');
@@ -15,6 +16,7 @@ const xmlToJson = require('../tools/xml-to-json');
 module.exports = async function tools({ eventEmitter }) {
   base64EncoderDecoder({ eventEmitter });
   canvas({ eventEmitter });
+  compare({ eventEmitter });
   csvToJson({ eventEmitter });
   editor({ eventEmitter });
   epoch();

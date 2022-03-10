@@ -13,6 +13,9 @@ module.exports = {
   SANDUK_UI_WORK_AREA_CANVAS_TAB_ID: 'v-pills-canvas-tab',
   SANDUK_UI_WORK_AREA_CANVAS_TAB_PANE_ID: 'v-pills-canvas',
 
+  SANDUK_UI_WORK_AREA_COMPARE_TAB_ID: 'v-pills-compare-tab',
+  SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID: 'v-pills-compare',
+
   SANDUK_UI_WORK_AREA_CSV_TO_JSON_TAB_ID: 'v-pills-csv-to-json-tab',
   SANDUK_UI_WORK_AREA_CSV_TO_JSON_TAB_PANE_ID: 'v-pills-csv-to-json',
 
