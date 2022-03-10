@@ -1,9 +1,6 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const DMP = require('diff-match-patch');
-const Diff2html = require('diff2html');
+const DiffFinder = require('../../functions/diff-finder');
 const {
   SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID,
   SANDUK_UI_WORK_AREA_COMPARE_TAB_ID
@@ -18,7 +15,10 @@ const setupEditor = require('../../editor/setup-editor');
 const { mode: aceMode } = require('../../constants/ace-editor-constants');
 const fontSize = require('../../editor/font-size');
 const activeTabElement = require('../../helpers/active-tab-element');
-const iframeComponent = require('../../ui-components/iframe-component');
+const toolNavbarNavItemComponent = require('../../ui-components/tool-navbar-nav-item-component');
+const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
+const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
+const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
 
 module.exports = function compareTool() {
   const prefix = 'sanduk-compare';
@@ -73,7 +73,14 @@ module.exports = function compareTool() {
   const destinationEditors = [];
   const destinationEditorElements = [];
 
-  const previewIframeElements = [];
+  const sourcePreElements = [];
+  const destinationPreElements = [];
+
+  const { transformNavbarNavItemElements: transformBtn } =
+    toolNavbarNavItemComponent.getHtmlElements({
+      prefix,
+      specificNavItemsToPick: [toolNavbarNavItemComponent.NAVBAR_NAV_ITEMS.TRANSFORM]
+    });
 
   // Initialising the editors
   for (let id = 1; id <= totalTabs; id++) {
@@ -114,7 +121,8 @@ module.exports = function compareTool() {
       editorComponent.getHtmlElement({ prefix: prefixForDestinationEditor, id })
     );
 
-    previewIframeElements.push(iframeComponent.getHtmlElement({ prefix: prefixForPreview, id }));
+    sourcePreElements.push(document.getElementById(`${prefix}-pre-source-${id}`));
+    destinationPreElements.push(document.getElementById(`${prefix}-pre-destination-${id}`));
   }
 
   const getActiveTabId = () =>
@@ -137,48 +145,58 @@ module.exports = function compareTool() {
     fontSize.resetFontSize(destinationEditorElements[activeTabId - 1]);
   });
 
-  const dmp = new DMP();
+  // Source - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForSourceEditor.wrapNavItemElements,
+    sourceEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForSourceEditor.copyNavItemElements,
+    sourceEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForSourceEditor.clearNavItemElements,
+    sourceEditors
+  );
 
-  const source = `Hello World`;
-  const destination = `Hello
-  World`;
+  // Destination - Wrap, Copy, Clear
+  wrapBtnHandler.initWrapBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDestinationEditor.wrapNavItemElements,
+    destinationEditors
+  );
+  copyBtnHandler.initCopyBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDestinationEditor.copyNavItemElements,
+    destinationEditors
+  );
+  clearBtnHandler.initClearBtnHandler(
+    getActiveTabId,
+    tabPaneNavItemElementsForDestinationEditor.clearNavItemElements,
+    destinationEditors
+  );
 
-  // const diff2htmlCss = fs.readFileSync(path.resolve(__dirname, 'diff2html-css.txt'), 'utf8');
-  // const diff2htmlJs = fs.readFileSync(path.resolve(__dirname, 'diff2html-js.txt'), 'utf8');
+  const diffFinder = new DiffFinder();
 
-  //   const diffJson = Diff2html.parse(`diff --git a/sample.js b/sample.js
-  // index 0000001..0ddf2ba
-  // --- a/Source
-  // +++ b/Source
-  // @@ -1 +1 @@
-  // -console.log("Hello World!")
-  // +console.log("Hello from Diff2Html!")`);
+  transformBtn.addEventListener('click', () => {
+    const activeTabId = getActiveTabId();
 
-  // const diffInput = dmp.patch_toText(dmp.patch_make(source, destination));
-  // console.log(diffInput);
-  // const diffJson = Diff2html.parse(`diff --git a/Source b/Source
-  // index 0000001..0ddf2ba
-  // --- a/Source
-  // +++ b/Source
-  // ${diffInput}`);
-  //
-  // const diffHtml = Diff2html.html(diffJson, {
-  //   drawFileList: false,
-  //   fileListToggle: false,
-  //   fileListStartVisible: false,
-  //   fileContentToggle: false,
-  //   matching: 'none', // 'lines',
-  //   outputFormat: 'side-by-side',
-  //   synchronisedScroll: true,
-  //   highlight: true,
-  //   renderNothingWhenEmpty: false
-  // });
+    const source = sourceEditors[activeTabId - 1].getValue();
+    const destination = destinationEditors[activeTabId - 1].getValue();
 
-  // const enrichedHtml = `<style>${diff2htmlCss}</style><script>${diff2htmlJs}</script>${diffHtml}`;
+    const diffs = diffFinder.diff_main(source, destination);
+    diffFinder.diff_cleanupSemantic(diffs);
 
-  const enrichedHtml = dmp.diff_prettyHtml(dmp.diff_main(source, destination));
+    const older = diffFinder.beforeContent(diffs);
+    const newer = diffFinder.afterContent(diffs);
 
-  const activeTabId = getActiveTabId();
-  previewIframeElements[activeTabId - 1].contentDocument.write(enrichedHtml);
-  previewIframeElements[activeTabId - 1].contentDocument.close();
+    const style =
+      '<style>.sanduk-diff-del-op { background-color: #ffc6bf; } .sanduk-diff-ins-op { background-color: #bafbba; }</style>';
+
+    sourcePreElements[activeTabId - 1].innerHTML = `${style}${older}`;
+    destinationPreElements[activeTabId - 1].innerHTML = `${style}${newer}`;
+  });
 };

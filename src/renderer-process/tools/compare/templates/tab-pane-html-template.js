@@ -114,7 +114,16 @@ module.exports = function tabPaneHtmlTemplate({
       </h2>
       <div id="${prefix}-collapse-output" class="accordion-collapse collapse" aria-labelledby="${prefix}-heading-output" data-bs-parent="#${prefix}-accordion">
         <div class="accordion-body p-0">
-          ${iframeComponent.getHtml(previewIframeOption)}
+          <div class="container-fluid" style="padding: 0 12px 0;">
+            <div class="row">
+              <div class="col-md-12 col-lg-6 px-0">
+                <pre id="${prefix}-pre-source-${id}" style="height: calc(100vh - 250px); margin: 0"></pre>
+              </div>
+              <div class="col-md-12 col-lg-6 px-0">
+                <pre id="${prefix}-pre-destination-${id}" style="height: calc(100vh - 250px); margin: 0"></pre>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
