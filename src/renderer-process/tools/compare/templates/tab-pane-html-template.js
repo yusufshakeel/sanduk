@@ -53,14 +53,14 @@ module.exports = function tabPaneHtmlTemplate({
   };
 
   return `<div class="tab-pane ${showActiveClassName}" id="${prefix}-tab-${id}-content" role="tabpanel" aria-labelledby="tab-${id}">
-  <div class="accordion" id="${prefix}-accordion">
+  <div class="accordion" id="${prefix}-accordion-${id}">
     <div class="accordion-item">
-      <h2 class="accordion-header" id="${prefix}-heading-input">
-        <span class="accordion-button" data-bs-toggle="collapse" data-bs-target="#${prefix}-collapse-input" aria-expanded="true" aria-controls="${prefix}-collapse-input">
+      <h2 class="accordion-header" id="${prefix}-heading-source-${id}">
+        <span class="accordion-button" data-bs-toggle="collapse" data-bs-target="#${prefix}-collapse-source-${id}" aria-expanded="true" aria-controls="${prefix}-collapse-source-${id}">
           Input
         </span>
       </h2>
-      <div id="${prefix}-collapse-input" class="accordion-collapse collapse show" aria-labelledby="${prefix}-heading-input" data-bs-parent="#${prefix}-accordion">
+      <div id="${prefix}-collapse-source-${id}" class="accordion-collapse collapse show" aria-labelledby="${prefix}-heading-source-${id}" data-bs-parent="#${prefix}-accordion-${id}">
         <div class="accordion-body p-0">
           <div class="container-fluid" style="padding: 0 12px 0;">
             <div class="row">
@@ -98,12 +98,12 @@ module.exports = function tabPaneHtmlTemplate({
       </div>
     </div>
     <div class="accordion-item">
-      <h2 class="accordion-header" id="${prefix}-heading-output">
-        <span class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#${prefix}-collapse-output" aria-expanded="false" aria-controls="${prefix}-collapse-output">
+      <h2 class="accordion-header" id="${prefix}-heading-destination-${id}">
+        <span class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#${prefix}-collapse-destination-${id}" aria-expanded="false" aria-controls="${prefix}-collapse-destination-${id}">
           Difference
         </span>
       </h2>
-      <div id="${prefix}-collapse-output" class="accordion-collapse collapse" aria-labelledby="${prefix}-heading-output" data-bs-parent="#${prefix}-accordion">
+      <div id="${prefix}-collapse-destination-${id}" class="accordion-collapse collapse" aria-labelledby="${prefix}-heading-destination-${id}" data-bs-parent="#${prefix}-accordion-${id}">
         <div class="accordion-body p-0">
           <div class="container-fluid" style="padding: 0 12px 0;">
             <div class="row" style="height: calc(100vh - 250px); overflow-y: scroll; overflow-x: hidden;">

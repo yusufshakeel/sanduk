@@ -19,13 +19,14 @@ const toolNavbarNavItemComponent = require('../../ui-components/tool-navbar-nav-
 const wrapBtnHandler = require('../../editor/handlers/wrap-btn-handler');
 const copyBtnHandler = require('../../editor/handlers/copy-btn-handler');
 const clearBtnHandler = require('../../editor/handlers/clear-btn-handler');
+const contextMenuHandlerSetup = require('../../editor/handlers/context-menu-handler-setup');
 
-module.exports = function compareTool() {
+module.exports = function compareTool({ eventEmitter }) {
   const prefix = 'sanduk-compare';
   const prefixForSourceEditor = 'sanduk-compare-source';
   const prefixForDestinationEditor = 'sanduk-compare-destination';
-  // const contextMenuEventHandlerIdForSourceEditor = `${prefixForSourceEditor}-context-menu-event-handler`;
-  // const contextMenuEventHandlerIdForDestinationEditor = `${prefixForDestinationEditor}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForSourceEditor = `${prefixForSourceEditor}-context-menu-event-handler`;
+  const contextMenuEventHandlerIdForDestinationEditor = `${prefixForDestinationEditor}-context-menu-event-handler`;
   const toolName = 'Compare';
   const totalTabs = 7;
   const tabsHtml = tabsTemplate({
@@ -126,6 +127,20 @@ module.exports = function compareTool() {
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
+  // Context Menu setup
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForSourceEditor,
+    editors: sourceEditors,
+    getActiveTabId
+  });
+  contextMenuHandlerSetup({
+    eventEmitter,
+    contextMenuEventHandlerId: contextMenuEventHandlerIdForDestinationEditor,
+    editors: destinationEditors,
+    getActiveTabId
+  });
+
   // font size adjustments
   increaseFontSizeBtnElement.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
@@ -179,6 +194,15 @@ module.exports = function compareTool() {
 
   transformBtn.addEventListener('click', () => {
     const activeTabId = getActiveTabId();
+
+    const sourceAccordionElement = document.getElementById(
+      `${prefix}-collapse-source-${activeTabId}`
+    );
+    sourceAccordionElement.classList.remove('show');
+    const destinationAccordionElement = document.getElementById(
+      `${prefix}-collapse-destination-${activeTabId}`
+    );
+    destinationAccordionElement.classList.add('show');
 
     const source = sourceEditors[activeTabId - 1].getValue();
     const destination = destinationEditors[activeTabId - 1].getValue();
