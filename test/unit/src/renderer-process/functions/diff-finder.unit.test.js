@@ -14,7 +14,11 @@ describe('Testing diff finder', () => {
     const older = diffFinder.beforeContent(diffs);
     const newer = diffFinder.afterContent(diffs);
 
-    expect(older).toStrictEqual('Hello World<span class="sanduk-diff-del-op"> Hello</span>');
-    expect(newer).toStrictEqual('<span class="sanduk-diff-ins-op">World </span>Hello World');
+    expect(older).toStrictEqual(
+      '<span class="sanduk-diff-context-added">World </span>Hello World<span class="sanduk-diff-del-op"> Hello</span>'
+    );
+    expect(newer).toStrictEqual(
+      '<span class="sanduk-diff-ins-op">World </span>Hello World<span class="sanduk-diff-context-removed"> Hello</span>'
+    );
   });
 });
