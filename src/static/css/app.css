@@ -76,20 +76,18 @@ i[class*="bi-"] {
     background-color: #f8a39d;
 }
 
-/*.sanduk-line-changed.sanduk-del-op {*/
-/*    background-color: #fcd6d0;*/
-/*}*/
+.sanduk-compare-tool-line.sanduk-del-op {
+    background-color: #fcd6d0;
+}
 
 .sanduk-diff-ins-op {
     background-color: #85f685;
 }
 
-/*.sanduk-line-changed.sanduk-ins-op {*/
-/*    background-color: #c9ffc9;*/
-/*}*/
+.sanduk-compare-tool-line.sanduk-ins-op {
+    background-color: #c9ffc9;
+}
 
-.sanduk-diff-context-added,
-.sanduk-diff-context-removed {
+.sanduk-compare-tool-line-empty {
     background-color: #eee;
-    color: #eee;
 }

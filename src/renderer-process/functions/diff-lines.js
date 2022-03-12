@@ -133,29 +133,31 @@ function fixSandukInsTags(lines) {
 }
 
 function setupSourceLineTags(lines) {
-  return lines.reduce(
-    (result, line, index) => [
+  return lines.reduce((result, line, index) => {
+    const delClass = line.includes('<span class="sanduk-diff-del-op">') ? 'sanduk-del-op' : '';
+    const emptyLine = line.length === 0 ? 'sanduk-compare-tool-line-empty' : '';
+    return [
       ...result,
-      `<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">${
+      `<div class="sanduk-compare-tool-line ${delClass} ${emptyLine}"><span class="sanduk-compare-tool-line-number">${
         index + 1
       }</span>${line}</div>`
-    ],
-    []
-  );
+    ];
+  }, []);
 }
 
 function setupDestinationLineTags(lines) {
   let lineNumber = 1;
   return lines.reduce((result, line) => {
+    const insClass = line.includes('<span class="sanduk-diff-ins-op">') ? 'sanduk-ins-op' : '';
     if (line.length === 0) {
       return [
         ...result,
-        `<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`
+        `<div class="sanduk-compare-tool-line ${insClass} sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div>`
       ];
     }
     const enrichedResult = [
       ...result,
-      `<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">${lineNumber}</span>${line}</div>`
+      `<div class="sanduk-compare-tool-line ${insClass}"><span class="sanduk-compare-tool-line-number">${lineNumber}</span>${line}</div>`
     ];
     lineNumber++;
     return enrichedResult;
@@ -163,7 +165,7 @@ function setupDestinationLineTags(lines) {
 }
 
 function joinLines(lines) {
-  return lines.join('\n');
+  return lines.join('');
 }
 
 function splitInput(input) {
