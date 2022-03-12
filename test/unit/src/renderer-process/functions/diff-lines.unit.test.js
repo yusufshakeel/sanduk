@@ -13,13 +13,13 @@ describe('Testing diff lines', () => {
   describe('Testing trimSandukTags', () => {
     test('Should be able to format source lines', () => {
       const source = `{
-  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero<sanduk-content-added>21</sanduk-content-added> squad",
+  "squadName": "Super<sanduk-diff-del-op>12</sanduk-diff-del-op> hero<sanduk-content-added>21</sanduk-content-added> squad",
   "members": [
     {
       "powers": [
-<span class="sanduk-diff-del-op">        "Radiation resistance",
+<sanduk-diff-del-op>        "Radiation resistance",
         "Turning tiny",
-</span>        "Radiation blast"
+</sanduk-diff-del-op>        "Radiation blast"
       ]
     },
     {
@@ -28,7 +28,7 @@ describe('Testing diff lines', () => {
       "secretIdentity": "Unknown",
       "powers": [
         "Teleportation",
-        "I<span class="sanduk-diff-del-op">nterdimensional travel</span><sanduk-content-added>mmortality",
+        "I<sanduk-diff-del-op>nterdimensional travel</sanduk-diff-del-op><sanduk-content-added>mmortality",
         "Teleportation",
         "Immortality</sanduk-content-added>"
       ]
@@ -36,15 +36,15 @@ describe('Testing diff lines', () => {
   ]
 }
 `;
-      expect(trimSandukTags({ lines: source.split('\n') })).toStrictEqual([
+      expect(trimSandukTags(source.split('\n'))).toStrictEqual([
         '{',
-        '  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",',
+        '  "squadName": "Super<sanduk-diff-del-op>12</sanduk-diff-del-op> hero squad",',
         '  "members": [',
         '    {',
         '      "powers": [',
-        '<span class="sanduk-diff-del-op">        "Radiation resistance",',
+        '<sanduk-diff-del-op>        "Radiation resistance",',
         '        "Turning tiny",',
-        '</span>        "Radiation blast"',
+        '</sanduk-diff-del-op>        "Radiation blast"',
         '      ]',
         '    },',
         '    {',
@@ -53,7 +53,7 @@ describe('Testing diff lines', () => {
         '      "secretIdentity": "Unknown",',
         '      "powers": [',
         '        "Teleportation",',
-        '        "I<span class="sanduk-diff-del-op">nterdimensional travel</span>',
+        '        "I<sanduk-diff-del-op>nterdimensional travel</sanduk-diff-del-op>',
         '',
         '"',
         '      ]',
@@ -66,7 +66,7 @@ describe('Testing diff lines', () => {
 
     test('Should be able to format destination lines', () => {
       const destination = `{
-  "squadName": "Super<sanduk-content-removed>12</sanduk-content-removed> hero<span class="sanduk-diff-ins-op">21</span> squad",
+  "squadName": "Super<sanduk-content-removed>12</sanduk-content-removed> hero<sanduk-diff-ins-op>21</sanduk-diff-ins-op> squad",
   "members": [
     {
       "powers": [
@@ -81,17 +81,17 @@ describe('Testing diff lines', () => {
       "secretIdentity": "Unknown",
       "powers": [
         "Teleportation",
-        "I<sanduk-content-removed>nterdimensional travel</sanduk-content-removed><span class="sanduk-diff-ins-op">mmortality",
+        "I<sanduk-content-removed>nterdimensional travel</sanduk-content-removed><sanduk-diff-ins-op>mmortality",
         "Teleportation",
-        "Immortality</span>"
+        "Immortality</sanduk-diff-ins-op>"
       ]
     }
   ]
 }
 `;
-      expect(trimSandukTags({ lines: destination.split('\n') })).toStrictEqual([
+      expect(trimSandukTags(destination.split('\n'))).toStrictEqual([
         '{',
-        '  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",',
+        '  "squadName": "Super hero<sanduk-diff-ins-op>21</sanduk-diff-ins-op> squad",',
         '  "members": [',
         '    {',
         '      "powers": [',
@@ -106,9 +106,9 @@ describe('Testing diff lines', () => {
         '      "secretIdentity": "Unknown",',
         '      "powers": [',
         '        "Teleportation",',
-        '        "I<span class="sanduk-diff-ins-op">mmortality",',
+        '        "I<sanduk-diff-ins-op>mmortality",',
         '        "Teleportation",',
-        '        "Immortality</span>"',
+        '        "Immortality</sanduk-diff-ins-op>"',
         '      ]',
         '    }',
         '  ]',
@@ -154,7 +154,7 @@ describe('Testing diff lines', () => {
         '      "powers": [',
         '<span class="sanduk-diff-del-op">        "Radiation resistance",</span>',
         '<span class="sanduk-diff-del-op">        "Turning tiny",</span>',
-        '<span class="sanduk-diff-del-op"></span>        "Radiation blast"',
+        '        "Radiation blast"',
         '      ]',
         '    },',
         '    {',
@@ -318,8 +318,8 @@ describe('Testing diff lines', () => {
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"></div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"></div>
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span>      ]</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>    },</div>
@@ -336,64 +336,110 @@ describe('Testing diff lines', () => {
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>    }</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>  ]</div>
 <div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>}</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"></div>`);
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`);
     });
   });
 
   describe('Testing diffLines', () => {
-    describe('When source and destination have equal lines', () => {
-      test('Should return as is', () => {
-        const source = `Hello\nWorld`;
-        const destination = `Hello\nWorld`;
-        expect(diffLines({ source, destination })).toStrictEqual({
-          formattedSourceLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>'
-          ],
-          formattedDestinationLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>'
-          ]
-        });
-      });
-    });
+    test('Should be able to return difference', () => {
+      const source = `{
+  "squadName": "Super12 hero squad",
+  "members": [
+    {
+      "powers": [
+        "Radiation resistance",
+        "Turning tiny",
+        "Radiation blast"
+      ]
+    },
+    {
+      "name": "Eternal Flame",
+      "age": 1000000,
+      "secretIdentity": "Unknown",
+      "powers": [
+        "Teleportation",
+        "Interdimensional travel"
+      ]
+    }
+  ]
+}
+`;
+      const destination = `{
+  "squadName": "Super hero21 squad",
+  "members": [
+    {
+      "powers": [
+        "Radiation blast"
+      ]
+    },
+    {
+      "name": "Eternal Flame",
+      "age": 1000000,
+      "secretIdentity": "Unknown",
+      "powers": [
+        "Teleportation",
+        "Immortality",
+        "Teleportation",
+        "Immortality"
+      ]
+    }
+  ]
+}
+`;
 
-    describe('When source has more lines than destination', () => {
-      test('Should return enriched destination', () => {
-        const source = `Hello\nWorld\nHello`;
-        const destination = `Hello\nWorld`;
-        expect(diffLines({ source, destination })).toStrictEqual({
-          formattedDestinationLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">3</span> <span class="sanduk-diff-context-removed">Hello</span></span>'
-          ],
-          formattedSourceLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
-            '<span class="sanduk-compare-tool-line sanduk-line-changed sanduk-del-op"><span class="sanduk-line-number">3</span> <span class="sanduk-diff-del-op">Hello</span></span>'
-          ]
-        });
-      });
-    });
+      const { formattedSource, formattedDestination } = diffLines({ source, destination });
 
-    describe('When source has less lines than destination', () => {
-      test('Should return enriched source', () => {
-        const source = `Hello\nWorld`;
-        const destination = `Hello\nWorld\nHello`;
-        expect(diffLines({ source, destination })).toStrictEqual({
-          formattedDestinationLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
-            '<span class="sanduk-compare-tool-line sanduk-line-changed sanduk-ins-op"><span class="sanduk-line-number">3</span> <span class="sanduk-diff-ins-op">Hello</span></span>'
-          ],
-          formattedSourceLines: [
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">1</span> Hello</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">2</span> World</span>',
-            '<span class="sanduk-compare-tool-line "><span class="sanduk-line-number">3</span> <span class="sanduk-diff-context-added">Hello</span></span>'
-          ]
-        });
-      });
+      expect(formattedSource)
+        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span><span class="sanduk-diff-del-op">        "Radiation resistance",</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span><span class="sanduk-diff-del-op">        "Turning tiny",</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>        "Radiation blast"</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>      ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>    },</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>    {</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "name": "Eternal Flame",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "age": 1000000,</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>      "secretIdentity": "Unknown",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>      "powers": [</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span>        "Teleportation",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span>        "I<span class="sanduk-diff-del-op">nterdimensional travel</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>"</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>      ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>    }</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">22</span>  ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">23</span>}</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">24</span></div>`);
+
+      expect(formattedDestination)
+        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span>      ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>    },</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>    {</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>      "name": "Eternal Flame",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>      "age": 1000000,</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "secretIdentity": "Unknown",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "powers": [</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>        "Teleportation",</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>        "I<span class="sanduk-diff-ins-op">mmortality",</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span><span class="sanduk-diff-ins-op">        "Teleportation",</span></div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span><span class="sanduk-diff-ins-op">        "Immortality</span>"</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span>      ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>    }</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>  ]</div>
+<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>}</div>
+<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`);
     });
   });
 });
