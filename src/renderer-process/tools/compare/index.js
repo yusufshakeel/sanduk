@@ -1,7 +1,6 @@
 'use strict';
 
-const DiffFinder = require('../../functions/diff-finder');
-// const { diffLines } = require('../../functions/diff-lines');
+const { diffLines } = require('../../functions/diff-lines');
 const { SANDUK_UI_WORK_AREA_COMPARE_TAB_PANE_ID } = require('../../constants/ui-constants');
 const tabsTemplate = require('./templates/tabs-template');
 const ui = require('./ui');
@@ -213,20 +212,12 @@ module.exports = function compareTool({ eventEmitter }) {
       );
       destinationAccordionElement.classList.add('show');
 
-      // const { formattedSourceLines, formattedDestinationLines } = diffLines({
-      //   source,
-      //   destination
-      // });
-      // sourcePreElements[activeTabId - 1].innerHTML = formattedSourceLines.join('\n');
-      // destinationPreElements[activeTabId - 1].innerHTML = formattedDestinationLines.join('\n');
-
-      const diffFinder = new DiffFinder();
-      const diffs = diffFinder.diff_main(source, destination);
-      diffFinder.diff_cleanupSemantic(diffs);
-      const before = diffFinder.beforeContent(diffs);
-      const after = diffFinder.afterContent(diffs);
-      sourcePreElements[activeTabId - 1].innerHTML = before;
-      destinationPreElements[activeTabId - 1].innerHTML = after;
+      const { formattedSource, formattedDestination } = diffLines({
+        source,
+        destination
+      });
+      sourcePreElements[activeTabId - 1].innerHTML = formattedSource;
+      destinationPreElements[activeTabId - 1].innerHTML = formattedDestination;
     } catch (e) {
       popError({ message: e.message });
     }

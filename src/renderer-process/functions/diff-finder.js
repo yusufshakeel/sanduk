@@ -24,7 +24,8 @@ class DiffFinder extends DMP {
       } else if (op === this.NO_OP) {
         lines.push(enrichedContent);
       } else if (op === this.INSERT_OP) {
-        lines.push(`<span class="sanduk-diff-context-added">${enrichedContent}</span>`);
+        // lines.push(`<span class="sanduk-diff-context-added">${enrichedContent}</span>`);
+        lines.push(`<sanduk-content-added>${enrichedContent}</sanduk-content-added>`);
       }
     });
     return lines.join('');
@@ -39,7 +40,8 @@ class DiffFinder extends DMP {
       } else if (op === this.NO_OP) {
         lines.push(enrichedContent);
       } else if (op === this.DELETE_OP) {
-        lines.push(`<span class="sanduk-diff-context-removed">${enrichedContent}</span>`);
+        // lines.push(`<span class="sanduk-diff-context-removed">${enrichedContent}</span>`);
+        lines.push(`<sanduk-content-removed>${enrichedContent}</sanduk-content-removed>`);
       }
     });
     return lines.join('');
