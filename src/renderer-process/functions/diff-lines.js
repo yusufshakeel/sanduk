@@ -52,9 +52,35 @@ function trimSandukTags({ lines }) {
   }, []);
 }
 
+function fixSandukDelTags({ lines }) {
+  return lines.reduce((result, line) => {
+    let updatedLine = line
+      .replace(/<sanduk-diff-del-op>/gi, '<span class="sanduk-diff-del-op">')
+      .replace(/<\/sanduk-diff-del-op>/gi, '</span>');
+
+    return [...result, updatedLine];
+  }, []);
+}
+
+function fixSandukInsTags({ lines }) {
+  return lines.reduce((result, line) => {
+    let updatedLine = line
+      .replace(/<sanduk-diff-ins-op>/gi, '<span class="sanduk-diff-ins-op">')
+      .replace(/<\/sanduk-diff-ins-op>/gi, '</span>');
+
+    return [...result, updatedLine];
+  }, []);
+}
+
 function formatter({ lines }) {
-  const pipe = [trimSandukTags];
-  return pipe.reduce((result, action) => action(result), { lines });
+  const actions = [trimSandukTags, fixSandukDelTags, fixSandukInsTags];
+  return actions.reduce(
+    (result, action) => {
+      const lines = action(result);
+      return { lines };
+    },
+    { lines }
+  ).lines;
 }
 
 function formatLines(context) {
