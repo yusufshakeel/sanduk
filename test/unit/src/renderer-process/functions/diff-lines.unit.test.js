@@ -31,6 +31,9 @@ describe('Testing diff lines', () => {
         "I<sanduk-diff-del-op>nterdimensional travel</sanduk-diff-del-op><sanduk-content-added>mmortality",
         "Teleportation",
         "Immortality</sanduk-content-added>"
+        <sanduk-content-added>"true
+        world
+        hello"</sanduk-content-added>
       ]
     }
   ]
@@ -56,6 +59,9 @@ describe('Testing diff lines', () => {
         '        "I<sanduk-diff-del-op>nterdimensional travel</sanduk-diff-del-op>',
         '',
         '"',
+        '        ',
+        '',
+        '',
         '      ]',
         '    }',
         '  ]',
