@@ -77,7 +77,7 @@ function lineWithClosingTags({ lines, OPENING_TAG, CLOSING_TAG, CLOSING_SANDUK_T
       updatedLine = updatedLine + CLOSING_SANDUK_TAG;
     }
     return [...result, updatedLine];
-  });
+  }, []);
 }
 
 function fixSandukDelTags(lines) {
@@ -103,7 +103,7 @@ function fixSandukDelTags(lines) {
       .replace(/<\/sanduk-diff-del-op>/gi, CLOSING_TAG)
       .replace(/<span class="sanduk-diff-del-op"><\/span>/gi, EMPTY);
     return [...result, updatedLine];
-  });
+  }, []);
 }
 
 function fixSandukInsTags(lines) {
@@ -129,7 +129,7 @@ function fixSandukInsTags(lines) {
       .replace(/<\/sanduk-diff-ins-op>/gi, CLOSING_TAG)
       .replace(/<span class="sanduk-diff-ins-op"><\/span>/gi, EMPTY);
     return [...result, updatedLine];
-  });
+  }, []);
 }
 
 function setupSourceLineTags(lines) {
