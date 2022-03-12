@@ -264,31 +264,9 @@ describe('Testing diff lines', () => {
   ]
 }
 `;
-      expect(sourceFormatter(source))
-        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span><span class="sanduk-diff-del-op">        "Radiation resistance",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span><span class="sanduk-diff-del-op">        "Turning tiny",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>        "Radiation blast"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>    },</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "name": "Eternal Flame",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "age": 1000000,</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>      "secretIdentity": "Unknown",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span>        "Teleportation",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span>        "I<span class="sanduk-diff-del-op">nterdimensional travel</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>    }</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">22</span>  ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">23</span>}</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">24</span></div>`);
+      expect(sourceFormatter(source)).toStrictEqual(
+        `<div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">1</span>{</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">4</span>    {</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">6</span><span class="sanduk-diff-del-op">        "Radiation resistance",</span></div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">7</span><span class="sanduk-diff-del-op">        "Turning tiny",</span></div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">8</span>        "Radiation blast"</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">9</span>      ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">10</span>    },</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">11</span>    {</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">12</span>      "name": "Eternal Flame",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">13</span>      "age": 1000000,</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">14</span>      "secretIdentity": "Unknown",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">15</span>      "powers": [</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">16</span>        "Teleportation",</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">17</span>        "I<span class="sanduk-diff-del-op">nterdimensional travel</span></div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number">18</span></div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">19</span>"</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">20</span>      ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">21</span>    }</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">22</span>  ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">23</span>}</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number">24</span></div>`
+      );
     });
   });
 
@@ -318,31 +296,9 @@ describe('Testing diff lines', () => {
   ]
 }
 `;
-      expect(destinationFormatter(destination))
-        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>    },</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>      "name": "Eternal Flame",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>      "age": 1000000,</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "secretIdentity": "Unknown",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>        "Teleportation",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>        "I<span class="sanduk-diff-ins-op">mmortality",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span><span class="sanduk-diff-ins-op">        "Teleportation",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span><span class="sanduk-diff-ins-op">        "Immortality</span>"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>    }</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>  ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>}</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`);
+      expect(destinationFormatter(destination)).toStrictEqual(
+        `<div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">1</span>{</div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">4</span>    {</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">7</span>      ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">8</span>    },</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">9</span>    {</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">10</span>      "name": "Eternal Flame",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">11</span>      "age": 1000000,</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">12</span>      "secretIdentity": "Unknown",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">13</span>      "powers": [</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">14</span>        "Teleportation",</div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">15</span>        "I<span class="sanduk-diff-ins-op">mmortality",</span></div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">16</span><span class="sanduk-diff-ins-op">        "Teleportation",</span></div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">17</span><span class="sanduk-diff-ins-op">        "Immortality</span>"</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">18</span>      ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">19</span>    }</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">20</span>  ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">21</span>}</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div>`
+      );
     });
   });
 
@@ -395,57 +351,13 @@ describe('Testing diff lines', () => {
 
       const { formattedSource, formattedDestination } = diffLines({ source, destination });
 
-      expect(formattedSource)
-        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span><span class="sanduk-diff-del-op">        "Radiation resistance",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span><span class="sanduk-diff-del-op">        "Turning tiny",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>        "Radiation blast"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>    },</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "name": "Eternal Flame",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "age": 1000000,</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>      "secretIdentity": "Unknown",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span>        "Teleportation",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span>        "I<span class="sanduk-diff-del-op">nterdimensional travel</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>    }</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">22</span>  ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">23</span>}</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">24</span></div>`);
+      expect(formattedSource).toStrictEqual(
+        `<div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">1</span>{</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super<span class="sanduk-diff-del-op">12</span> hero squad",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">4</span>    {</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">6</span><span class="sanduk-diff-del-op">        "Radiation resistance",</span></div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">7</span><span class="sanduk-diff-del-op">        "Turning tiny",</span></div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">8</span>        "Radiation blast"</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">9</span>      ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">10</span>    },</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">11</span>    {</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">12</span>      "name": "Eternal Flame",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">13</span>      "age": 1000000,</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">14</span>      "secretIdentity": "Unknown",</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">15</span>      "powers": [</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">16</span>        "Teleportation",</div><div class="sanduk-compare-tool-line sanduk-del-op "><span class="sanduk-compare-tool-line-number">17</span>        "I<span class="sanduk-diff-del-op">nterdimensional travel</span></div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number">18</span></div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">19</span>"</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">20</span>      ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">21</span>    }</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">22</span>  ]</div><div class="sanduk-compare-tool-line  "><span class="sanduk-compare-tool-line-number">23</span>}</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number">24</span></div>`
+      );
 
-      expect(formattedDestination)
-        .toStrictEqual(`<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">1</span>{</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">4</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">7</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">8</span>    },</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">9</span>    {</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">10</span>      "name": "Eternal Flame",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">11</span>      "age": 1000000,</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">12</span>      "secretIdentity": "Unknown",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">13</span>      "powers": [</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">14</span>        "Teleportation",</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">15</span>        "I<span class="sanduk-diff-ins-op">mmortality",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">16</span><span class="sanduk-diff-ins-op">        "Teleportation",</span></div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">17</span><span class="sanduk-diff-ins-op">        "Immortality</span>"</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">18</span>      ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">19</span>    }</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">20</span>  ]</div>
-<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">21</span>}</div>
-<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`);
+      expect(formattedDestination).toStrictEqual(
+        `<div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">1</span>{</div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">2</span>  "squadName": "Super hero<span class="sanduk-diff-ins-op">21</span> squad",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">3</span>  "members": [</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">4</span>    {</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">5</span>      "powers": [</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">6</span>        "Radiation blast"</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">7</span>      ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">8</span>    },</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">9</span>    {</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">10</span>      "name": "Eternal Flame",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">11</span>      "age": 1000000,</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">12</span>      "secretIdentity": "Unknown",</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">13</span>      "powers": [</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">14</span>        "Teleportation",</div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">15</span>        "I<span class="sanduk-diff-ins-op">mmortality",</span></div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">16</span><span class="sanduk-diff-ins-op">        "Teleportation",</span></div><div class="sanduk-compare-tool-line sanduk-ins-op"><span class="sanduk-compare-tool-line-number">17</span><span class="sanduk-diff-ins-op">        "Immortality</span>"</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">18</span>      ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">19</span>    }</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">20</span>  ]</div><div class="sanduk-compare-tool-line "><span class="sanduk-compare-tool-line-number">21</span>}</div><div class="sanduk-compare-tool-line  sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-number"> </span><span class="sanduk-compare-tool-line-empty-content"> </span></div>`
+      );
     });
   });
 });
