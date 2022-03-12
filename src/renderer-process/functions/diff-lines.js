@@ -2,7 +2,7 @@
 
 const DiffFinder = require('./diff-finder');
 
-function trimSandukTags({ lines }) {
+function trimSandukTags(lines) {
   const EMPTY = '';
   const EMPTY_LINE = '';
   const CLOSING_TAG_CONTENT_ADDED = '</sanduk-content-added>';
@@ -11,7 +11,6 @@ function trimSandukTags({ lines }) {
   let closingTag = '';
   let isInspectingMultipleLines = false;
 
-  // in this we are removing the content-added, content-removed tags
   return lines.reduce((result, line) => {
     let updatedLine = line;
     if (isInspectingMultipleLines) {
@@ -52,44 +51,139 @@ function trimSandukTags({ lines }) {
   }, []);
 }
 
-function fixSandukDelTags({ lines }) {
+function lineWithClosingTags({ lines, OPENING_TAG, CLOSING_TAG, CLOSING_SANDUK_TAG }) {
+  let isInspectingMultipleLines = false;
   return lines.reduce((result, line) => {
-    let updatedLine = line
-      .replace(/<sanduk-diff-del-op>/gi, '<span class="sanduk-diff-del-op">')
-      .replace(/<\/sanduk-diff-del-op>/gi, '</span>');
+    let updatedLine = line;
+    if (isInspectingMultipleLines) {
+      const indexOfDelClosingTag = updatedLine.indexOf(CLOSING_SANDUK_TAG);
+      if (indexOfDelClosingTag === -1) {
+        updatedLine = `${OPENING_TAG}${updatedLine}${CLOSING_TAG}`;
+        return [...result, updatedLine];
+      } else {
+        isInspectingMultipleLines = false;
+        updatedLine = OPENING_TAG + updatedLine;
+      }
+    }
 
+    const lastIndexOfOpeningTag = updatedLine.lastIndexOf(OPENING_TAG);
+    const indexOfClosingTagForLastOpeningTag =
+      lastIndexOfOpeningTag > -1
+        ? updatedLine.indexOf(CLOSING_SANDUK_TAG, lastIndexOfOpeningTag + OPENING_TAG.length)
+        : undefined;
+
+    if (!isInspectingMultipleLines && indexOfClosingTagForLastOpeningTag === -1) {
+      isInspectingMultipleLines = true;
+      updatedLine = updatedLine + CLOSING_SANDUK_TAG;
+    }
     return [...result, updatedLine];
+  });
+}
+
+function fixSandukDelTags(lines) {
+  const OPENING_TAG = '<span class="sanduk-diff-del-op">';
+  const CLOSING_TAG = '</span>';
+  const CLOSING_DEL_TAG = '</sanduk-diff-del-op>';
+  const EMPTY = '';
+
+  const enrichedLines = lines.reduce((result, line) => {
+    let updatedLine = line.replace(/<sanduk-diff-del-op>/gi, OPENING_TAG);
+    return [...result, updatedLine];
+  }, []);
+
+  const linesWithClosingDelTags = lineWithClosingTags({
+    lines: enrichedLines,
+    OPENING_TAG,
+    CLOSING_TAG,
+    CLOSING_SANDUK_TAG: CLOSING_DEL_TAG
+  });
+
+  return linesWithClosingDelTags.reduce((result, line) => {
+    let updatedLine = line
+      .replace(/<\/sanduk-diff-del-op>/gi, CLOSING_TAG)
+      .replace(/<span class="sanduk-diff-del-op"><\/span>/gi, EMPTY);
+    return [...result, updatedLine];
+  });
+}
+
+function fixSandukInsTags(lines) {
+  const OPENING_TAG = '<span class="sanduk-diff-ins-op">';
+  const CLOSING_TAG = '</span>';
+  const CLOSING_INS_TAG = '</sanduk-diff-ins-op>';
+  const EMPTY = '';
+
+  const enrichedLines = lines.reduce((result, line) => {
+    let updatedLine = line.replace(/<sanduk-diff-ins-op>/gi, OPENING_TAG);
+    return [...result, updatedLine];
+  }, []);
+
+  const linesWithClosingInsTags = lineWithClosingTags({
+    lines: enrichedLines,
+    OPENING_TAG,
+    CLOSING_TAG,
+    CLOSING_SANDUK_TAG: CLOSING_INS_TAG
+  });
+
+  return linesWithClosingInsTags.reduce((result, line) => {
+    let updatedLine = line
+      .replace(/<\/sanduk-diff-ins-op>/gi, CLOSING_TAG)
+      .replace(/<span class="sanduk-diff-ins-op"><\/span>/gi, EMPTY);
+    return [...result, updatedLine];
+  });
+}
+
+function setupSourceLineTags(lines) {
+  return lines.reduce(
+    (result, line, index) => [
+      ...result,
+      `<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">${
+        index + 1
+      }</span>${line}</div>`
+    ],
+    []
+  );
+}
+
+function setupDestinationLineTags(lines) {
+  let lineNumber = 1;
+  return lines.reduce((result, line) => {
+    if (line.length === 0) {
+      return [
+        ...result,
+        `<div class="sanduk-compare-tool-line sanduk-compare-tool-line-empty"><span class="sanduk-compare-tool-line-empty-content"> </span></div>`
+      ];
+    }
+    const enrichedResult = [
+      ...result,
+      `<div class="sanduk-compare-tool-line"><span class="sanduk-compare-tool-line-number">${lineNumber}</span>${line}</div>`
+    ];
+    lineNumber++;
+    return enrichedResult;
   }, []);
 }
 
-function fixSandukInsTags({ lines }) {
-  return lines.reduce((result, line) => {
-    let updatedLine = line
-      .replace(/<sanduk-diff-ins-op>/gi, '<span class="sanduk-diff-ins-op">')
-      .replace(/<\/sanduk-diff-ins-op>/gi, '</span>');
-
-    return [...result, updatedLine];
-  }, []);
+function joinLines(lines) {
+  return lines.join('\n');
 }
 
-function formatter({ lines }) {
-  const actions = [trimSandukTags, fixSandukDelTags, fixSandukInsTags];
-  return actions.reduce(
-    (result, action) => {
-      const lines = action(result);
-      return { lines };
-    },
-    { lines }
-  ).lines;
+function splitInput(input) {
+  return input.split('\n');
 }
 
-function formatLines(context) {
-  const lines = context.split('\n');
+function sourceFormatter(context) {
+  const actions = [splitInput, trimSandukTags, fixSandukDelTags, setupSourceLineTags, joinLines];
+  return actions.reduce((result, action) => action(result), context);
+}
 
-  const formatLines = formatter({ lines });
-  console.log({ formatLines });
-
-  return { formattedLines: formatLines.join('\n') };
+function destinationFormatter(context) {
+  const actions = [
+    splitInput,
+    trimSandukTags,
+    fixSandukInsTags,
+    setupDestinationLineTags,
+    joinLines
+  ];
+  return actions.reduce((result, action) => action(result), context);
 }
 
 function diffLines({ source, destination }) {
@@ -100,18 +194,17 @@ function diffLines({ source, destination }) {
   const before = diffFinder.beforeContent(diffs);
   const after = diffFinder.afterContent(diffs);
 
-  console.log({ before });
-  console.log({ after });
+  const formattedSource = sourceFormatter(before);
+  const formattedDestination = destinationFormatter(after);
 
-  // return {
-  //   formattedSource: before,
-  //   formattedDestination: after
-  // };
-
-  return {
-    formattedSource: formatLines(before).formattedLines,
-    formattedDestination: formatLines(after).formattedLines
-  };
+  return { formattedSource, formattedDestination };
 }
 
-module.exports = { diffLines, formatLines, formatter, trimSandukTags };
+module.exports = {
+  diffLines,
+  trimSandukTags,
+  fixSandukDelTags,
+  fixSandukInsTags,
+  sourceFormatter,
+  destinationFormatter
+};
