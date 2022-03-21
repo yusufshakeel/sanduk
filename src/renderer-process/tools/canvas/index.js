@@ -97,40 +97,82 @@ module.exports = function canvasTool({ eventEmitter }) {
   const getActiveTabId = () =>
     activeTabElement.getActiveTabIdByClassName(`${prefix}-tab active`, 'tabid');
 
+  // UNDO - REDO - HISTORY
+  const clearHistory = activeTabId => {
+    histories[activeTabId - 1].undo = [];
+    histories[activeTabId - 1].redo = [];
+  };
+  const saveCanvasHistory = (activeTabId, canvas) => {
+    histories[activeTabId - 1].undo.push(canvas.toDataURL());
+    histories[activeTabId - 1].undo.length > 10 && histories[activeTabId - 1].undo.splice(0, 1);
+  };
+  const undoHistory = (activeTabId, canvas) => {
+    histories[activeTabId - 1].undo.push(canvas);
+    histories[activeTabId - 1].undo.length > 10 && histories[activeTabId - 1].undo.splice(0, 1);
+  };
+  const revertUndoHistory = activeTabId => {
+    const totalUndoItems = histories[activeTabId - 1].undo.length;
+    if (totalUndoItems > 1) {
+      const canvas = histories[activeTabId - 1].undo.pop();
+      redoHistory(activeTabId, canvas);
+      return histories[activeTabId - 1].undo[totalUndoItems - 2];
+    }
+  };
+  const redoHistory = (activeTabId, canvas) => {
+    histories[activeTabId - 1].redo.push(canvas);
+    histories[activeTabId - 1].redo.length > 10 && histories[activeTabId - 1].redo.splice(0, 1);
+  };
+  const revertRedoHistory = activeTabId => {
+    const totalRedoItems = histories[activeTabId - 1].redo.length;
+    if (totalRedoItems > 0) {
+      const canvas = histories[activeTabId - 1].redo.pop();
+      undoHistory(activeTabId, canvas);
+      return canvas;
+    }
+  };
+
+  // init history
+  for (let activeTabId = 1; activeTabId <= totalTabs; activeTabId++) {
+    const canvas = canvasses[activeTabId - 1];
+    saveCanvasHistory(activeTabId, canvas);
+  }
+
   // history
   const saveState = () => {
     const activeTabId = getActiveTabId();
     const canvas = canvasses[activeTabId - 1];
-    histories[activeTabId - 1].undo.push(canvas.toDataURL());
+    saveCanvasHistory(activeTabId, canvas);
   };
   const undo = () => {
     const activeTabId = getActiveTabId();
     if (histories[activeTabId - 1].undo.length) {
-      const lastCanvas = histories[activeTabId - 1].undo.pop();
-      histories[activeTabId - 1].redo.push(lastCanvas);
-      const image = new Image();
-      image.src = lastCanvas.toString();
-      image.onload = () => {
-        const ctx = canvasContexts[activeTabId - 1];
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.clearRect(0, 0, CANVAS_HEIGHT_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
-        ctx.drawImage(image, 0, 0);
-      };
+      const lastCanvas = revertUndoHistory(activeTabId);
+      if (lastCanvas) {
+        const image = new Image();
+        image.src = lastCanvas.toString();
+        image.onload = () => {
+          const ctx = canvasContexts[activeTabId - 1];
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
+          ctx.drawImage(image, 0, 0);
+        };
+      }
     }
   };
   const redo = () => {
     const activeTabId = getActiveTabId();
     if (histories[activeTabId - 1].redo.length) {
-      const lastCanvas = histories[activeTabId - 1].redo.pop();
-      histories[activeTabId - 1].undo.push(lastCanvas);
-      const image = new Image();
-      image.src = lastCanvas.toString();
-      image.onload = () => {
-        const ctx = canvasContexts[activeTabId - 1];
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
-        ctx.drawImage(image, 0, 0);
-      };
+      const lastCanvas = revertRedoHistory(activeTabId);
+      if (lastCanvas) {
+        const image = new Image();
+        image.src = lastCanvas.toString();
+        image.onload = () => {
+          const ctx = canvasContexts[activeTabId - 1];
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
+          ctx.drawImage(image, 0, 0);
+        };
+      }
     }
   };
   const clearCanvas = () => {
@@ -163,8 +205,9 @@ module.exports = function canvasTool({ eventEmitter }) {
     const activeTabId = getActiveTabId();
     const ctx = canvasContexts[activeTabId - 1];
     ctx.clearRect(0, 0, CANVAS_WIDTH_IN_PIXELS, CANVAS_HEIGHT_IN_PIXELS);
-    histories[activeTabId - 1].undo = [];
-    histories[activeTabId - 1].redo = [];
+    clearHistory(activeTabId);
+    // histories[activeTabId - 1].undo = [];
+    // histories[activeTabId - 1].redo = [];
   };
   const loadImage = data => {
     const activeTabId = getActiveTabId();
@@ -237,7 +280,7 @@ module.exports = function canvasTool({ eventEmitter }) {
   const startDrawing = event => {
     const activeTabId = getActiveTabId();
     isDrawing[activeTabId - 1] = true;
-    saveState();
+    // saveState();
     fileChangedListener();
     draw(event);
   };
