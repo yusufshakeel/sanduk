@@ -62,34 +62,27 @@ i[class*="bi-"] {
     counter-reset: line;
 }
 
-/*.sanduk-compare-tool-pre .sanduk-compare-tool-line {*/
-/*    display: inline;*/
-/*    font-size: 15px;*/
-/*}*/
-
-/*.sanduk-compare-tool-pre .sanduk-compare-tool-line:before {*/
-/*    counter-increment: line;*/
-/*    content: counter(line);*/
-/*}*/
-
-.sanduk-diff-del-op {
+.sanduk-compare-tool-line .sanduk-diff-del-op {
     background-color: #f8a39d;
 }
 
-/*.sanduk-line-changed.sanduk-del-op {*/
-/*    background-color: #fcd6d0;*/
-/*}*/
+.sanduk-compare-tool-line.sanduk-del-op {
+    background-color: #ffe4e0;
+}
 
-.sanduk-diff-ins-op {
+.sanduk-compare-tool-line .sanduk-diff-ins-op {
     background-color: #85f685;
 }
 
-/*.sanduk-line-changed.sanduk-ins-op {*/
-/*    background-color: #c9ffc9;*/
-/*}*/
+.sanduk-compare-tool-line.sanduk-ins-op {
+    background-color: #c9ffc9;
+}
 
-.sanduk-diff-context-added,
-.sanduk-diff-context-removed {
+.sanduk-compare-tool-line-number {
+    margin-right: 5px;
+    padding: 0 5px;
+}
+
+.sanduk-compare-tool-line-empty {
     background-color: #eee;
-    color: #eee;
 }

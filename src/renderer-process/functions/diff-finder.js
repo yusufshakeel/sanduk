@@ -20,11 +20,12 @@ class DiffFinder extends DMP {
     diffs.forEach(([op, content]) => {
       const enrichedContent = this.transformContent(content);
       if (op === this.DELETE_OP) {
-        lines.push(`<span class="sanduk-diff-del-op">${enrichedContent}</span>`);
+        lines.push(`<sanduk-diff-del-op>${enrichedContent}</sanduk-diff-del-op>`);
       } else if (op === this.NO_OP) {
         lines.push(enrichedContent);
       } else if (op === this.INSERT_OP) {
-        lines.push(`<span class="sanduk-diff-context-added">${enrichedContent}</span>`);
+        // lines.push(`<span class="sanduk-diff-context-added">${enrichedContent}</span>`);
+        lines.push(`<sanduk-content-added>${enrichedContent}</sanduk-content-added>`);
       }
     });
     return lines.join('');
@@ -35,11 +36,12 @@ class DiffFinder extends DMP {
     diffs.forEach(([op, content]) => {
       const enrichedContent = this.transformContent(content);
       if (op === this.INSERT_OP) {
-        lines.push(`<span class="sanduk-diff-ins-op">${enrichedContent}</span>`);
+        lines.push(`<sanduk-diff-ins-op>${enrichedContent}</sanduk-diff-ins-op>`);
       } else if (op === this.NO_OP) {
         lines.push(enrichedContent);
       } else if (op === this.DELETE_OP) {
-        lines.push(`<span class="sanduk-diff-context-removed">${enrichedContent}</span>`);
+        // lines.push(`<span class="sanduk-diff-context-removed">${enrichedContent}</span>`);
+        lines.push(`<sanduk-content-removed>${enrichedContent}</sanduk-content-removed>`);
       }
     });
     return lines.join('');
