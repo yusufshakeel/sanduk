@@ -6,7 +6,10 @@ const fontSizeAdjustmentNavItemComponent = require('../../ui-components/font-siz
 const tabComponent = require('../../ui-components/tab-component');
 
 module.exports = function ui({ toolName, prefix }) {
-  const transform = toolNavbarNavItemComponent.getHtmlTransformNavbarNavItem({ prefix });
+  const transform = toolNavbarNavItemComponent.getHtmlTransformNavbarNavItem({
+    prefix,
+    title: 'Compare'
+  });
   const fontSizeMenu = fontSizeAdjustmentNavItemComponent.getHtml({ prefix });
   const navbarCollapseHtml = [fontSizeMenu, transform].join('');
   const navBar = toolNavbarComponent.getHtmlWithNavbarCollapse({
