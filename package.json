@@ -44,7 +44,7 @@
       "icon": "resources/app-icons/stable/sanduk.icns"
     },
     "dmg": {
-      "background": "resources/app-icons/stable/background.tiff",
+      "background": "resources/app-icons/stable/sanduk-dmg-background.tiff",
       "icon": "resources/app-icons/stable/sanduk.icns"
     }
   },
