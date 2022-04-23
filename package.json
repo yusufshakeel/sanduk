@@ -49,17 +49,17 @@
     }
   },
   "devDependencies": {
-    "electron": "^13.1.5",
-    "electron-builder": "^22.11.7",
-    "eslint": "^7.30.0",
-    "eslint-config-prettier": "^8.3.0",
+    "electron": "^18.1.0",
+    "electron-builder": "^23.0.3",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.0.6",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
     "madge": "^5.0.1",
-    "nodemon": "^2.0.9",
-    "prettier": "^2.3.2",
-    "spectron": "^15.0.0"
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
+    "spectron": "^19.0.0"
   },
   "dependencies": {
     "base-64": "^1.0.0",
@@ -70,11 +70,11 @@
     "fast-csv": "^4.3.6",
     "immutability-helper": "^3.1.1",
     "jwt-decode": "^3.1.2",
-    "markdown-it": "^12.1.0",
-    "sanitize-html": "^2.4.0",
+    "markdown-it": "^13.0.0",
+    "sanitize-html": "^2.7.0",
     "utf8": "^3.0.0",
     "uuid": "^8.3.2",
-    "xml-formatter": "^2.4.0",
+    "xml-formatter": "^2.6.1",
     "xml-js": "^1.6.11"
   }
 }
