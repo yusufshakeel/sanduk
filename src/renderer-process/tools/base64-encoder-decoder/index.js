@@ -179,7 +179,8 @@ module.exports = function base64EncoderDecoder({ eventEmitter }) {
       try {
         const input = decoderEditors[activeTabId - 1].getValue();
         if (input.length) {
-          encoderEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
+          // encoderEditors[activeTabId - 1].setValue(utf8.decode(base64.decode(input)), -1);
+          encoderEditors[activeTabId - 1].setValue(base64.decode(input), -1);
         }
       } catch (e) {
         popError({ message: e.message });
